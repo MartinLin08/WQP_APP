@@ -71,8 +71,21 @@ public class CalendarActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        SharedPreferences user_id = getSharedPreferences("department_id" , MODE_PRIVATE);
+        String department_id_data = user_id.getString("D_ID" , "");
+        if (department_id_data.toString().equals("2100")) {
+            getMenuInflater().inflate(R.menu.clerk_menu, menu);
+            return true;
+        }else if (department_id_data.toString().equals("2200")) {
+            getMenuInflater().inflate(R.menu.diy_menu, menu);
+            return true;
+        }else if (department_id_data.toString().equals("5200")) {
+            getMenuInflater().inflate(R.menu.workers_menu, menu);
+            return true;
+        }else{
+            getMenuInflater().inflate(R.menu.main, menu);
+            return true;
+        }
     }
 
     /**

@@ -28,8 +28,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a10609516.app.Clerk.QuotationActivity;
+import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.app.Element.HttpParse;
 import com.example.a10609516.app.R;
+import com.example.a10609516.app.Workers.ScheduleActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText accountEdit, passwordEdit;
     private Button login;
     private CheckBox remember_checkBox;
-    private TextView version_no_txt;
+    private TextView version_no_txt, department_txt;
 
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 
@@ -84,16 +87,18 @@ public class LoginActivity extends AppCompatActivity {
         login = (Button) findViewById(R.id.loginBtn);
         remember_checkBox = (CheckBox) findViewById(R.id.remember_checkBox);
         version_no_txt = (TextView) findViewById(R.id.version_no_txt);
+        department_txt = (TextView) findViewById(R.id.department_txt);
         //Button.setOnClickListener監聽器
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 CheckEditTextIsEmptyOrNot();
                 //取得TokenID的OKHttp
                 sendRequestWithOkHttpOfTokenID();
                 //取得版本號的OKHttp
                 sendRequestWithOkHttpOfVersion();
+                //判斷部門別的OKHttp
+                sendRequestWithOkHttpOfDepartment();
 
                 if (CheckEditText) {
 
@@ -152,6 +157,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     /**
      *確認accountEdit、passwordEdit是否為空值
      */
@@ -164,6 +170,7 @@ public class LoginActivity extends AppCompatActivity {
             CheckEditText = true;
         }
     }
+
     /**
      *AsyncTask非同步任務
      */
@@ -183,18 +190,27 @@ public class LoginActivity extends AppCompatActivity {
                 //Log.e("LoginActivity",httpResponseMsg);
                 if (version_no_txt.getText().toString().equals(ver_no)) {
                     if (httpResponseMsg.equalsIgnoreCase("登入成功")) {
-                        finish();
+                        /*finish();
                         Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
                         intent.putExtra(Userid, User_id);
                         Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
-                        startActivity(intent);
+                        startActivity(intent);*/
+                        if (department_txt.getText().toString().equals("8888")){
+                            Toast.makeText(LoginActivity.this, "無使用權限", Toast.LENGTH_SHORT).show();
+                        }else{
+                            finish();
+                            Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
+                            intent.putExtra(Userid, User_id);
+                            Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
+                            startActivity(intent);
+                        }
                     } else {
                         Toast.makeText(LoginActivity.this, httpResponseMsg, Toast.LENGTH_LONG).show();
                     }
                 }else{
                     new AlertDialog.Builder(LoginActivity.this)
                             .setTitle("更新通知")
-                            .setMessage("檢測到軟體重大更新\n請前往內部網站下載更新最新版本")
+                            .setMessage("檢測到軟體重大更新\n請點擊下方網址下載更新最新版本")
                             .setIcon(R.drawable.bwt_icon)
                             .setNegativeButton("確定",
                                     new DialogInterface.OnClickListener() {
@@ -204,8 +220,8 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     }).show();
                     /**
-                                    *動態跑出安裝APK網址
-                                    */
+                     *動態跑出安裝APK網址
+                     */
                     /*TextView Hyperlink_txt = new TextView(LoginActivity.this);
                     Hyperlink_txt.setText("http://m.wqp-water.com.tw/APP");
                     Hyperlink_txt.setAutoLinkMask(Linkify.WEB_URLS);
@@ -223,9 +239,9 @@ public class LoginActivity extends AppCompatActivity {
                 hashMap.put("User_id", params[0]);
                 hashMap.put("User_password", params[1]);
                 finalResult = httpParse.postRequest(hashMap, HttpURL);
-                //Log.e("LoginActivity",params[0]);
-                //Log.e("LoginActivity",params[1]);
-                //Log.e("LoginActivity",finalResult);
+                Log.e("LoginActivity",params[0]);
+                Log.e("LoginActivity",params[1]);
+                Log.e("LoginActivity",finalResult);
                 return finalResult;
             }
         }
@@ -369,4 +385,49 @@ public class LoginActivity extends AppCompatActivity {
             // permissions this app might request
         }
     }
+
+        /**
+         * 與OkHttp建立連線(UserLogin判斷部門別)
+         */
+        private void sendRequestWithOkHttpOfDepartment() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        OkHttpClient client = new OkHttpClient();
+                        //POST
+                        RequestBody requestBody = new FormBody.Builder()
+                                .add("User_id", IDEdT)
+                                .build();
+                        Log.e("LoginActivity", IDEdT);
+                        Request request = new Request.Builder()
+                                .url("http://220.133.80.146/WQP/DepartmentID.php")
+                                .post(requestBody)
+                                .build();
+                        Response response = client.newCall(request).execute();
+                        String responseData = response.body().string();
+                        Log.i("LoginActivity", responseData);
+                        showResponse(responseData);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
+
+        /**
+         * 在TextView上SHOW出回傳的員工姓名
+         * @param response
+         */
+        private void showResponse(final String response){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    department_txt.setText(response);
+
+                    SharedPreferences sharedPreferences = getSharedPreferences("department_id", MODE_PRIVATE);
+                    sharedPreferences.edit().putString("D_ID", department_txt.getText().toString()).apply();
+                }
+            });
+        }
 }

@@ -1,6 +1,7 @@
 package com.example.a10609516.app.DepartmentAndDIY;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -37,10 +38,29 @@ public class CustomerActivity extends AppCompatActivity {
     private String[] show_text = {"Test1", "Test2", "Test3", "Test4","Test5", "Test6", "Test7", "Test8","Test9", "Test10", "Test11", "Test12","Test13", "Test14", "Test15", "Test16"};
     private ArrayAdapter listAdapter;
 
+    /**
+     * 創建Menu
+     *
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        SharedPreferences user_id = getSharedPreferences("department_id" , MODE_PRIVATE);
+        String department_id_data = user_id.getString("D_ID" , "");
+        if (department_id_data.toString().equals("2100")) {
+            getMenuInflater().inflate(R.menu.clerk_menu, menu);
+            return true;
+        }else if (department_id_data.toString().equals("2200")) {
+            getMenuInflater().inflate(R.menu.diy_menu, menu);
+            return true;
+        }else if (department_id_data.toString().equals("5200")) {
+            getMenuInflater().inflate(R.menu.workers_menu, menu);
+            return true;
+        }else{
+            getMenuInflater().inflate(R.menu.main, menu);
+            return true;
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item){

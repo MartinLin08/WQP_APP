@@ -177,7 +177,8 @@ public class MaintainActivity extends AppCompatActivity {
                                     } else {
                                         //金額已收齊的OKHttp(工務收錢)
                                         sendRequestWithOkHttpForAll();
-                                        //是否進入客戶電子簽名頁面
+                                        finish();
+                                        /*//是否進入客戶電子簽名頁面
                                         if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
                                             finish();
                                         } else {
@@ -191,7 +192,7 @@ public class MaintainActivity extends AppCompatActivity {
                                             intent.putExtras(bundle);//可放所有基本類別
                                             startActivity(intent);
                                             finish();
-                                        }
+                                        }*/
                                     }
                                 }
                                 if (not_get_all_checkBox.isChecked()) {
@@ -203,7 +204,8 @@ public class MaintainActivity extends AppCompatActivity {
                                         } else {
                                             //金額未收齊的OKHttp(工務收錢)
                                             sendRequestWithOkHttpForNotAll();
-                                            //是否進入客戶電子簽名頁面
+                                            finish();
+                                            /*//是否進入客戶電子簽名頁面
                                             if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
                                                 finish();
                                             } else {
@@ -217,7 +219,7 @@ public class MaintainActivity extends AppCompatActivity {
                                                 intent.putExtras(bundle);//可放所有基本類別
                                                 startActivity(intent);
                                                 finish();
-                                            }
+                                            }*/
                                         }
                                     }
                                 }
@@ -227,7 +229,8 @@ public class MaintainActivity extends AppCompatActivity {
                                     } else {
                                         //金額未收的OKHttp(工務收錢)
                                         sendRequestWithOkHttpForNotGet();
-                                        //是否進入客戶電子簽名頁面
+                                        finish();
+                                        /*//是否進入客戶電子簽名頁面
                                         if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
                                             finish();
                                         } else {
@@ -241,7 +244,7 @@ public class MaintainActivity extends AppCompatActivity {
                                             intent.putExtras(bundle);//可放所有基本類別
                                             startActivity(intent);
                                             finish();
-                                        }
+                                        }*/
                                     }
                                 }
                                 if (have_get_money_checkBox.isChecked() || not_get_all_checkBox.isChecked() || not_get_money_checkBox.isChecked()) {
@@ -254,7 +257,8 @@ public class MaintainActivity extends AppCompatActivity {
                                 } else {
                                     //金額已收齊的OKHttp(業務收錢)
                                     sendRequestWithOkHttpForIsGet();
-                                    //是否進入客戶電子簽名頁面
+                                    finish();
+                                    /*//是否進入客戶電子簽名頁面
                                     if ((useless_spinner.getSelectedItem().equals("客人不在場")) || (useless_spinner.getSelectedItem().equals("業務取消"))) {
                                         finish();
                                     } else {
@@ -268,7 +272,7 @@ public class MaintainActivity extends AppCompatActivity {
                                         intent.putExtras(bundle);//可放所有基本類別
                                         startActivity(intent);
                                         finish();
-                                    }
+                                    }*/
                                 }
                             }
                         }

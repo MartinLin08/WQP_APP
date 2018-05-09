@@ -71,13 +71,27 @@ public class ScheduleActivity extends AppCompatActivity {
 
     /**
      * 創建Menu
+     *
      * @param menu
      * @return
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        SharedPreferences user_id = getSharedPreferences("department_id" , MODE_PRIVATE);
+        String department_id_data = user_id.getString("D_ID" , "");
+        if (department_id_data.toString().equals("2100")) {
+            getMenuInflater().inflate(R.menu.clerk_menu, menu);
+            return true;
+        }else if (department_id_data.toString().equals("2200")) {
+            getMenuInflater().inflate(R.menu.diy_menu, menu);
+            return true;
+        }else if (department_id_data.toString().equals("5200")) {
+            getMenuInflater().inflate(R.menu.workers_menu, menu);
+            return true;
+        }else{
+            getMenuInflater().inflate(R.menu.main, menu);
+            return true;
+        }
     }
 
     /**
@@ -213,11 +227,11 @@ public class ScheduleActivity extends AppCompatActivity {
     private void InItFunction() {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         pagerTitleStrip = (PagerTitleStrip) findViewById(R.id.pager_title);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
+        //mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
         lin_points = (LinearLayout) findViewById(R.id.lin_points);
 
         //UI介面下拉刷新
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        /*mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -228,7 +242,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 sendRequestWithOkHttpForWeek();
                 sendRequestWithOkHttpForMissing();
             }
-        });
+        });*/
     }
 
     /**

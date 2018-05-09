@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.a10609516.app.R;
 
@@ -42,7 +43,7 @@ public class AuthorizeActivity extends AppCompatActivity {
     String TA002TB002, ResponseText1, ResponseText2, company, quotation_type, COMPANY
             , TA001, TA001TA002, TA004, TA005, TA004TA006, TA009, TA010, TA011, TA020
             , TA021, PERCENTAGE, TRANSATION, PROCESS, LOCKING, TB003, TB004TB005, TB007TB008
-            , TB009, TB010, TB025TB024;
+            , TB009, TB010, TB025TB024, user_id_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +79,14 @@ public class AuthorizeActivity extends AppCompatActivity {
         approved_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //建立QuotationApproved.php OKHttp連線
-                sendRequestWithOkHttpForApproved();
-                finish();
+                if(TA005.toString().substring(0, 8).equals(user_id_data.toString())) {
+                    Toast.makeText(AuthorizeActivity.this, "無權限審核此報價單", Toast.LENGTH_SHORT).show();
+                }else {
+                    //建立QuotationApproved.php OKHttp連線
+                    sendRequestWithOkHttpForApproved();
+                    Log.e("AuthorizeActivity",TA005.toString().substring(0, 8));
+                    finish();
+                }
             }
         });
         //駁回報價單Button的監聽器
@@ -88,8 +94,13 @@ public class AuthorizeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //建立QuotationReject.php OKHttp連線
-                sendRequestWithOkHttpForReject();
-                finish();
+                if(TA005.toString().substring(0, 8).equals(user_id_data.toString())) {
+                    Toast.makeText(AuthorizeActivity.this, "無權限審核此報價單", Toast.LENGTH_SHORT).show();
+                }else {
+                    sendRequestWithOkHttpForReject();
+                    Log.e("AuthorizeActivity", TA005.toString().substring(0, 8));
+                    finish();
+                }
             }
         });
         //取消退回報價單Button的監聽器
@@ -97,8 +108,13 @@ public class AuthorizeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //建立QuotationReject.php OKHttp連線
-                sendRequestWithOkHttpForReject();
-                finish();
+                if(TA005.toString().substring(0, 8).equals(user_id_data.toString())) {
+                    Toast.makeText(AuthorizeActivity.this, "無權限審核此報價單", Toast.LENGTH_SHORT).show();
+                }else {
+                    sendRequestWithOkHttpForReject();
+                    Log.e("AuthorizeActivity888", TA005.toString().substring(0, 8));
+                    finish();
+                }
             }
         });
     }
@@ -136,7 +152,7 @@ public class AuthorizeActivity extends AppCompatActivity {
             public void run() {
                 //接收LoginActivity傳過來的值
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
-                String user_id_data = user_id.getString("ID", "");
+                user_id_data = user_id.getString("ID", "");
                 Log.e("AuthorizeActivity1", user_id_data);
                 Log.e("AuthorizeActivity1", company);
                 Log.e("AuthorizeActivity1", quotation_type);
@@ -351,8 +367,7 @@ public class AuthorizeActivity extends AppCompatActivity {
                             .add("TB002", TA002TB002)
                             .build();
                     Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/WQP/QuotationDetail.php")
-                            .url("http://192.168.0.172/WQP/QuotationDetail.php")
+                            .url("http://220.133.80.146/WQP/QuotationDetail.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
