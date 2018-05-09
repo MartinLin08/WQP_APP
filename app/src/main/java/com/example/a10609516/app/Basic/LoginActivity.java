@@ -109,7 +109,6 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "請輸入員工ID及密碼", Toast.LENGTH_LONG).show();
 
                 }
-
                 if (remember_checkBox.isChecked()) { //檢測使用者帳號密碼
                     SharedPreferences remdname = getPreferences(Activity.MODE_PRIVATE);
                     SharedPreferences.Editor edit = remdname.edit();
