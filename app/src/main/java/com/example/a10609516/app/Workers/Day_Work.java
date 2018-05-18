@@ -126,6 +126,7 @@ public class Day_Work extends AppCompatActivity {
                 String esvd_booking_remark = jsonObject.getString("任務說明");
                 String esv_item_remark = jsonObject.getString("料品說明");
                 String esvd_remark = jsonObject.getString("工作說明");
+                String my_ontype = jsonObject.getString("狀態");
                 String reserve_time = jsonObject.getString("今日派工時段");
                 String work_type = jsonObject.getString("處理方式");
 
@@ -153,6 +154,7 @@ public class Day_Work extends AppCompatActivity {
                 JArrayList.add(esvd_booking_remark);
                 JArrayList.add(esv_item_remark);
                 JArrayList.add(esvd_remark);
+                JArrayList.add(my_ontype);
                 JArrayList.add(reserve_time);
                 JArrayList.add(work_type);
 
@@ -176,19 +178,18 @@ public class Day_Work extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "派工日期時段", "聯絡人",
-                                          "主要電話", "次要電話", "派工地址", "付款方式", "是否要收款",
-                                          "應收款金額", "是否已收款", "已收款金額", "抵達日期", "抵達時間",
-                                          "結束時間", "任務說明", "料品說明", "工作說明", "今日派工時段 :",
-                                          "處理方式 :"};
+                    "主要電話", "次要電話", "派工地址", "付款方式", "是否要收款",
+                    "應收款金額", "是否已收款", "已收款金額", "抵達日期", "抵達時間",
+                    "結束時間", "任務說明", "料品說明", "工作說明", "狀態",
+                    "今日派工時段 :", "處理方式 :"};
             switch (msg.what) {
                 case 1:
                     //最外層有一個大的TableLayout,再設置TableRow包住小的TableLayout
                     date_work_TableLayout.setStretchAllColumns(true);
-
                     //設置大TableLayout的TableRow
                     TableRow big_tbr = new TableRow(Day_Work.this);
                     //設置每筆資料的小TableLayout
-                    TableLayout small_tb = new TableLayout(Day_Work.this);
+                    final TableLayout small_tb = new TableLayout(Day_Work.this);
                     //全部列自動填充空白處
                     small_tb.setStretchAllColumns(true);
                     small_tb.setBackgroundResource(R.drawable.whiteline);
@@ -198,7 +199,6 @@ public class Day_Work extends AppCompatActivity {
                     Bundle jb = msg.getData();
                     ArrayList<String> JArrayList = new ArrayList<String>();
                     JArrayList = jb.getStringArrayList("JSON_data");
-
                     //設置每筆派工的派工單號、送貨客戶
                     LinearLayout dynamically_llt = new LinearLayout(Day_Work.this);
                     TextView dynamically_title2;
@@ -207,12 +207,11 @@ public class Day_Work extends AppCompatActivity {
                     dynamically_title2.setPadding(40, 10, 0, 10);
                     dynamically_title2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                     dynamically_title2.setTextColor(Color.rgb(6, 102, 219));
-                    dynamically_title2.setTypeface(Typeface.SANS_SERIF,Typeface.BOLD);
+                    dynamically_title2.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
 
                     dynamically_llt.addView(dynamically_title2);
                     TableRow tr1 = new TableRow(Day_Work.this);
                     tr1.addView(dynamically_llt);
-
                     //將動態新增TableRow合併 讓分隔線延伸
                     TableRow.LayoutParams the_param1;
                     the_param1 = (TableRow.LayoutParams) dynamically_llt.getLayoutParams();
@@ -226,12 +225,11 @@ public class Day_Work extends AppCompatActivity {
                     dynamically_title3.setPadding(40, 10, 0, 10);
                     dynamically_title3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                     dynamically_title3.setTextColor(Color.rgb(6, 102, 219));
-                    dynamically_title3.setTypeface(Typeface.SANS_SERIF,Typeface.BOLD);
+                    dynamically_title3.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
 
                     dynamically_llt2.addView(dynamically_title3);
                     TableRow tr2 = new TableRow(Day_Work.this);
                     tr2.addView(dynamically_llt2);
-
                     //將動態新增TableRow合併 讓分隔線延伸
                     TableRow.LayoutParams the_param2;
                     the_param2 = (TableRow.LayoutParams) dynamically_llt2.getLayoutParams();
@@ -239,7 +237,6 @@ public class Day_Work extends AppCompatActivity {
                     dynamically_llt2.setLayoutParams(the_param2);
 
                     for (int i = 0; i < jb.getStringArrayList("JSON_data").size(); i++) {
-
                         //顯示每筆TableLayout的Title
                         TextView dynamically_title;
                         dynamically_title = new TextView(Day_Work.this);
@@ -258,6 +255,7 @@ public class Day_Work extends AppCompatActivity {
                         dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                         dynamically_txt.setTextColor(Color.rgb(6, 102, 219));
                         dynamically_txt.setMaxWidth(350);
+                        dynamically_txt.setTextIsSelectable(true);
 
                         TableRow tr3 = new TableRow(Day_Work.this);
                         tr3.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -265,11 +263,11 @@ public class Day_Work extends AppCompatActivity {
                         tr3.addView(dynamically_txt, layoutParams);
 
                         small_tb.addView(tr3, layoutParams);
-
                         //隱藏不需要的SQL資料
                         if (i > 18 || 7 < i && i < 16 || 0 < i && i < 3) {
                             small_tb.getChildAt(i).setVisibility(View.GONE);
                         }
+
                     }
                     big_tbr.addView(small_tb);
 

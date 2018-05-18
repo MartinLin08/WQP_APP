@@ -320,17 +320,17 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/go_top_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_gravity="end|bottom"
             android:layout_marginBottom="5dp"
             android:layout_marginRight="5dp"
-            android:layout_weight="0.33"
+            android:alpha="0.6"
             android:clickable="true"
             android:onClick="GoTopBtn"
-            app:backgroundTint="#E0FFFF"
+            app:backgroundTint="#FFFF4D"
             app:fabSize="mini"
-            app:srcCompat="@drawable/ic_gotop" />
+            app:srcCompat="@drawable/btn_backtotop" />
 
     </android.support.design.widget.CoordinatorLayout>
 

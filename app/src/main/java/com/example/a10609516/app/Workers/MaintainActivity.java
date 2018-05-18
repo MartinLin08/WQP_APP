@@ -32,6 +32,8 @@ import com.example.a10609516.app.Element.ScannerActivity;
 import com.example.a10609516.app.Basic.SignatureActivity;
 import com.example.a10609516.app.R;
 
+import java.text.SimpleDateFormat;
+
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -315,9 +317,9 @@ public class MaintainActivity extends AppCompatActivity {
         esvd_remark_txt.setText(ResponseText18);
         String ResponseText20 = bundle.getString("ResponseText" + 20);
         esvd_eng_points_txt.setText(ResponseText20);
-        String ResponseText21 = bundle.getString("ResponseText" + 21);
-        my_on_type.setText(ResponseText21);
-        Log.e("MaintainActivity",ResponseText21);
+        String ResponseText23 = bundle.getString("ResponseText" + 23);
+        my_on_type.setText(ResponseText23);
+        Log.e("MaintainActivity",ResponseText23);
 
         //如果日期為0000-00-00,則把該TextView改為空值
         if (arrive_button.getText().toString().equals("1900-01-01")) {
@@ -472,26 +474,31 @@ public class MaintainActivity extends AppCompatActivity {
      */
     private void TimeSpinner() {
         Bundle bundle = getIntent().getExtras();
-        String ResponseText14 = bundle.getString("ResponseText" + 14);
-        String ResponseText15 = bundle.getString("ResponseText" + 15);
-
+        String ResponseText21 = bundle.getString("ResponseText" + 21);
+        String ResponseText22 = bundle.getString("ResponseText" + 22);
+        /*Log.e("MaintainActivity",ResponseText21);
+        Log.e("MaintainActivity",ResponseText22);*/
         time_listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, time);
         time_listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         arrive_spinner.setAdapter(time_listAdapter);
         //當迴圈與ResponseText內容一致時跳出迴圈 並顯示該ResponseText的Spinner位置
         for (int i = 0; i < time.length; i++) {
-            if (time[i].equals(ResponseText14)) {
+            if (time[i].equals(ResponseText21)) {
                 arrive_spinner.setSelection(i, true);
                 break;
             }
         }
         leave_spinner.setAdapter(time_listAdapter);
         for (int i = 0; i < time.length; i++) {
-            if (time[i].equals(ResponseText15)) {
+            if (time[i].equals(ResponseText22)) {
                 leave_spinner.setSelection(i, true);
                 break;
             }
         }
+        //抵達日期Button自動帶入當天日期
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String date = simpleDateFormat.format(new java.util.Date());
+        arrive_button.setText(date);
     }
 
     /**

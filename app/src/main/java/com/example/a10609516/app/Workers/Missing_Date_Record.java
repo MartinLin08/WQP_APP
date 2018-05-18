@@ -238,6 +238,7 @@ public class Missing_Date_Record extends AppCompatActivity {
                         dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                         dynamically_txt.setTextColor(Color.rgb(6, 102, 219));
                         dynamically_txt.setMaxWidth(350);
+                        dynamically_txt.setTextIsSelectable(true);
 
                         TableRow tr3 = new TableRow(Missing_Date_Record.this);
                         tr3.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -249,7 +250,6 @@ public class Missing_Date_Record extends AppCompatActivity {
                         if (i > 18 || 7 < i && i < 16 || 0 < i && i < 3) {
                             small_tb.getChildAt(i).setVisibility(View.GONE);
                         }
-
                     }
                     big_tbr.addView(small_tb);
 

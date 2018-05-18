@@ -11,13 +11,13 @@
         android:id="@+id/login_llt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="#CCEEFF"
         android:orientation="vertical"
         android:weightSum="2"
-        android:background="#CCEEFF"
-        tools:context="com.example.a10609516.app.Basic.LoginActivity"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        tools:context="com.example.a10609516.app.Basic.LoginActivity">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -66,7 +66,7 @@
                 android:layout_marginRight="10dp"
                 android:text="Password/密碼:"
                 android:textColor="#0000ff"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/password"
@@ -133,7 +133,7 @@
             android:text=""
             android:textColor="#0000ff"
             android:textSize="15sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/version_txt"
@@ -155,7 +155,7 @@
             android:layout_gravity="bottom"
             android:layout_marginTop="20dp"
             android:layout_weight="0.3"
-            android:text="1.1"
+            android:text="1.2"
             android:textColor="#0000ff"
             android:textSize="15sp" />
 

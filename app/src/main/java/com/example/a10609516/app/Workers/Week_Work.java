@@ -181,7 +181,6 @@ public class Week_Work extends AppCompatActivity {
                     Bundle jb = msg.getData();
                     ArrayList<String> JArrayList = new ArrayList<String>();
                     JArrayList = jb.getStringArrayList("JSON_data");
-
                     //設置每筆派工的派工單號、送貨客戶
                     LinearLayout dynamically_llt = new LinearLayout(Week_Work.this);
                     TextView dynamically_title2;
@@ -239,6 +238,7 @@ public class Week_Work extends AppCompatActivity {
                         dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                         dynamically_txt.setTextColor(Color.rgb(6, 102, 219));
                         dynamically_txt.setMaxWidth(350);
+                        dynamically_txt.setTextIsSelectable(true);
 
                         TableRow tr3 = new TableRow(Week_Work.this);
                         tr3.setGravity(Gravity.CENTER_HORIZONTAL);

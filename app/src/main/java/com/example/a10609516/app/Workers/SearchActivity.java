@@ -293,6 +293,8 @@ public class SearchActivity extends AppCompatActivity {
                 String esvd_remark = jsonObject.getString("工作說明");
                 String esvd_seq_id = jsonObject.getString("派工資料識別碼");
                 String esvd_eng_points = jsonObject.getString("工務點數");
+                String esvd_booking_period = jsonObject.getString("預約開始時間");
+                String esvd_booking_period_end = jsonObject.getString("預約結束時間");
                 String my_ontype = jsonObject.getString("狀態");
 
                 Log.e("SearchActivity", esvd_seq_id);
@@ -320,6 +322,8 @@ public class SearchActivity extends AppCompatActivity {
                 JArrayList.add(esvd_remark);
                 JArrayList.add(esvd_seq_id);
                 JArrayList.add(esvd_eng_points);
+                JArrayList.add(esvd_booking_period);
+                JArrayList.add(esvd_booking_period_end);
                 JArrayList.add(my_ontype);
 
                 //HandlerMessage更新UI
@@ -345,7 +349,7 @@ public class SearchActivity extends AppCompatActivity {
                                           "主要電話", "次要電話", "派工地址", "付款方式", "是否要收款",
                                           "應收款金額", "是否已收款", "已收款金額", "抵達日期", "抵達時間",
                                           "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼",
-                                          "工務點數", "狀態"};
+                                          "工務點數", "預約開始時間", "預約結束時間", "狀態"};
             switch (msg.what) {
                 case 1:
                     //最外層有一個大的TableLayout,再設置TableRow包住小的TableLayout
@@ -384,6 +388,7 @@ public class SearchActivity extends AppCompatActivity {
                         dynamically_txt.setText(JArrayList.get(i));
                         dynamically_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                         dynamically_txt.setMaxWidth(350);
+                        dynamically_txt.setTextIsSelectable(true);
 
                         TableRow tr1 = new TableRow(SearchActivity.this);
                         tr1.setWeightSum(5);
@@ -399,6 +404,8 @@ public class SearchActivity extends AppCompatActivity {
                     small_tb.getChildAt(19).setVisibility(View.GONE);
                     small_tb.getChildAt(20).setVisibility(View.GONE);
                     small_tb.getChildAt(21).setVisibility(View.GONE);
+                    small_tb.getChildAt(22).setVisibility(View.GONE);
+                    small_tb.getChildAt(23).setVisibility(View.GONE);
                     //設置每筆TableLayout的Button監聽器、與動態新增Button的ID
                     int loc = 0;
                     for (int i = 0; i < dynamically_btn.length; i++) {
@@ -424,7 +431,7 @@ public class SearchActivity extends AppCompatActivity {
                                     //取得大TableRow中的小TableLayout位置
                                     TableLayout tb_tbr_tb = (TableLayout) tb_tbr.getChildAt(0);
                                     //派工資料的迴圈
-                                    for (int x = 0; x < 22; x++) {
+                                    for (int x = 0; x < 24; x++) {
                                         //取得小TableLayout中的小TableRow位置
                                         TableRow tb_tbr_tb_tbr = (TableRow) tb_tbr_tb.getChildAt(x);
                                         //小TableRow中的layout_column位置

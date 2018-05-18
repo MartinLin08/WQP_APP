@@ -8,70 +8,140 @@
     tools:context="com.example.a10609516.app.Basic.VersionActivity">
 
     <Button
-        android:id="@+id/version_btn2"
+        android:id="@+id/version_btn3"
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:background="@drawable/version_up_button"
         android:drawableLeft="@drawable/version_icon"
-        android:drawableRight="@drawable/version_down"
         android:drawablePadding="20dp"
-        android:text="ver. 1.1"
-        android:textSize="18dp"
-        android:textColor="@color/colorAccent"
-        android:textStyle="bold"
+        android:drawableRight="@drawable/version_down"
         android:gravity="center_vertical"
-        android:textAllCaps="false" />
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="ver. 1.2"
+        android:textAllCaps="false"
+        android:textColor="@color/colorAccent"
+        android:textSize="18dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/version_up_btn3"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/version_up_button"
+        android:drawableLeft="@drawable/version_icon"
+        android:drawablePadding="20dp"
+        android:drawableRight="@drawable/version_up"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="ver. 1.2"
+        android:textAllCaps="false"
+        android:textColor="@color/colorAccent"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/detail_llt3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/version_btn3"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/titleline"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/detail_txt3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="left"
+            android:text=""
+            android:textColor="@color/colorAccent"
+            android:textSize="15dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/version_btn2"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_below="@+id/detail_llt3"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/version_up_button"
+        android:drawableLeft="@drawable/version_icon"
+        android:drawablePadding="20dp"
+        android:drawableRight="@drawable/version_down"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="ver. 1.1"
+        android:textAllCaps="false"
+        android:textColor="@color/colorAccent"
+        android:textSize="18dp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/version_up_btn2"
         android:layout_width="match_parent"
         android:layout_height="58dp"
+        android:layout_below="@+id/detail_llt3"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:background="@drawable/version_up_button"
         android:drawableLeft="@drawable/version_icon"
-        android:drawableRight="@drawable/version_up"
         android:drawablePadding="20dp"
-        android:text="ver. 1.1"
-        android:textSize="18dp"
-        android:textColor="@color/colorAccent"
-        android:textStyle="bold"
+        android:drawableRight="@drawable/version_up"
         android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="ver. 1.1"
         android:textAllCaps="false"
-        android:visibility="gone"/>
+        android:textColor="@color/colorAccent"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/detail_llt2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:layout_below="@+id/version_btn2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/version_btn2"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/titleline">
+        android:background="@drawable/titleline"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/detail_txt2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:text=""
-            android:textSize="15dp"
+            android:layout_marginTop="5dp"
             android:gravity="left"
-            android:textColor="@color/colorAccent"/>
+            android:text=""
+            android:textColor="@color/colorAccent"
+            android:textSize="15dp" />
 
     </LinearLayout>
 
@@ -79,69 +149,69 @@
         android:id="@+id/version_btn1"
         android:layout_width="match_parent"
         android:layout_height="58dp"
+        android:layout_below="@+id/detail_llt2"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_below="@+id/detail_llt2"
         android:background="@drawable/version_up_button"
         android:drawableLeft="@drawable/version_icon"
-        android:drawableRight="@drawable/version_down"
         android:drawablePadding="20dp"
-        android:text="ver. 1.0"
-        android:textSize="18dp"
-        android:textColor="@color/colorAccent"
-        android:textStyle="bold"
+        android:drawableRight="@drawable/version_down"
         android:gravity="center_vertical"
-        android:textAllCaps="false" />
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="ver. 1.0"
+        android:textAllCaps="false"
+        android:textColor="@color/colorAccent"
+        android:textSize="18dp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/version_up_btn1"
         android:layout_width="match_parent"
         android:layout_height="58dp"
+        android:layout_below="@+id/detail_llt2"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_below="@+id/detail_llt2"
         android:background="@drawable/version_up_button"
         android:drawableLeft="@drawable/version_icon"
-        android:drawableRight="@drawable/version_up"
         android:drawablePadding="20dp"
-        android:text="ver. 1.0"
-        android:textSize="18dp"
-        android:textColor="@color/colorAccent"
-        android:textStyle="bold"
+        android:drawableRight="@drawable/version_up"
         android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="ver. 1.0"
         android:textAllCaps="false"
-        android:visibility="gone"/>
+        android:textColor="@color/colorAccent"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/detail_llt1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:layout_below="@+id/version_btn1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/version_btn1"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/titleline">
+        android:background="@drawable/titleline"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/detail_txt1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:text=""
-            android:textSize="15dp"
+            android:layout_marginTop="5dp"
             android:gravity="left"
-            android:textColor="@color/colorAccent"/>
+            android:text=""
+            android:textColor="@color/colorAccent"
+            android:textSize="15dp" />
 
     </LinearLayout>
 

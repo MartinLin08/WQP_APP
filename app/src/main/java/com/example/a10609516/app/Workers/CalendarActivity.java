@@ -799,6 +799,7 @@ public class CalendarActivity extends AppCompatActivity {
                         dynamically_address.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                         dynamically_address.setGravity(Gravity.LEFT);
                         dynamically_address.setPadding(5, 0, 0, 0);
+                        //dynamically_address.setTextIsSelectable(true);
 
                         small_llt2.addView(dynamically_customer);
                         small_llt2.addView(dynamically_phone);
