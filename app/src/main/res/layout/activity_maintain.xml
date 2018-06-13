@@ -177,16 +177,17 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="17sp" />
 
-                <TextView
-                    android:id="@+id/cp_name_txt"
+                <Spinner
+                    android:id="@+id/cp_name_spinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="36dp"
                     android:layout_column="1"
-                    android:layout_marginRight="5dp"
-                    android:gravity="center_vertical"
-                    android:text=""
-                    android:textColor="@color/colorAccent"
-                    android:textSize="17sp" />
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_weight="0.9"
+                    android:background="#F5F5F5"
+                    android:gravity="center" />
 
             </TableRow>
 
@@ -407,17 +408,17 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="17sp" />
 
-                <TextView
-                    android:id="@+id/esvd_eng_points_txt"
+                <CheckBox
+                    android:id="@+id/credit_card_checkBox"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_column="1"
                     android:layout_weight="0.9"
                     android:gravity="center_vertical"
-                    android:text=""
+                    android:text="已收款(信用卡)"
                     android:textColor="@color/colorAccent"
                     android:textSize="17sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
             </TableRow>
 
@@ -641,17 +642,16 @@
                     android:textSize="17sp" />
 
                 <TextView
-                    android:id="@+id/empty"
+                    android:id="@+id/esvd_eng_points_txt"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_column="2"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="0.1"
+                    android:layout_height="40dp"
+                    android:layout_column="1"
+                    android:layout_weight="0.9"
                     android:gravity="center_vertical"
                     android:text=""
                     android:textColor="@color/colorAccent"
-                    android:textSize="17sp" />
+                    android:textSize="17sp"
+                    android:visibility="gone" />
 
             </TableRow>
 

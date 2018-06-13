@@ -7,7 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -37,6 +39,13 @@ import com.example.a10609516.app.Workers.ScheduleActivity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 
 import okhttp3.FormBody;
@@ -204,13 +213,20 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     new AlertDialog.Builder(LoginActivity.this)
                             .setTitle("更新通知")
-                            .setMessage("檢測到軟體重大更新\n請前往下載更新最新版本")
+                            .setMessage("檢測到軟體重大更新\n請更新最新版本")
                             .setIcon(R.drawable.bwt_icon)
                             .setNegativeButton("確定",
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog,
                                                             int which) {
+                                            new Thread() {
+                                                @Override
+                                                public void run() {
+                                                    super.run();
+                                                    LoginActivity.this.Update();
+                                                }
+                                            }.start();
                                         }
                                     }).show();
                     /**
@@ -242,6 +258,59 @@ public class LoginActivity extends AppCompatActivity {
         }
         Login userLoginClass = new Login();
         userLoginClass.execute(User_id, User_password);
+    }
+
+    /**
+     * 下載新版本APK
+     */
+    public void Update() {
+        try {
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.4.apk");
+            HttpURLConnection c = (HttpURLConnection) url.openConnection();
+            //c.setRequestMethod("GET");
+            //c.setDoOutput(true);
+            c.connect();
+
+            //String PATH = Environment.getExternalStorageDirectory() + "/download/";
+            String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
+            File file = new File(PATH);
+            file.mkdirs();
+            File outputFile = new File(file, "wqp_1.4.apk");
+            FileOutputStream fos = new FileOutputStream(outputFile);
+
+            InputStream is = c.getInputStream();
+
+            byte[] buffer = new byte[1024];
+            int len1 = 0;
+            while ((len1 = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, len1);
+            }
+            fos.close();
+            is.close();//till here, it works fine - .apk is download to my sdcard in download file
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.4.apk")), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            LoginActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "開始安裝新版本", Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e("下載錯誤!", e.toString());
+            LoginActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "更新錯誤!", Toast.LENGTH_LONG).show();
+                }
+            });
+
+        }
     }
 
     /**
@@ -318,6 +387,9 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 ver_no = jsonObject.getString("版本");
                 Log.e("LoginActivity", ver_no);
+
+                SharedPreferences sharedPreferences = getSharedPreferences("fb_version", MODE_PRIVATE);
+                sharedPreferences.edit().putString("FB_VER", version_no_txt.getText().toString()).apply();
             }
         } catch (Exception e) {
             e.printStackTrace();

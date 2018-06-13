@@ -1,11 +1,15 @@
 package com.example.a10609516.app.Basic;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,8 +31,21 @@ import com.example.a10609516.app.Workers.CalendarActivity;
 import com.example.a10609516.app.Element.ScannerActivity;
 import com.example.a10609516.app.Workers.ScheduleActivity;
 import com.example.a10609516.app.Workers.SearchActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Map;
 
 public class QRCodeActivity extends AppCompatActivity {
 
@@ -155,6 +172,8 @@ public class QRCodeActivity extends AppCompatActivity {
         GetDate();
         //初始畫面設置
         initSet();
+        //確認是否有最新版本，進行更新
+        CheckFirebaseVersion();
     }
 
     /**
@@ -186,6 +205,110 @@ public class QRCodeActivity extends AppCompatActivity {
                 }
             }
         });*/
+    }
+
+    /**
+     * 確認是否有最新版本，進行更新
+     */
+    private void CheckFirebaseVersion() {
+        SharedPreferences fb_version = getSharedPreferences("fb_version", MODE_PRIVATE);
+        final String version = fb_version.getString("FB_VER", "");
+        Log.e("QRCodeActivity", version);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("WQP");
+        // Read from the database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                //String value = dataSnapshot.getValue(String.class);
+                //Log.d("現在在根結點上的資料是:", "Value is: " + value);
+                Map<String, String> map = (Map) dataSnapshot.getValue();
+                String data = map.toString().substring(9, 12);
+                Log.e("QRCodeActivity", "已讀取到值:" + data);
+                if (version.equals(data)) {
+                } else {
+                    new AlertDialog.Builder(QRCodeActivity.this)
+                            .setTitle("更新通知")
+                            .setMessage("檢測到軟體重大更新\n請更新最新版本")
+                            .setIcon(R.drawable.bwt_icon)
+                            .setNegativeButton("確定",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog,
+                                                            int which) {
+                                            new Thread() {
+                                                @Override
+                                                public void run() {
+                                                    super.run();
+                                                    QRCodeActivity.this.Update();
+                                                }
+                                            }.start();
+                                        }
+                                    }).show();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e("QRCodeActivity", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    /**
+     * 下載新版本APK
+     */
+    public void Update() {
+        try {
+            //URL url = new URL("http://192.168.0.201/wqp_1.4.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.4.apk");
+            HttpURLConnection c = (HttpURLConnection) url.openConnection();
+            //c.setRequestMethod("GET");
+            //c.setDoOutput(true);
+            c.connect();
+
+            //String PATH = Environment.getExternalStorageDirectory() + "/download/";
+            String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
+            File file = new File(PATH);
+            file.mkdirs();
+            File outputFile = new File(file, "wqp_1.4.apk");
+            FileOutputStream fos = new FileOutputStream(outputFile);
+
+            InputStream is = c.getInputStream();
+
+            byte[] buffer = new byte[1024];
+            int len1 = 0;
+            while ((len1 = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, len1);
+            }
+            fos.close();
+            is.close();//till here, it works fine - .apk is download to my sdcard in download file
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.4.apk")), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            QRCodeActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "開始安裝新版本", Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e("下載錯誤!", e.toString());
+            QRCodeActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "更新失敗!", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     /**
@@ -236,13 +359,17 @@ public class QRCodeActivity extends AppCompatActivity {
         mWebView.setWebViewClient(new WebViewClient());
     }
 
-    //Button的設置
+    /**
+     * Button的設置
+     */
     public void scanCode(View view) {
         //startActivityForResult(new Intent(this, ScannerActivity.class), 1);
         launchActivity(ScannerActivity.class);
     }
 
-    //轉畫面的封包，兼具權限和Intent跳轉化面
+    /**
+     * 轉畫面的封包，兼具權限和Intent跳轉畫面
+     */
     public void launchActivity(Class<?> clss) {
         //假如還「未獲取」權限
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
@@ -257,7 +384,9 @@ public class QRCodeActivity extends AppCompatActivity {
         }
     }
 
-    //當ScannerActivity結束後的回調資訊
+    /**
+     * 當ScannerActivity結束後的回調資訊
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
