@@ -309,6 +309,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "更新錯誤!", Toast.LENGTH_LONG).show();
                 }
             });
+
         }
     }
 
