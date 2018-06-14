@@ -1296,8 +1296,8 @@ public class ScheduleActivity extends AppCompatActivity {
                             .add("User_id", user_id_data)
                             .build();
                     Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/WQP/MissWorkCount.php")
-                            .url("http://192.168.0.172/WQP/MissWorkCount.php")
+                            .url("http://220.133.80.146/WQP/MissWorkCount.php")
+                            //.url("http://192.168.0.172/WQP/MissWorkCount.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
