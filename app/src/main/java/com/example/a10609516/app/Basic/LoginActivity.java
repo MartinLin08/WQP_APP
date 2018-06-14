@@ -48,6 +48,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -61,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button login;
     private CheckBox remember_checkBox;
     private TextView version_no_txt, department_txt;
+    public int badgeCount;
 
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 
@@ -108,6 +110,8 @@ public class LoginActivity extends AppCompatActivity {
                 sendRequestWithOkHttpOfVersion();
                 //判斷部門別的OKHttp
                 sendRequestWithOkHttpOfDepartment();
+                //取得未回派工數量
+                sendRequestWithOkHttpOfMissCount();
 
                 if (CheckEditText) {
                     UserLoginFunction(IDEdT, PwdEdT);
@@ -496,6 +500,55 @@ public class LoginActivity extends AppCompatActivity {
 
                 SharedPreferences sharedPreferences = getSharedPreferences("department_id", MODE_PRIVATE);
                 sharedPreferences.edit().putString("D_ID", department_txt.getText().toString()).apply();
+            }
+        });
+    }
+
+    /**
+     * 與OkHttp建立連線(未回派工數量)
+     */
+    private void sendRequestWithOkHttpOfMissCount() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id", IDEdT)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("http://220.133.80.146/WQP/MissWorkCount.php")
+                            //.url("http://192.168.0.172/WQP/MissWorkCount.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.e("LoginActivity", responseData);
+                    parseJSONWithJSONObjectOfMissCount(responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 取得未回出勤的數量
+     * @param miss_count
+     */
+    private void parseJSONWithJSONObjectOfMissCount(final String miss_count) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("LoginActivity", miss_count);
+                if(miss_count.toString().equals("0")){
+                    badgeCount = 0;
+                    ShortcutBadger.removeCount(LoginActivity.this);
+                }else{
+                    int count = Integer.valueOf(miss_count);
+                    ShortcutBadger.applyCount(LoginActivity.this, count);
+                }
             }
         });
     }

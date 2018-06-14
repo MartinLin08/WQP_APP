@@ -29,6 +29,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -71,6 +72,7 @@ public class SearchActivity extends AppCompatActivity {
     private TableLayout search_TableLayout;
     private LinearLayout search_LinearLayout, separate_linearLayout;
     private ScrollView search_scrollView;
+    public int badgeCount;
 
     /**
      * 創建Menu
@@ -216,6 +218,8 @@ public class SearchActivity extends AppCompatActivity {
                 search_TableLayout.setVisibility(View.VISIBLE);
                 //建立SearchData.php OKHttp連線
                 sendRequestWithOkHttp();
+                //取得未回派工數量
+                sendRequestWithOkHttpOfMissCount();
             }
         });//end setOnItemClickListener
         //Clean_Start_Button.setOnClickListener監聽器  //清空time_start_button內的文字
@@ -674,5 +678,66 @@ public class SearchActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d("SearchActivity", "onDestroy");
+    }
+
+    /**
+     * 與OkHttp建立連線(未回派工數量)
+     */
+    private void sendRequestWithOkHttpOfMissCount() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //接收LoginActivity傳過來的值
+                SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID", "");
+                Log.i("SearchActivity", user_id_data);
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id", user_id_data)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("http://220.133.80.146/WQP/MissWorkCount.php")
+                            //.url("http://192.168.0.172/WQP/MissWorkCount.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.e("SearchActivity", responseData);
+                    parseJSONWithJSONObjectOfMissCount(responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 取得未回出勤的數量
+     * @param miss_count
+     */
+    private void parseJSONWithJSONObjectOfMissCount(final String miss_count) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("SearchActivity", miss_count);
+                if(miss_count.toString().equals("0")){
+                    badgeCount = 0;
+                    ShortcutBadger.removeCount(SearchActivity.this);
+                }else{
+                    int count = Integer.valueOf(miss_count);
+                    ShortcutBadger.applyCount(SearchActivity.this, count);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("SearchActivity", "onRestart");
+        //取得未回派工數量
+        sendRequestWithOkHttpOfMissCount();
     }
 }

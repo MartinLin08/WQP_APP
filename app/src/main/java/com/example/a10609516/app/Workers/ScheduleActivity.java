@@ -60,6 +60,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -85,6 +86,7 @@ public class ScheduleActivity extends AppCompatActivity {
     private TextView today_sql_total_textView, week_sql_total_textView, missing_sql_total_textView;
 
     private Handler handler;
+    public int badgeCount;
 
     /**
      * 創建Menu
@@ -1276,11 +1278,100 @@ public class ScheduleActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 與OkHttp建立連線(未回派工數量)
+     */
+    private void sendRequestWithOkHttpOfMissCount() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //接收LoginActivity傳過來的值
+                SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID", "");
+                Log.i("ScheduleActivity", user_id_data);
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id", user_id_data)
+                            .build();
+                    Request request = new Request.Builder()
+                            //.url("http://220.133.80.146/WQP/MissWorkCount.php")
+                            .url("http://192.168.0.172/WQP/MissWorkCount.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.e("ScheduleActivity", responseData);
+                    parseJSONWithJSONObjectOfMissCount(responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 取得未回出勤的數量
+     * @param miss_count
+     */
+    private void parseJSONWithJSONObjectOfMissCount(final String miss_count) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("ScheduleActivity", miss_count);
+                if(miss_count.toString().equals("0")){
+                    badgeCount = 0;
+                    ShortcutBadger.removeCount(ScheduleActivity.this);
+                }else{
+                    int count = Integer.valueOf(miss_count);
+                    ShortcutBadger.applyCount(ScheduleActivity.this, count);
+                }
+            }
+        });
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d("ScheduleActivity", "onDestroy");
-
         handler = null; //此處在Activity退出時即時回收
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("ScheduleActivity", "onStart");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("ScheduleActivity", "onPause");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("ScheduleActivity", "onResume");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("ScheduleActivity", "onStop");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("ScheduleActivity", "onRestart");
+        today_TableLayout.removeAllViews();
+        week_TableLayout.removeAllViews();
+        missing_TableLayout.removeAllViews();
+        sendRequestWithOkHttpForToday();
+        sendRequestWithOkHttpForWeek();
+        sendRequestWithOkHttpForMissing();
+        sendRequestWithOkHttpOfMissCount();
     }
 }
