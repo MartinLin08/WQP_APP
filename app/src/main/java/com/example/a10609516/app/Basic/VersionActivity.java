@@ -22,6 +22,7 @@ import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.app.R;
 import com.example.a10609516.app.Workers.CalendarActivity;
+import com.example.a10609516.app.Workers.PointsActivity;
 import com.example.a10609516.app.Workers.ScheduleActivity;
 import com.example.a10609516.app.Workers.SearchActivity;
 import com.google.firebase.database.DataSnapshot;
@@ -41,10 +42,11 @@ import java.util.Map;
 
 public class VersionActivity extends AppCompatActivity {
 
-    private TextView detail_txt1, detail_txt2, detail_txt3, detail_txt4;
-    private LinearLayout detail_llt1, detail_llt2, detail_llt3, detail_llt4;
-    private Button version_btn1, version_btn2, version_btn3, version_btn4;
-    private Button version_up_btn1, version_up_btn2, version_up_btn3, version_up_btn4;
+    private TextView detail_txt0, detail_txt1, detail_txt2, detail_txt3, detail_txt4;
+    private LinearLayout detail_llt0, detail_llt1, detail_llt2, detail_llt3, detail_llt4;
+    private Button version_btn0, version_btn1, version_btn2, version_btn3, version_btn4;
+    private Button version_up_btn0, version_up_btn1, version_up_btn2, version_up_btn3, version_up_btn4;
+
 
     /**
      * 創建Menu
@@ -54,8 +56,8 @@ public class VersionActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        SharedPreferences user_id = getSharedPreferences("department_id" , MODE_PRIVATE);
-        String department_id_data = user_id.getString("D_ID" , "");
+        SharedPreferences department_id = getSharedPreferences("department_id" , MODE_PRIVATE);
+        String department_id_data = department_id.getString("D_ID" , "");
         if (department_id_data.toString().equals("2100")) {
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
@@ -140,6 +142,11 @@ public class VersionActivity extends AppCompatActivity {
                 startActivity(intent11);
                 Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
                 break; //進入報價單審核頁面
+            case R.id.points_item:
+                Intent intent12 = new Intent(VersionActivity.this, PointsActivity.class);
+                startActivity(intent12);
+                Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
+                break; //進入查詢工務點數頁面
             default:
         }
         return true;
@@ -163,18 +170,22 @@ public class VersionActivity extends AppCompatActivity {
      * 動態取得 View 物件
      */
     private void InItFunction(){
+        detail_txt0 = (TextView)findViewById(R.id.detail_txt0);
         detail_txt1 = (TextView)findViewById(R.id.detail_txt1);
         detail_txt2 = (TextView)findViewById(R.id.detail_txt2);
         detail_txt3 = (TextView)findViewById(R.id.detail_txt3);
         detail_txt4 = (TextView)findViewById(R.id.detail_txt4);
+        detail_llt0 = (LinearLayout)findViewById(R.id.detail_llt0);
         detail_llt1 = (LinearLayout)findViewById(R.id.detail_llt1);
         detail_llt2 = (LinearLayout)findViewById(R.id.detail_llt2);
         detail_llt3 = (LinearLayout)findViewById(R.id.detail_llt3);
         detail_llt4 = (LinearLayout)findViewById(R.id.detail_llt4);
+        version_btn0 = (Button)findViewById(R.id.version_btn0);
         version_btn1 = (Button)findViewById(R.id.version_btn1);
         version_btn2 = (Button)findViewById(R.id.version_btn2);
         version_btn3 = (Button)findViewById(R.id.version_btn3);
         version_btn4 = (Button)findViewById(R.id.version_btn4);
+        version_up_btn0 = (Button)findViewById(R.id.version_up_btn0);
         version_up_btn1 = (Button)findViewById(R.id.version_up_btn1);
         version_up_btn2 = (Button)findViewById(R.id.version_up_btn2);
         version_up_btn3 = (Button)findViewById(R.id.version_up_btn3);
@@ -185,22 +196,39 @@ public class VersionActivity extends AppCompatActivity {
      * 版本詳細資訊
      */
     private void DetailOfVersion(){
-        detail_txt1.setText("1.新增工務部 - 行程資訊、派工行事曆、查詢派工資料 \n" +
+        detail_txt0.setText("1.新增工務部 - 行程資訊、派工行事曆、查詢派工資料 \n" +
                             "2.新增工務部 - 出勤維護回報功能 \n" +
                             "3.新增推播功能-工務(新派工、更新派工、取消派工) \n" +
                             "4.新增客戶電子簽名、QRCode功能");
-        detail_txt2.setText("1.新增業務部 - 報價單審核");
-        detail_txt3.setText("1.關閉工務部 - 客戶電子簽名功能 \n" +
+        detail_txt1.setText("1.新增業務部 - 報價單審核");
+        detail_txt2.setText("1.關閉工務部 - 客戶電子簽名功能 \n" +
                             "2.新增工務部 - 回報派工頁面自動帶入當天日期與客戶預約時間 \n" +
                             "3.新增工務部 - 派工地址可長按點擊複製");
-        detail_txt4.setText("1.新增APP線上更新功能 \n" +
+        detail_txt3.setText("1.新增APP線上更新功能 \n" +
                             "2.新增工務部 - 出勤回報的付款方式可更改(現金、匯款、支票、信用卡)");
+        detail_txt4.setText("1.新增工務部 - 可檢視當天當工的工務點數與工務獎金 \n" +
+                            "2.新增工務部 - 工務點數獎金查詢(可查詢A點數、B點數、D點數、AB點數合計、工務獎金) \n" +
+                            "3.新增業務部 - 報價單已讀功能");
     }
 
     /**
      * 查看版本
      */
     private void CheckWhatDetail() {
+        version_btn0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt0.setVisibility(View.VISIBLE);
+                version_up_btn0.setVisibility(View.VISIBLE);
+            }
+        });
+        version_up_btn0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt0.setVisibility(View.GONE);
+                version_up_btn0.setVisibility(View.GONE);
+            }
+        });
         version_btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -315,8 +343,8 @@ public class VersionActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            //URL url = new URL("http://192.168.0.201/wqp_1.4.apk");
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.4.apk");
+            //URL url = new URL("http://192.168.0.201/wqp_1.5.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.5.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -326,7 +354,7 @@ public class VersionActivity extends AppCompatActivity {
             String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.4.apk");
+            File outputFile = new File(file, "wqp_1.5.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -340,7 +368,7 @@ public class VersionActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.4.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.5.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 

@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.a10609516.app.Element.BackKeyActivity">
+    tools:context="com.example.a10609516.app.Tools.BackKeyActivity">
 
 </android.support.constraint.ConstraintLayout>

@@ -34,7 +34,7 @@ import android.widget.TextView;
 import com.example.a10609516.app.Basic.QRCodeActivity;
 import com.example.a10609516.app.Clerk.QuotationActivity;
 import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
-import com.example.a10609516.app.Element.DatePickerFragment;
+import com.example.a10609516.app.Tools.DatePickerFragment;
 import com.example.a10609516.app.Basic.MenuActivity;
 import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.app.R;
@@ -72,7 +72,7 @@ public class CalendarActivity extends AppCompatActivity {
     private LinearLayout search_llt, calendar_llt;
     private Spinner company_spinner;
     private TextView date_txt, search_up_txt, search_down_txt, dynamically_txt, dynamically_type,
-            dynamically_customer, dynamically_phone, dynamically_address;
+                     dynamically_customer, dynamically_phone, dynamically_address;
     private Button work_date_btn, last_btn, search_btn, next_btn;
     private ProgressBar dynamically_PGTime;
 
@@ -88,8 +88,8 @@ public class CalendarActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        SharedPreferences user_id = getSharedPreferences("department_id" , MODE_PRIVATE);
-        String department_id_data = user_id.getString("D_ID" , "");
+        SharedPreferences department_id = getSharedPreferences("department_id" , MODE_PRIVATE);
+        String department_id_data = department_id.getString("D_ID" , "");
         if (department_id_data.toString().equals("2100")) {
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
@@ -177,6 +177,11 @@ public class CalendarActivity extends AppCompatActivity {
                 startActivity(intent11);
                 Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
                 break; //進入報價單審核頁面
+            case R.id.points_item:
+                Intent intent12 = new Intent(CalendarActivity.this, PointsActivity.class);
+                startActivity(intent12);
+                Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
+                break; //進入查詢工務點數頁面
             default:
         }
         return true;
@@ -900,8 +905,8 @@ public class CalendarActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            //URL url = new URL("http://192.168.0.201/wqp_1.4.apk");
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.4.apk");
+            //URL url = new URL("http://192.168.0.201/wqp_1.5.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.5.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -911,7 +916,7 @@ public class CalendarActivity extends AppCompatActivity {
             String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.4.apk");
+            File outputFile = new File(file, "wqp_1.5.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -925,7 +930,7 @@ public class CalendarActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.4.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.5.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 

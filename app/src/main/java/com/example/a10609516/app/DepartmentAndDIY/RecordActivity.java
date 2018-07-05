@@ -15,10 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.a10609516.app.Basic.MenuActivity;
+import com.example.a10609516.app.Clerk.QuotationActivity;
 import com.example.a10609516.app.R;
 import com.example.a10609516.app.Basic.VersionActivity;
 import com.example.a10609516.app.Workers.CalendarActivity;
 import com.example.a10609516.app.Basic.QRCodeActivity;
+import com.example.a10609516.app.Workers.PointsActivity;
 import com.example.a10609516.app.Workers.ScheduleActivity;
 import com.example.a10609516.app.Workers.SearchActivity;
 
@@ -113,6 +115,16 @@ public class RecordActivity extends AppCompatActivity {
                 startActivity(intent10);
                 Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
                 break; //進入QRCode頁面
+            case R.id.quotation_item:
+                Intent intent11 = new Intent(RecordActivity.this, QuotationActivity.class);
+                startActivity(intent11);
+                Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
+                break; //進入報價單審核頁面
+            case R.id.points_item:
+                Intent intent12 = new Intent(RecordActivity.this, PointsActivity.class);
+                startActivity(intent12);
+                Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
+                break; //進入查詢工務點數頁面
             default:
         }
         return true;
@@ -194,5 +206,3 @@ public class RecordActivity extends AppCompatActivity {
         Log.d("RecordActivity", "onDestroy");
     }
 }
-
-

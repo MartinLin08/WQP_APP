@@ -5,4 +5,4 @@
     android:id="@+id/main_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.a10609516.app.Element.ScannerActivity"></FrameLayout>
+    tools:context="com.example.a10609516.app.Tools.ScannerActivity"></FrameLayout>

@@ -24,6 +24,7 @@ import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.app.R;
 import com.example.a10609516.app.Workers.CalendarActivity;
+import com.example.a10609516.app.Workers.PointsActivity;
 import com.example.a10609516.app.Workers.ScheduleActivity;
 import com.example.a10609516.app.Workers.SearchActivity;
 import com.google.firebase.database.DataSnapshot;
@@ -50,7 +51,7 @@ import okhttp3.Response;
 public class MenuActivity extends AppCompatActivity {
 
     private ListView announcement_ListView;
-    private String[] show_text = {"","","","","","",""};
+    private String[] show_text = {"", "", "", "", "", "", ""};
     private ArrayAdapter listAdapter;
     private Spinner announcement_spinner;
     private TextView name_textView;
@@ -63,18 +64,18 @@ public class MenuActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        SharedPreferences user_id = getSharedPreferences("department_id" , MODE_PRIVATE);
-        String department_id_data = user_id.getString("D_ID" , "");
+        SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
+        String department_id_data = department_id.getString("D_ID", "");
         if (department_id_data.toString().equals("2100")) {
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("2200")) {
+        } else if (department_id_data.toString().equals("2200")) {
             getMenuInflater().inflate(R.menu.diy_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("5200")) {
+        } else if (department_id_data.toString().equals("5200")) {
             getMenuInflater().inflate(R.menu.workers_menu, menu);
             return true;
-        }else{
+        } else {
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
         }
@@ -82,6 +83,7 @@ public class MenuActivity extends AppCompatActivity {
 
     /**
      * 進入Menu各個頁面
+     *
      * @param item
      * @return
      */
@@ -150,6 +152,11 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(intent11);
                 Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
                 break; //進入報價單審核頁面
+            case R.id.points_item:
+                Intent intent12 = new Intent(MenuActivity.this, PointsActivity.class);
+                startActivity(intent12);
+                Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
+                break; //進入查詢工務點數頁面
             default:
         }
         return true;
@@ -191,19 +198,19 @@ public class MenuActivity extends AppCompatActivity {
     /**
      * 與資料庫連線 藉由登入輸入的員工ID取得員工姓名
      */
-    private void sendRequestWithOkHttp(){
+    private void sendRequestWithOkHttp() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 //接收LoginActivity傳過來的值
-                SharedPreferences user_id = getSharedPreferences("user_id_data" , MODE_PRIVATE);
-                String user_id_data = user_id.getString("ID" , "");
-                Log.i("MenuActivity",user_id_data);
-                try{
+                SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID", "");
+                Log.i("MenuActivity", user_id_data);
+                try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
                     RequestBody requestBody = new FormBody.Builder()
-                            .add("User_id",user_id_data)
+                            .add("User_id", user_id_data)
                             .build();
                     Request request = new Request.Builder()
                             .url("http://220.133.80.146/WQP/MenuUserName.php")
@@ -211,9 +218,9 @@ public class MenuActivity extends AppCompatActivity {
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.i("MenuActivity",responseData);
+                    Log.i("MenuActivity", responseData);
                     showResponse(responseData);
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -222,9 +229,10 @@ public class MenuActivity extends AppCompatActivity {
 
     /**
      * 在TextView上SHOW出回傳的員工姓名
+     *
      * @param response
      */
-    private void showResponse(final String response){
+    private void showResponse(final String response) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -250,6 +258,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Toast.makeText(MenuActivity.this, "你選的是" + announcement[position], Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
@@ -299,6 +308,7 @@ public class MenuActivity extends AppCompatActivity {
                                     }).show();
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
@@ -312,8 +322,8 @@ public class MenuActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            //URL url = new URL("http://192.168.0.201/wqp_1.4.apk");
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.4.apk");
+            //URL url = new URL("http://192.168.0.201/wqp_1.5.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.5.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -323,7 +333,7 @@ public class MenuActivity extends AppCompatActivity {
             String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.4.apk");
+            File outputFile = new File(file, "wqp_1.5.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -337,7 +347,7 @@ public class MenuActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.4.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.5.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 

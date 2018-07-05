@@ -14,7 +14,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="vertical"
-        tools:context="com.example.a10609516.app.Workers.MaintainActivity">
+        tools:context="com.example.a10609516.myapplication.Workers.MaintainActivity">
 
         <TextView
             android:id="@+id/maintain_textView"
@@ -121,9 +121,9 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="5dp"
-                    android:paddingLeft="8dp"
                     android:layout_weight="0.6"
                     android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
                     android:text=""
                     android:textColor="@color/colorAccent"
                     android:textSize="17sp" />
@@ -183,8 +183,8 @@
                     android:layout_height="36dp"
                     android:layout_column="1"
                     android:layout_marginBottom="2dp"
-                    android:layout_marginTop="3dp"
                     android:layout_marginRight="30dp"
+                    android:layout_marginTop="3dp"
                     android:layout_weight="0.9"
                     android:background="#F5F5F5"
                     android:gravity="center" />
@@ -277,9 +277,9 @@
                     android:layout_column="1"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="8dp"
-                    android:paddingLeft="8dp"
                     android:layout_weight="0.9"
                     android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
                     android:text=""
                     android:textColor="@color/colorAccent"
                     android:textSize="16dp" />
@@ -342,11 +342,11 @@
                     android:layout_height="40dp"
                     android:layout_column="1"
                     android:layout_marginRight="20dp"
-                    android:paddingLeft="12dp"
                     android:layout_weight="0.9"
                     android:cursorVisible="false"
                     android:gravity="center_vertical"
                     android:hint="金額"
+                    android:paddingLeft="12dp"
                     android:textColor="@color/colorAccent"
                     android:textSize="15sp" />
 
@@ -378,11 +378,11 @@
                     android:layout_height="40dp"
                     android:layout_column="1"
                     android:layout_marginRight="20dp"
-                    android:paddingLeft="12dp"
                     android:layout_weight="0.9"
                     android:cursorVisible="false"
                     android:gravity="center_vertical"
                     android:hint="已收金額"
+                    android:paddingLeft="12dp"
                     android:textColor="@color/colorAccent"
                     android:textSize="15sp" />
 
@@ -418,7 +418,7 @@
                     android:text="已收款(信用卡)"
                     android:textColor="@color/colorAccent"
                     android:textSize="17sp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </TableRow>
 
@@ -623,10 +623,10 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:weightSum="1"
                 tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="8dp"
-                android:visibility="gone">
+                tools:layout_editor_absoluteY="8dp">
 
                 <TextView
                     android:id="@+id/my_on_type"
@@ -642,7 +642,7 @@
                     android:textSize="17sp" />
 
                 <TextView
-                    android:id="@+id/esvd_eng_points_txt"
+                    android:id="@+id/esvd_eng_dpoints_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_column="1"
@@ -651,11 +651,55 @@
                     android:text=""
                     android:textColor="@color/colorAccent"
                     android:textSize="17sp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
             </TableRow>
 
         </TableLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="10dp"
+                android:text="本次派工點數 : "
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/esvd_eng_points_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="10dp"
+                android:text="本次派工點數獎金 : $"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/esvd_eng_money_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp" />
+
+        </LinearLayout>
 
         <TableLayout
             android:id="@+id/qrcode_tablelayot"
@@ -681,9 +725,9 @@
                     android:layout_height="wrap_content"
                     android:layout_column="0"
                     android:layout_marginLeft="10dp"
-                    android:paddingTop="4dp"
                     android:layout_weight="4"
                     android:gravity="center_vertical"
+                    android:paddingTop="4dp"
                     android:text="設備/耗材"
                     android:textColor="@color/colorAccent"
                     android:textSize="20sp" />
@@ -694,10 +738,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_weight="1"
+                    android:onClick="scanCode"
                     android:paddingBottom="3dp"
                     android:paddingTop="3dp"
-                    android:src="@drawable/qr_code"
-                    android:onClick="scanCode"/>
+                    android:src="@drawable/qr_code" />
 
             </TableRow>
 
@@ -731,8 +775,8 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="6dp"
-                android:layout_weight="0.5"
                 android:layout_toRightOf="@+id/check_button"
+                android:layout_weight="0.5"
                 android:background="@drawable/cancel_button"
                 android:text="取消"
                 android:textColor="@color/colorAccent"

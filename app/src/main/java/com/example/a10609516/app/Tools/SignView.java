@@ -1,4 +1,4 @@
-package com.example.a10609516.app.Element;
+package com.example.a10609516.app.Tools;
 
 /**
  * Created by 10609516 on 2018/2/22.
@@ -16,7 +16,6 @@ import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 
 public class SignView extends View {
 

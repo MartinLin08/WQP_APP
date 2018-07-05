@@ -16,11 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -30,11 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.a10609516.app.Clerk.QuotationActivity;
-import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
-import com.example.a10609516.app.Element.HttpParse;
+import com.example.a10609516.app.Tools.HttpParse;
 import com.example.a10609516.app.R;
-import com.example.a10609516.app.Workers.ScheduleActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -197,11 +190,6 @@ public class LoginActivity extends AppCompatActivity {
                 //Log.e("LoginActivity",httpResponseMsg);
                 if (version_no_txt.getText().toString().equals(ver_no)) {
                     if (httpResponseMsg.equalsIgnoreCase("登入成功")) {
-                        /*finish();
-                        Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-                        intent.putExtra(Userid, User_id);
-                        Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
-                        startActivity(intent);*/
                         if (department_txt.getText().toString().equals("8888")) {
                             Toast.makeText(LoginActivity.this, "無使用權限", Toast.LENGTH_SHORT).show();
                         } else {
@@ -269,7 +257,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.4.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.5.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -279,7 +267,7 @@ public class LoginActivity extends AppCompatActivity {
             String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.4.apk");
+            File outputFile = new File(file, "wqp_1.5.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -293,7 +281,7 @@ public class LoginActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.4.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.5.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 
@@ -310,7 +298,7 @@ public class LoginActivity extends AppCompatActivity {
             LoginActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getApplicationContext(), "更新錯誤!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "更新失敗!", Toast.LENGTH_LONG).show();
                 }
             });
 

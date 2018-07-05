@@ -13,12 +13,14 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
-import com.example.a10609516.app.Element.DatePickerFragment;
+import com.example.a10609516.app.Clerk.QuotationActivity;
+import com.example.a10609516.app.Tools.DatePickerFragment;
 import com.example.a10609516.app.Basic.MenuActivity;
 import com.example.a10609516.app.R;
 import com.example.a10609516.app.Basic.VersionActivity;
 import com.example.a10609516.app.Workers.CalendarActivity;
 import com.example.a10609516.app.Basic.QRCodeActivity;
+import com.example.a10609516.app.Workers.PointsActivity;
 import com.example.a10609516.app.Workers.ScheduleActivity;
 import com.example.a10609516.app.Workers.SearchActivity;
 
@@ -32,8 +34,8 @@ public class CorrectActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        SharedPreferences user_id = getSharedPreferences("department_id" , MODE_PRIVATE);
-        String department_id_data = user_id.getString("D_ID" , "");
+        SharedPreferences department_id = getSharedPreferences("department_id" , MODE_PRIVATE);
+        String department_id_data = department_id.getString("D_ID" , "");
         if (department_id_data.toString().equals("2100")) {
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
@@ -110,6 +112,16 @@ public class CorrectActivity extends AppCompatActivity {
                 startActivity(intent10);
                 Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
                 break; //進入QRCode頁面
+            case R.id.quotation_item:
+                Intent intent11 = new Intent(CorrectActivity.this, QuotationActivity.class);
+                startActivity(intent11);
+                Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
+                break; //進入報價單審核頁面
+            case R.id.points_item:
+                Intent intent12 = new Intent(CorrectActivity.this, PointsActivity.class);
+                startActivity(intent12);
+                Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
+                break; //進入查詢工務點數頁面
             default:
         }
         return true;

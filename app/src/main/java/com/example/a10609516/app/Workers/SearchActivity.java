@@ -42,7 +42,7 @@ import android.os.Message;
 import com.example.a10609516.app.Basic.QRCodeActivity;
 import com.example.a10609516.app.Clerk.QuotationActivity;
 import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
-import com.example.a10609516.app.Element.DatePickerFragment;
+import com.example.a10609516.app.Tools.DatePickerFragment;
 import com.example.a10609516.app.Basic.MenuActivity;
 import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.app.R;
@@ -82,18 +82,18 @@ public class SearchActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        SharedPreferences user_id = getSharedPreferences("department_id" , MODE_PRIVATE);
-        String department_id_data = user_id.getString("D_ID" , "");
+        SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
+        String department_id_data = department_id.getString("D_ID", "");
         if (department_id_data.toString().equals("2100")) {
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("2200")) {
+        } else if (department_id_data.toString().equals("2200")) {
             getMenuInflater().inflate(R.menu.diy_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("5200")) {
+        } else if (department_id_data.toString().equals("5200")) {
             getMenuInflater().inflate(R.menu.workers_menu, menu);
             return true;
-        }else{
+        } else {
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
         }
@@ -101,6 +101,7 @@ public class SearchActivity extends AppCompatActivity {
 
     /**
      * 進入Menu各個頁面
+     *
      * @param item
      * @return
      */
@@ -170,6 +171,11 @@ public class SearchActivity extends AppCompatActivity {
                 startActivity(intent11);
                 Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
                 break; //進入報價單審核頁面
+            case R.id.points_item:
+                Intent intent12 = new Intent(SearchActivity.this, PointsActivity.class);
+                startActivity(intent12);
+                Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
+                break; //進入查詢工務點數頁面
             default:
         }
         return true;
@@ -219,7 +225,7 @@ public class SearchActivity extends AppCompatActivity {
                 //建立SearchData.php OKHttp連線
                 sendRequestWithOkHttp();
                 //取得未回派工數量
-                sendRequestWithOkHttpOfMissCount();
+                sendRequestWithOkHttpForMissCount();
             }
         });//end setOnItemClickListener
         //Clean_Start_Button.setOnClickListener監聽器  //清空time_start_button內的文字
@@ -286,6 +292,7 @@ public class SearchActivity extends AppCompatActivity {
 
     /**
      * 獲得JSON字串並解析成String字串
+     *
      * @param jsonData
      */
     private void parseJSONWithJSONObject(String jsonData) {
@@ -369,10 +376,10 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人",
-                                          "主要電話", "次要電話", "派工地址", "付款方式", "是否要收款",
-                                          "應收款金額", "是否已收款", "已收款金額", "抵達日期", "抵達時間",
-                                          "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼",
-                                          "工務點數", "預約開始時間", "預約結束時間", "狀態"};
+                    "主要電話", "次要電話", "派工地址", "付款方式", "是否要收款",
+                    "應收款金額", "是否已收款", "已收款金額", "抵達日期", "抵達時間",
+                    "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼",
+                    "工務點數", "預約開始時間", "預約結束時間", "狀態"};
             switch (msg.what) {
                 case 1:
                     //最外層有一個大的TableLayout,再設置TableRow包住小的TableLayout
@@ -499,7 +506,6 @@ public class SearchActivity extends AppCompatActivity {
                     if ((dynamically_btn.length - 1) != loc) {
                         small_tb.addView(tr3);
                     }
-
                     big_tbr.addView(small_tb);
 
                     TableRow.LayoutParams the_param3;
@@ -519,6 +525,7 @@ public class SearchActivity extends AppCompatActivity {
 
     /**
      * 日期挑選器
+     *
      * @param v
      */
     public void showDatePickerDialog(View v) {
@@ -558,6 +565,7 @@ public class SearchActivity extends AppCompatActivity {
 
     /**
      * 實現畫面置頂按鈕
+     *
      * @param view
      */
     public void GoTopBtn(View view) {
@@ -613,6 +621,7 @@ public class SearchActivity extends AppCompatActivity {
                                     }).show();
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
@@ -626,8 +635,8 @@ public class SearchActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            //URL url = new URL("http://192.168.0.201/wqp_1.4.apk");
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.4.apk");
+            //URL url = new URL("http://192.168.0.201/wqp_1.5.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.5.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -637,7 +646,7 @@ public class SearchActivity extends AppCompatActivity {
             String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.4.apk");
+            File outputFile = new File(file, "wqp_1.5.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -651,7 +660,7 @@ public class SearchActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.4.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.5.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 
@@ -674,16 +683,10 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d("SearchActivity", "onDestroy");
-    }
-
     /**
      * 與OkHttp建立連線(未回派工數量)
      */
-    private void sendRequestWithOkHttpOfMissCount() {
+    private void sendRequestWithOkHttpForMissCount() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -699,13 +702,12 @@ public class SearchActivity extends AppCompatActivity {
                             .build();
                     Request request = new Request.Builder()
                             .url("http://220.133.80.146/WQP/MissWorkCount.php")
-                            //.url("http://192.168.0.172/WQP/MissWorkCount.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
                     Log.e("SearchActivity", responseData);
-                    parseJSONWithJSONObjectOfMissCount(responseData);
+                    parseJSONWithJSONObjectForMissCount(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -715,17 +717,18 @@ public class SearchActivity extends AppCompatActivity {
 
     /**
      * 取得未回出勤的數量
+     *
      * @param miss_count
      */
-    private void parseJSONWithJSONObjectOfMissCount(final String miss_count) {
+    private void parseJSONWithJSONObjectForMissCount(final String miss_count) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Log.e("SearchActivity", miss_count);
-                if(miss_count.toString().equals("0")){
+                if (miss_count.toString().equals("0")) {
                     badgeCount = 0;
                     ShortcutBadger.removeCount(SearchActivity.this);
-                }else{
+                } else {
                     int count = Integer.valueOf(miss_count);
                     ShortcutBadger.applyCount(SearchActivity.this, count);
                 }
@@ -738,6 +741,12 @@ public class SearchActivity extends AppCompatActivity {
         super.onRestart();
         Log.d("SearchActivity", "onRestart");
         //取得未回派工數量
-        sendRequestWithOkHttpOfMissCount();
+        sendRequestWithOkHttpForMissCount();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("SearchActivity", "onDestroy");
     }
 }

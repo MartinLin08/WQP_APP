@@ -38,7 +38,7 @@ public class AuthorizeActivity extends AppCompatActivity {
     private TableLayout quotation_master_tb;
     private LinearLayout quotation_detail_llt, yes_no_llt, cancellation_llt, separate_llt;
     private TextView dynamically_master_title, dynamically_master_txt, mode_txt, dynamically_item_txt, dynamically_product_txt
-            , dynamically_count_txt, dynamically_price_txt, dynamically_total_txt, dynamically_money_txt;
+                   , dynamically_count_txt, dynamically_price_txt, dynamically_total_txt, dynamically_money_txt;
     private Button approved_button, reject_button, cancellation_button;
     String TA002TB002, ResponseText1, ResponseText2, company, quotation_type, COMPANY
             , TA001, TA001TA002, TA004, TA005, TA004TA006, TA009, TA010, TA011, TA020
@@ -59,6 +59,8 @@ public class AuthorizeActivity extends AppCompatActivity {
         sendRequestWithOkHttpForMaster();
         //建立QuotationMaster.php OKHttp連線
         sendRequestWithOkHttpForDetail();
+        //與OkHttp建立連線(QuotationRead.php)
+        sendRequestWithOkHttpForQuotationRead();
     }
 
     /**
@@ -141,6 +143,52 @@ public class AuthorizeActivity extends AppCompatActivity {
         Log.e("AuthorizeActivity0", ResponseText2);
         Log.e("AuthorizeActivity0", company);
         Log.e("AuthorizeActivity0", quotation_type);
+    }
+
+    /**
+     * 與OkHttp建立連線(已讀報價單)
+     */
+    private void sendRequestWithOkHttpForQuotationRead() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //接收LoginActivity傳過來的值
+                SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID", "");
+                Log.e("AuthorizeActivity111", user_id_data);
+                Log.e("AuthorizeActivity111", company);
+                Log.e("AuthorizeActivity111", quotation_type);
+                Log.e("AuthorizeActivity111", TA002TB002);
+
+                String quotation_read = "1";
+
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id", user_id_data)
+                            .add("COMPANY", company)
+                            .add("TA001", quotation_type)
+                            .add("TA002", TA002TB002)
+                            .add("Q_READ", quotation_read)
+                            .build();
+                    Log.e("AuthorizeActivity112", user_id_data);
+                    Log.e("AuthorizeActivity112", quotation_type);
+                    Log.e("AuthorizeActivity112", TA002TB002);
+                    Log.e("AuthorizeActivity112", company);
+                    Log.e("AuthorizeActivity112", quotation_read);
+                    Request request = new Request.Builder()
+                            .url("http://220.133.80.146/WQP/QuotationRead.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.e("AuthorizeActivity111", responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     /**

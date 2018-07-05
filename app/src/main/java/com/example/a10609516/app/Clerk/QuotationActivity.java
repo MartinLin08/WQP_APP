@@ -36,6 +36,7 @@ import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.app.R;
 import com.example.a10609516.app.Workers.CalendarActivity;
 import com.example.a10609516.app.Basic.QRCodeActivity;
+import com.example.a10609516.app.Workers.PointsActivity;
 import com.example.a10609516.app.Workers.ScheduleActivity;
 import com.example.a10609516.app.Workers.SearchActivity;
 import com.google.firebase.database.DataSnapshot;
@@ -81,18 +82,18 @@ public class QuotationActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        SharedPreferences user_id = getSharedPreferences("department_id" , MODE_PRIVATE);
-        String department_id_data = user_id.getString("D_ID" , "");
+        SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
+        String department_id_data = department_id.getString("D_ID", "");
         if (department_id_data.toString().equals("2100")) {
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("2200")) {
+        } else if (department_id_data.toString().equals("2200")) {
             getMenuInflater().inflate(R.menu.diy_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("5200")) {
+        } else if (department_id_data.toString().equals("5200")) {
             getMenuInflater().inflate(R.menu.workers_menu, menu);
             return true;
-        }else{
+        } else {
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
         }
@@ -164,6 +165,11 @@ public class QuotationActivity extends AppCompatActivity {
             case R.id.quotation_item:
                 Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
                 break; //顯示報價單審核
+            case R.id.points_item:
+                Intent intent12 = new Intent(QuotationActivity.this, PointsActivity.class);
+                startActivity(intent12);
+                Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
+                break; //進入查詢工務點數頁面
             default:
         }
         return true;
@@ -230,7 +236,7 @@ public class QuotationActivity extends AppCompatActivity {
      */
     private void TypeSpinner() {
         //Spinner下拉選單
-        final String[] returns = {"W210", "W211"};
+        final String[] returns = {"W210", "W211", "W212"};
         ArrayAdapter<String> quotation_type_List = new ArrayAdapter<>(QuotationActivity.this,
                 android.R.layout.simple_spinner_dropdown_item,
                 returns);
@@ -285,6 +291,8 @@ public class QuotationActivity extends AppCompatActivity {
                             .add("TA005", clerk)
                             .add("PROCESS", quotation_mode)
                             .build();
+                    Log.e("QuotationActivity2", user_id_data);
+                    Log.e("QuotationActivity2", clerk);
                     Log.e("QuotationActivity", quotation_type);
                     Log.e("QuotationActivity", quotation_no);
                     Log.e("QuotationActivity", quotation_mode);
@@ -424,9 +432,9 @@ public class QuotationActivity extends AppCompatActivity {
                     dynamically_txt1.setGravity(Gravity.LEFT);
                     dynamically_txt1.setTextColor(Color.rgb(6, 102, 219));
                     dynamically_txt1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-                    if (dynamically_txt1.getText().toString().equals("報價單號")){
+                    if (dynamically_txt1.getText().toString().equals("報價單號")) {
                         dynamically_txt1.setGravity(Gravity.CENTER_VERTICAL);
-                        dynamically_txt1.setPadding(10,5,0,0);
+                        dynamically_txt1.setPadding(10, 5, 0, 0);
                         dynamically_txt1.setTextColor(Color.rgb(0, 51, 102));
                         //dynamically_txt1.setBackgroundResource(R.drawable.warningline);
                     }
@@ -438,9 +446,9 @@ public class QuotationActivity extends AppCompatActivity {
                     dynamically_txt2.setGravity(Gravity.LEFT);
                     dynamically_txt2.setTextColor(Color.rgb(6, 102, 219));
                     dynamically_txt2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-                    if (dynamically_txt2.getText().toString().equals("客戶代號")){
+                    if (dynamically_txt2.getText().toString().equals("客戶代號")) {
                         dynamically_txt2.setGravity(Gravity.CENTER_VERTICAL);
-                        dynamically_txt2.setPadding(30,5,0,0);
+                        dynamically_txt2.setPadding(30, 5, 0, 0);
                         dynamically_txt2.setTextColor(Color.rgb(0, 51, 102));
                         //dynamically_txt2.setBackgroundResource(R.drawable.warningline);
                     }
@@ -452,9 +460,9 @@ public class QuotationActivity extends AppCompatActivity {
                     dynamically_txt3.setGravity(Gravity.LEFT);
                     dynamically_txt3.setTextColor(Color.rgb(6, 102, 219));
                     dynamically_txt3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-                    if (dynamically_txt3.getText().toString().equals("業務姓名")){
+                    if (dynamically_txt3.getText().toString().equals("業務姓名")) {
                         dynamically_txt3.setGravity(Gravity.CENTER_VERTICAL);
-                        dynamically_txt3.setPadding(18,5,0,0);
+                        dynamically_txt3.setPadding(18, 5, 0, 0);
                         dynamically_txt3.setTextColor(Color.rgb(0, 51, 102));
                         //dynamically_txt3.setBackgroundResource(R.drawable.warningline);
                     }
@@ -529,6 +537,7 @@ public class QuotationActivity extends AppCompatActivity {
                                     }).show();
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
@@ -542,8 +551,8 @@ public class QuotationActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            //URL url = new URL("http://192.168.0.201/wqp_1.4.apk");
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.4.apk");
+            //URL url = new URL("http://192.168.0.201/wqp_1.5.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.5.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -553,7 +562,7 @@ public class QuotationActivity extends AppCompatActivity {
             String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.4.apk");
+            File outputFile = new File(file, "wqp_1.5.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -567,7 +576,7 @@ public class QuotationActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.4.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.5.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 

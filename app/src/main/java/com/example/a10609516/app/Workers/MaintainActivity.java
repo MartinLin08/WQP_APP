@@ -27,9 +27,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.a10609516.app.Element.DatePickerFragment;
-import com.example.a10609516.app.Element.ScannerActivity;
-import com.example.a10609516.app.Basic.SignatureActivity;
+import com.example.a10609516.app.Tools.DatePickerFragment;
+import com.example.a10609516.app.Tools.ScannerActivity;
 import com.example.a10609516.app.R;
 
 import java.text.SimpleDateFormat;
@@ -45,10 +44,10 @@ public class MaintainActivity extends AppCompatActivity {
     private ImageView add_qrcode;
     private Button arrive_button, check_button, cancel_button;
     private TextView work_type_name_txt, svd_service_no_txt, esv_note_txt, time_period_name_txt, cp_name_txt,
-            esvd_eng_points_txt, esvd_is_money_txt, esvd_booking_remark_txt, have_get_money_txt, esvd_remark_txt,
-            reason_txt, esvd_is_eng_money_txt, maintain_textView, my_on_type;
+                     esvd_eng_points_txt, esvd_is_money_txt, esvd_booking_remark_txt, have_get_money_txt, esvd_remark_txt,
+                     reason_txt, esvd_is_eng_money_txt, maintain_textView, my_on_type, esvd_eng_money_txt;
     private TableLayout maintain_tablelayot, qrcode_tablelayot;
-    private CheckBox is_get_money_checkBox, have_get_money_checkBox, not_get_money_checkBox, not_get_all_checkBox, credit_card_checkBox;
+    private CheckBox is_get_money_checkBox, have_get_money_checkBox, not_get_money_checkBox, not_get_all_checkBox;
     private EditText have_get_money_edt, not_get_money_edt, not_get_all_edt, not_get_all_reason_edt;
     private Spinner arrive_spinner, leave_spinner, reason_spinner, useless_spinner, cp_name_spinner;
     private ArrayAdapter<String> time_listAdapter, work_listAdapter, reason_listAdapter, pay_listAdapter;
@@ -56,6 +55,10 @@ public class MaintainActivity extends AppCompatActivity {
             , "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00"
             , "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30"
             , "23:00", "23:30", "00:00"};
+    /*private String[] time2 = new String[]{"", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30"
+            , "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00"
+            , "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30"
+            , "23:00", "23:30", "00:00"};*/
     private String[] reason_spinnerprivate = new String[]{"請選擇", "產品瑕疵", "安裝不當", "使用不良", "安裝收尾", "零件老化", "其他", "現場勘查"};
     private String[] useless_work = new String[]{"無", "客人不在場", "現場無法施工", "材料有異", "其他", "業務取消"};
     private String[] pay_mode = new String[]{"無", "現金", "匯款", "支票", "信用卡"};
@@ -73,6 +76,8 @@ public class MaintainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         //動態取得 View 物件
         InItFunction();
+        //與OKHttp取得連線(取得工務點數分配金額)
+        sendRequestWithOkHttpForWorkPoints();
         //取得SearchActivity傳遞過來的值
         GetResponseData();
         //判斷SearchActivity的是否要收款傳遞過來的值為(是/否)
@@ -110,6 +115,7 @@ public class MaintainActivity extends AppCompatActivity {
         esvd_eng_points_txt = (TextView) findViewById(R.id.esvd_eng_points_txt);
         maintain_textView = (TextView) findViewById(R.id.maintain_textView);
         my_on_type = (TextView) findViewById(R.id.my_on_type);
+        esvd_eng_money_txt = (TextView) findViewById(R.id.esvd_eng_money_txt);
         arrive_button = (Button) findViewById(R.id.arrive_button);
         is_get_money_checkBox = (CheckBox) findViewById(R.id.is_get_money_checkBox);
         have_get_money_checkBox = (CheckBox) findViewById(R.id.have_get_money_checkBox);
@@ -153,7 +159,7 @@ public class MaintainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(my_on_type.getText().toString().equals("2")){
                     Toast.makeText(MaintainActivity.this, "【此派工已結案】", Toast.LENGTH_SHORT).show();
-                }else {
+                }else{
                     if (arrive_button.getText().toString().equals("") || arrive_spinner.getSelectedItem().equals("選擇") || leave_spinner.getSelectedItem().equals("選擇")) {
                         if (arrive_button.getText().toString().equals("")) {
                             Toast.makeText(MaintainActivity.this, "【請選擇抵達日期!!!】", Toast.LENGTH_SHORT).show();
@@ -389,7 +395,6 @@ public class MaintainActivity extends AppCompatActivity {
                     //not_get_all_reason_edt.setEnabled(true);
                 }*/
                 break;
-
             case R.id.not_get_all_checkBox:
                 if (checked) {
                     not_get_all_edt.setEnabled(true);
@@ -405,7 +410,6 @@ public class MaintainActivity extends AppCompatActivity {
                     //not_get_money_edt.setEnabled(true);
                 }*/
                 break;
-
             case R.id.not_get_money_checkBox:
                 if (checked) {
                     have_get_money_checkBox.setChecked(false);
@@ -422,7 +426,6 @@ public class MaintainActivity extends AppCompatActivity {
                     //not_get_all_reason_edt.setEnabled(true);
                 }*/
                 break;
-
         }
     }
 
@@ -457,6 +460,7 @@ public class MaintainActivity extends AppCompatActivity {
 
     /**
      * 日期挑選器
+     *
      * @param v
      */
     public void showDatePickerDialog(View v) {
@@ -554,7 +558,6 @@ public class MaintainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 //接收LoginActivity傳過來的值
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
                 String user_id_data = user_id.getString("ID", "");
@@ -861,6 +864,54 @@ public class MaintainActivity extends AppCompatActivity {
     }
 
     /**
+     * 與OKHttp連線(工務點數)
+     */
+    private void sendRequestWithOkHttpForWorkPoints(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //接收LoginActivity傳過來的值
+                SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+                String user_id_data = user_id.getString("ID", "");
+                Log.e("MaintainActivity", user_id_data);
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("User_id", user_id_data)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("http://220.133.80.146/WQP/WorkPoints.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.e("MaintainActivity", responseData);
+                    parseJSONWithJSONObjectForWorkPoints(responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 取得工務點數金額的數量
+     * @param distribution_money
+     */
+    private void parseJSONWithJSONObjectForWorkPoints(final String distribution_money) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("MaintainActivity","MONEY : " + distribution_money);
+                float points = Float.parseFloat(esvd_eng_points_txt.getText().toString());
+                int money = Integer.parseInt(distribution_money.toString());
+                esvd_eng_money_txt.setText(String.valueOf(points * money));
+            }
+        });
+    }
+
+    /**
      * Button的設置
      */
     public void scanCode(View view) {
@@ -935,4 +986,3 @@ public class MaintainActivity extends AppCompatActivity {
         }
     }
 }
-

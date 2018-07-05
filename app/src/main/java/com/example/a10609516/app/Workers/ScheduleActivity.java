@@ -96,8 +96,8 @@ public class ScheduleActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        SharedPreferences user_id = getSharedPreferences("department_id" , MODE_PRIVATE);
-        String department_id_data = user_id.getString("D_ID" , "");
+        SharedPreferences department_id = getSharedPreferences("department_id" , MODE_PRIVATE);
+        String department_id_data = department_id.getString("D_ID" , "");
         if (department_id_data.toString().equals("2100")) {
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
@@ -115,6 +115,7 @@ public class ScheduleActivity extends AppCompatActivity {
 
     /**
      * 進入Menu各個頁面
+     *
      * @param item
      * @return
      */
@@ -184,6 +185,11 @@ public class ScheduleActivity extends AppCompatActivity {
                 startActivity(intent11);
                 Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
                 break; //進入報價單審核頁面
+            case R.id.points_item:
+                Intent intent12 = new Intent(ScheduleActivity.this, PointsActivity.class);
+                startActivity(intent12);
+                Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
+                break; //進入查詢工務點數頁面
             default:
         }
         return true;
@@ -203,22 +209,7 @@ public class ScheduleActivity extends AppCompatActivity {
         initCircle();
         //確認是否有最新版本，進行更新
         CheckFirebaseVersion();
-        //計時器
-        /*handler = new Handler();
-        handler.postDelayed(new TimerRunnable(), 5000);*/
     }
-
-    /*class TimerRunnable implements Runnable {
-
-        @Override
-        public void run() {
-            int curItem = viewPager.getCurrentItem();
-            viewPager.setCurrentItem(curItem + 1);
-            if (handler != null) {
-                handler.postDelayed(this, 5000);
-            }
-        }
-    }*/
 
     /**
      * 設置圓點
@@ -248,22 +239,7 @@ public class ScheduleActivity extends AppCompatActivity {
     private void InItFunction() {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         pagerTitleStrip = (PagerTitleStrip) findViewById(R.id.pager_title);
-        //mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
         lin_points = (LinearLayout) findViewById(R.id.lin_points);
-
-        //UI介面下拉刷新
-        /*mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mSwipeRefreshLayout.setRefreshing(false);
-                today_TableLayout.removeAllViews();
-                week_TableLayout.removeAllViews();
-                missing_TableLayout.removeAllViews();
-                sendRequestWithOkHttpForToday();
-                sendRequestWithOkHttpForWeek();
-                sendRequestWithOkHttpForMissing();
-            }
-        });*/
     }
 
     /**
@@ -540,7 +516,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 JArrayList.add(reserve_time);
                 JArrayList.add(work_type);
 
-
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();
                 b.putStringArrayList("JSON_data", JArrayList);
@@ -561,10 +536,10 @@ public class ScheduleActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             final String[] title_array = {"派工類別", "派工單號", "送貨客戶", "預約日期時段", "聯絡人",
-                    "主要電話", "次要電話", "派工地址", "付款方式", "是否要收款",
-                    "應收款金額", "是否已收款", "已收款金額", "抵達日期", "抵達時間",
-                    "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼",
-                    "工務點數", "預約開始時間", "預約結束時間", "狀態", "今日派工時段 :", "處理方式 :"};
+                                          "主要電話", "次要電話", "派工地址", "付款方式", "是否要收款",
+                                          "應收款金額", "是否已收款", "已收款金額", "抵達日期", "抵達時間",
+                                          "結束時間", "任務說明", "料品說明", "工作說明", "派工資料識別碼",
+                                          "工務點數", "預約開始時間", "預約結束時間", "狀態", "今日派工時段 :", "處理方式 :"};
             switch (msg.what) {
                 case 1:
                     Resources resources = getResources();
@@ -757,7 +732,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 String reserve_time = jsonObject.getString("派工日期時間");
                 String work_type = jsonObject.getString("處理方式");
 
-
                 Log.i("ScheduleActivity2", reserve_time);
                 Log.i("ScheduleActivity2", work_type_name);
 
@@ -789,7 +763,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 JArrayList.add(my_ontype);
                 JArrayList.add(reserve_time);
                 JArrayList.add(work_type);
-
 
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();
@@ -930,7 +903,6 @@ public class ScheduleActivity extends AppCompatActivity {
         }
     };
 
-
     /**
      * 與OkHttp(Missing)建立連線
      */
@@ -1034,7 +1006,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 JArrayList.add(my_ontype);
                 JArrayList.add(reserve_time);
                 JArrayList.add(work_type);
-
 
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();
@@ -1163,7 +1134,7 @@ public class ScheduleActivity extends AppCompatActivity {
                     if (loc > 5) {
                         missing_TableLayout.getChildAt(loc).setVisibility(View.GONE);
                     }
-                    //顯示一周件數的總數
+                    //顯示未回派工件數的總數
                     int total = missing_TableLayout.getChildCount();
                     missing_sql_total_textView.setText(String.valueOf(total));
                     break;
@@ -1230,8 +1201,8 @@ public class ScheduleActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            //URL url = new URL("http://192.168.0.201/wqp_1.4.apk");
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.4.apk");
+            //URL url = new URL("http://192.168.0.201/wqp_1.5.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.5.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -1241,7 +1212,7 @@ public class ScheduleActivity extends AppCompatActivity {
             String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.4.apk");
+            File outputFile = new File(file, "wqp_1.5.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -1255,7 +1226,7 @@ public class ScheduleActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.4.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.5.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 
@@ -1297,7 +1268,6 @@ public class ScheduleActivity extends AppCompatActivity {
                             .build();
                     Request request = new Request.Builder()
                             .url("http://220.133.80.146/WQP/MissWorkCount.php")
-                            //.url("http://192.168.0.172/WQP/MissWorkCount.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -1366,12 +1336,21 @@ public class ScheduleActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         Log.d("ScheduleActivity", "onRestart");
-        today_TableLayout.removeAllViews();
-        week_TableLayout.removeAllViews();
-        missing_TableLayout.removeAllViews();
-        sendRequestWithOkHttpForToday();
+        if (today_TableLayout != null) {
+            today_TableLayout.removeAllViews();
+            sendRequestWithOkHttpForToday();
+        }
+        if (week_TableLayout != null) {
+            week_TableLayout.removeAllViews();
+            sendRequestWithOkHttpForWeek();
+        }
+        if (missing_TableLayout != null) {
+            missing_TableLayout.removeAllViews();
+            sendRequestWithOkHttpForMissing();
+        }
+        /*sendRequestWithOkHttpForToday();
         sendRequestWithOkHttpForWeek();
-        sendRequestWithOkHttpForMissing();
+        sendRequestWithOkHttpForMissing();*/
         sendRequestWithOkHttpOfMissCount();
     }
 }
