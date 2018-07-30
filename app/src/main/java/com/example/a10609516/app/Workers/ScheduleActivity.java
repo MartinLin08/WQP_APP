@@ -96,18 +96,25 @@ public class ScheduleActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //接收LoginActivity傳過來的值
+        SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+        String user_id_data = user_id.getString("ID", "");
         SharedPreferences department_id = getSharedPreferences("department_id" , MODE_PRIVATE);
         String department_id_data = department_id.getString("D_ID" , "");
-        if (department_id_data.toString().equals("2100")) {
+        if ((user_id_data.toString().equals("9706013")) || user_id_data.toString().equals("9908023") || user_id_data.toString().equals("10010039")
+                || user_id_data.toString().equals("10012043") || user_id_data.toString().equals("10101046") || user_id_data.toString().equals("10405235")) {
+            getMenuInflater().inflate(R.menu.workers_manager_menu, menu);
+            return true;
+        }else if (department_id_data.toString().equals("2100")) {
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("2200")) {
+        } else if (department_id_data.toString().equals("2200")) {
             getMenuInflater().inflate(R.menu.diy_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("5200")) {
+        } else if (department_id_data.toString().equals("5200")) {
             getMenuInflater().inflate(R.menu.workers_menu, menu);
             return true;
-        }else{
+        } else {
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
         }
@@ -190,6 +197,11 @@ public class ScheduleActivity extends AppCompatActivity {
                 startActivity(intent12);
                 Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
                 break; //進入查詢工務點數頁面
+            case R.id.miss_item:
+                Intent intent14 = new Intent(ScheduleActivity.this, MissCountActivity.class);
+                startActivity(intent14);
+                Toast.makeText(this, "未回單數量", Toast.LENGTH_SHORT).show();
+                break; //進入工務未回單數量頁面
             default:
         }
         return true;
@@ -1201,8 +1213,7 @@ public class ScheduleActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            //URL url = new URL("http://192.168.0.201/wqp_1.5.apk");
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.5.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.6.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -1212,7 +1223,7 @@ public class ScheduleActivity extends AppCompatActivity {
             String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.5.apk");
+            File outputFile = new File(file, "wqp_1.6.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -1226,7 +1237,7 @@ public class ScheduleActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.5.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.6.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 

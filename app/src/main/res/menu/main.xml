@@ -19,6 +19,9 @@
             <item
                 android:id="@+id/points_item"
                 android:title="工務點數獎金查詢" />
+            <item
+                android:id="@+id/miss_item"
+                android:title="各區未回單數量" />
         </menu>
     </item>
     <item android:title="業務部">

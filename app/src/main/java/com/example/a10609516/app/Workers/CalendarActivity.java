@@ -72,7 +72,7 @@ public class CalendarActivity extends AppCompatActivity {
     private LinearLayout search_llt, calendar_llt;
     private Spinner company_spinner;
     private TextView date_txt, search_up_txt, search_down_txt, dynamically_txt, dynamically_type,
-                     dynamically_customer, dynamically_phone, dynamically_address;
+            dynamically_customer, dynamically_phone, dynamically_address;
     private Button work_date_btn, last_btn, search_btn, next_btn;
     private ProgressBar dynamically_PGTime;
 
@@ -88,18 +88,25 @@ public class CalendarActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        SharedPreferences department_id = getSharedPreferences("department_id" , MODE_PRIVATE);
-        String department_id_data = department_id.getString("D_ID" , "");
-        if (department_id_data.toString().equals("2100")) {
+        //接收LoginActivity傳過來的值
+        SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+        String user_id_data = user_id.getString("ID", "");
+        SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
+        String department_id_data = department_id.getString("D_ID", "");
+        if ((user_id_data.toString().equals("9706013")) || user_id_data.toString().equals("9908023") || user_id_data.toString().equals("10010039")
+                || user_id_data.toString().equals("10012043") || user_id_data.toString().equals("10101046") || user_id_data.toString().equals("10405235")) {
+            getMenuInflater().inflate(R.menu.workers_manager_menu, menu);
+            return true;
+        } else if (department_id_data.toString().equals("2100")) {
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("2200")) {
+        } else if (department_id_data.toString().equals("2200")) {
             getMenuInflater().inflate(R.menu.diy_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("5200")) {
+        } else if (department_id_data.toString().equals("5200")) {
             getMenuInflater().inflate(R.menu.workers_menu, menu);
             return true;
-        }else{
+        } else {
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
         }
@@ -182,6 +189,11 @@ public class CalendarActivity extends AppCompatActivity {
                 startActivity(intent12);
                 Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
                 break; //進入查詢工務點數頁面
+            case R.id.miss_item:
+                Intent intent14 = new Intent(CalendarActivity.this, MissCountActivity.class);
+                startActivity(intent14);
+                Toast.makeText(this, "未回單數量", Toast.LENGTH_SHORT).show();
+                break; //進入工務未回單數量頁面
             default:
         }
         return true;
@@ -317,9 +329,9 @@ public class CalendarActivity extends AppCompatActivity {
     /**
      * 獲取date_txt的前一日
      */
-    private void LastDate(){
+    private void LastDate() {
         String view_date = work_date_btn.getText().toString();
-        Log.e("CalendarActivity2",view_date);
+        Log.e("CalendarActivity2", view_date);
         //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         try {
@@ -335,9 +347,9 @@ public class CalendarActivity extends AppCompatActivity {
     /**
      * 獲取date_txt的後一日
      */
-    private void NextDate(){
+    private void NextDate() {
         String view_date = work_date_btn.getText().toString();
-        Log.e("CalendarActivity2",view_date);
+        Log.e("CalendarActivity2", view_date);
         //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         try {
@@ -441,14 +453,14 @@ public class CalendarActivity extends AppCompatActivity {
                 Log.e("CalendarActivity", user_id_data);
 
                 String s_date = work_date_btn.getText().toString();
-                String group_name = String.valueOf(company_spinner.getSelectedItem()).substring(0,5);
+                String group_name = String.valueOf(company_spinner.getSelectedItem()).substring(0, 5);
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
                     RequestBody requestBody = new FormBody.Builder()
                             .add("User_id", user_id_data)
                             .add("Work_date", s_date)
-                            .add("Group_name",group_name)
+                            .add("Group_name", group_name)
                             .build();
                     Log.e("CalendarActivity", group_name);
                     Request request = new Request.Builder()
@@ -517,15 +529,15 @@ public class CalendarActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String group_name = String.valueOf(company_spinner.getSelectedItem()).substring(0,5);
+                String group_name = String.valueOf(company_spinner.getSelectedItem()).substring(0, 5);
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
                     RequestBody requestBody = new FormBody.Builder()
-                            .add("Work_date",last_date)
-                            .add("Group_name",group_name)
+                            .add("Work_date", last_date)
+                            .add("Group_name", group_name)
                             .build();
-                    Log.e("CalendarActivity3",last_date);
+                    Log.e("CalendarActivity3", last_date);
                     Request request = new Request.Builder()
                             .url("http://220.133.80.146/WQP/CalendarData.php")
                             .post(requestBody)
@@ -592,15 +604,15 @@ public class CalendarActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String group_name = String.valueOf(company_spinner.getSelectedItem()).substring(0,5);
+                String group_name = String.valueOf(company_spinner.getSelectedItem()).substring(0, 5);
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
                     RequestBody requestBody = new FormBody.Builder()
-                            .add("Work_date",next_date)
-                            .add("Group_name",group_name)
+                            .add("Work_date", next_date)
+                            .add("Group_name", group_name)
                             .build();
-                    Log.e("CalendarActivity3",next_date);
+                    Log.e("CalendarActivity3", next_date);
                     Request request = new Request.Builder()
                             .url("http://220.133.80.146/WQP/CalendarData.php")
                             .post(requestBody)
@@ -830,7 +842,7 @@ public class CalendarActivity extends AppCompatActivity {
                         small_llt2.addView(dynamically_address);
                     }
 
-                    for(int a = 3; a <= 23; a++) {
+                    for (int a = 3; a <= 23; a++) {
                         small_llt2.getChildAt(a).setVisibility(View.GONE);
                     }
                     dynamically_hsv.addView(small_llt2);
@@ -905,8 +917,7 @@ public class CalendarActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            //URL url = new URL("http://192.168.0.201/wqp_1.5.apk");
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.5.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.6.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -916,7 +927,7 @@ public class CalendarActivity extends AppCompatActivity {
             String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.5.apk");
+            File outputFile = new File(file, "wqp_1.6.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -930,7 +941,7 @@ public class CalendarActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.5.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.6.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 

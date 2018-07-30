@@ -1,38 +1,44 @@
-package com.example.a10609516.app.Basic;
+package com.example.a10609516.app.Workers;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a10609516.app.Basic.MenuActivity;
+import com.example.a10609516.app.Basic.QRCodeActivity;
+import com.example.a10609516.app.Basic.SignatureActivity;
+import com.example.a10609516.app.Basic.VersionActivity;
 import com.example.a10609516.app.Clerk.QuotationActivity;
+import com.example.a10609516.app.DepartmentAndDIY.CorrectActivity;
 import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
+import com.example.a10609516.app.DepartmentAndDIY.RecordActivity;
+import com.example.a10609516.app.DepartmentAndDIY.UploadActivity;
 import com.example.a10609516.app.R;
-import com.example.a10609516.app.Workers.CalendarActivity;
-import com.example.a10609516.app.Workers.MissCountActivity;
-import com.example.a10609516.app.Workers.PointsActivity;
-import com.example.a10609516.app.Workers.ScheduleActivity;
-import com.example.a10609516.app.Workers.SearchActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,6 +47,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 
 import okhttp3.FormBody;
@@ -49,13 +56,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class MenuActivity extends AppCompatActivity {
+public class MissCountActivity extends AppCompatActivity {
 
-    private ListView announcement_ListView;
-    private String[] show_text = {"", "", "", "", "", "", ""};
-    private ArrayAdapter listAdapter;
-    private Spinner announcement_spinner;
-    private TextView name_textView;
+    private LinearLayout miss_llt;
 
     /**
      * 創建Menu
@@ -98,78 +101,79 @@ public class MenuActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.home_item:
+                Intent intent = new Intent(MissCountActivity.this, MenuActivity.class);
+                startActivity(intent);
                 Toast.makeText(this, "HOME", Toast.LENGTH_SHORT).show();
-                break;  //顯示HOME
+                finish();
+                break; //返回首頁
             case R.id.schedule_item:
-                Intent intent7 = new Intent(MenuActivity.this, ScheduleActivity.class);
+                Intent intent7 = new Intent(MissCountActivity.this, ScheduleActivity.class);
                 startActivity(intent7);
                 Toast.makeText(this, "行程資訊", Toast.LENGTH_SHORT).show();
                 break; //進入行程資訊頁面
             case R.id.calendar_item:
-                Intent intent = new Intent(MenuActivity.this, CalendarActivity.class);
-                startActivity(intent);
+                Intent intent1 = new Intent(MissCountActivity.this, CalendarActivity.class);
+                startActivity(intent1);
                 Toast.makeText(this, "派工行事曆", Toast.LENGTH_SHORT).show();
                 break; //進入派工行事曆頁面
             case R.id.work_item:
-                Intent intent1 = new Intent(MenuActivity.this, SearchActivity.class);
-                startActivity(intent1);
+                Intent intent13 = new Intent(MissCountActivity.this, SearchActivity.class);
+                startActivity(intent13);
                 Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
-                break; //進入查詢派工資料頁面
+                break; //進入查詢派工資料
             /*case R.id.signature_item:
-                Intent intent2 = new Intent(MenuActivity.this, SignatureActivity.class);
+                Intent intent2 = new Intent(MissCountActivity.this, SignatureActivity.class);
                 startActivity(intent2);
                 Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
                 break; //進入客戶電子簽名頁面
             case R.id.record_item:
-                Intent intent8 = new Intent(MenuActivity.this, RecordActivity.class);
+                Intent intent8 = new Intent(MissCountActivity.this, RecordActivity.class);
                 startActivity(intent8);
                 Toast.makeText(this, "上傳日報紀錄", Toast.LENGTH_SHORT).show();
                 break; //進入上傳日報紀錄頁面*/
             case R.id.picture_item:
-                Intent intent3 = new Intent(MenuActivity.this, PictureActivity.class);
+                Intent intent3 = new Intent(MissCountActivity.this, PictureActivity.class);
                 startActivity(intent3);
                 Toast.makeText(this, "客戶訂單照片上傳", Toast.LENGTH_SHORT).show();
                 break; //進入客戶訂單照片上傳頁面
             case R.id.customer_item:
-                Intent intent4 = new Intent(MenuActivity.this, CustomerActivity.class);
+                Intent intent4 = new Intent(MissCountActivity.this, CustomerActivity.class);
                 startActivity(intent4);
                 Toast.makeText(this, "客戶訂單查詢", Toast.LENGTH_SHORT).show();
-                break; //進入客戶訂單查詢
+                break; //進入客戶訂單查詢頁面
             /*case R.id.upload_item:
-                Intent intent5 = new Intent(MenuActivity.this, UploadActivity.class);
+                Intent intent5 = new Intent(MissCountActivity.this, UploadActivity.class);
                 startActivity(intent5);
                 Toast.makeText(this, "上傳日報", Toast.LENGTH_SHORT).show();
                 break; //進入上傳日報頁面
             case R.id.correct_item:
-                Intent intent6 = new Intent(MenuActivity.this, CorrectActivity.class);
+                Intent intent6 = new Intent(MissCountActivity.this, CorrectActivity.class);
                 startActivity(intent6);
                 Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
                 break; //進入日報修正頁面*/
             case R.id.about_item:
-                Intent intent9 = new Intent(MenuActivity.this, VersionActivity.class);
+                Intent intent9 = new Intent(MissCountActivity.this, VersionActivity.class);
                 startActivity(intent9);
                 Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
                 break; //進入版本資訊頁面
             case R.id.QRCode_item:
-                Intent intent10 = new Intent(MenuActivity.this, QRCodeActivity.class);
+                Intent intent10 = new Intent(MissCountActivity.this, QRCodeActivity.class);
                 startActivity(intent10);
                 Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
                 break; //進入QRCode頁面
             case R.id.quotation_item:
-                Intent intent11 = new Intent(MenuActivity.this, QuotationActivity.class);
+                Intent intent11 = new Intent(MissCountActivity.this, QuotationActivity.class);
                 startActivity(intent11);
                 Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
                 break; //進入報價單審核頁面
             case R.id.points_item:
-                Intent intent12 = new Intent(MenuActivity.this, PointsActivity.class);
+                Intent intent12 = new Intent(MissCountActivity.this, PointsActivity.class);
                 startActivity(intent12);
                 Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
                 break; //進入查詢工務點數頁面
             case R.id.miss_item:
-                Intent intent13 = new Intent(MenuActivity.this, MissCountActivity.class);
-                startActivity(intent13);
                 Toast.makeText(this, "未回單數量", Toast.LENGTH_SHORT).show();
-                break; //進入工務未回單數量頁面
+                break; //顯示未回單數量
             default:
         }
         return true;
@@ -178,15 +182,11 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.activity_miss_count);
         //動態取得 View 物件
         InItFunction();
-        //ListView監聽器
-        ListViewOnClick();
-        //與MenuUserName.php 建立OKHttp連線
+        //與OKHttp連線(GroupMissCount)工務未回報派工數量
         sendRequestWithOkHttp();
-        //公告區的各部門下拉選單
-        AnnouncementSpinner();
         //確認是否有最新版本，進行更新
         CheckFirebaseVersion();
     }
@@ -195,21 +195,11 @@ public class MenuActivity extends AppCompatActivity {
      * 動態取得 View 物件
      */
     private void InItFunction() {
-        name_textView = (TextView) findViewById(R.id.name_textView);
-        announcement_ListView = (ListView) findViewById(R.id.announcement_listView);
-        announcement_spinner = (Spinner) findViewById(R.id.announcement_spinner);
+        miss_llt = (LinearLayout) findViewById(R.id.miss_llt);
     }
 
     /**
-     * ListView監聽器
-     */
-    private void ListViewOnClick() {
-        listAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, show_text);
-        announcement_ListView.setAdapter(listAdapter);
-    }
-
-    /**
-     * 與資料庫連線 藉由登入輸入的員工ID取得員工姓名
+     * 與OkHttp建立連線
      */
     private void sendRequestWithOkHttp() {
         new Thread(new Runnable() {
@@ -218,21 +208,23 @@ public class MenuActivity extends AppCompatActivity {
                 //接收LoginActivity傳過來的值
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
                 String user_id_data = user_id.getString("ID", "");
-                Log.i("MenuActivity", user_id_data);
+                Log.i("MissCountActivity", user_id_data);
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
                     RequestBody requestBody = new FormBody.Builder()
                             .add("User_id", user_id_data)
                             .build();
+                    Log.i("MissCountActivity", user_id_data);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/UserName.php")
+                            //.url("http://220.133.80.146/WQP/GroupMissCount.php")
+                            .url("http://192.168.0.172/WQP/GroupMissCount.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.i("MenuActivity", responseData);
-                    showResponse(responseData);
+                    Log.i("MissCountActivity", responseData);
+                    parseJSONWithJSONObject(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -241,42 +233,87 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     /**
-     * 在TextView上SHOW出回傳的員工姓名
+     * 獲得JSON字串並解析成String字串
      *
-     * @param response
+     * @param jsonData
      */
-    private void showResponse(final String response) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                name_textView.setText(response);
+    private void parseJSONWithJSONObject(String jsonData) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                //JSON格式改為字串
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String eng_name = jsonObject.getString("工務");
+                String miss_count = jsonObject.getString("未回單數量");
+
+                Log.e("SearchActivity", eng_name);
+
+                //JSONArray加入SearchData資料
+                ArrayList<String> JArrayList = new ArrayList<String>();
+                JArrayList.add(eng_name);
+                JArrayList.add(miss_count);
+
+                //HandlerMessage更新UI
+                Bundle b = new Bundle();
+                b.putStringArrayList("JSON_data", JArrayList);
+                Message msg = mHandler.obtainMessage();
+                msg.setData(b);
+                msg.what = 1;
+                msg.sendToTarget();
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
-     * 公告區的各部門下拉選單
+     * 更新UI
      */
-    private void AnnouncementSpinner() {
-        final String[] announcement = {"全 部 分 類"/*, "內 部 公 告 區", "管 理 部", "財 會 部",
-                "水 資 部", "管 財 部", "設 計/經 銷 部", "電 商 部", "技 術 部",
-                "行 銷 部", "建 設 部", "D I Y 部", "百 貨 部", "客 服 工 程 部"*/};
-        ArrayAdapter<String> announcementList = new ArrayAdapter<>(MenuActivity.this,
-                android.R.layout.simple_spinner_dropdown_item,
-                announcement);
-        listAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        announcement_spinner.setAdapter(announcementList);
-        announcement_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //Toast.makeText(MenuActivity.this, "你選的是" + announcement[position], Toast.LENGTH_SHORT).show();
-            }
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    LinearLayout small_llt = new LinearLayout(MissCountActivity.this);
+                    small_llt.setOrientation(LinearLayout.HORIZONTAL);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                    Bundle jb = msg.getData();
+                    ArrayList<String> JArrayList = new ArrayList<String>();
+                    //int i = b.getStringArrayList("JSON_data").size();
+                    JArrayList = jb.getStringArrayList("JSON_data");
+
+                    //顯示每筆TableLayout的Title
+                    TextView dynamically_name;
+                    dynamically_name = new TextView(MissCountActivity.this);
+                    dynamically_name.setText(JArrayList.get(0));
+                    dynamically_name.setGravity(Gravity.CENTER);
+                    //dynamically_name.setWidth(50);
+                    dynamically_name.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+
+                    //顯示每筆TableLayout的SQL資料
+                    TextView dynamically_count;
+                    dynamically_count = new TextView(MissCountActivity.this);
+                    dynamically_count.setText(JArrayList.get(1));
+                    dynamically_count.setGravity(Gravity.CENTER);
+                    dynamically_count.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+
+                    //設置每筆TableLayout的分隔線
+                    TextView dynamically_txt = new TextView(MissCountActivity.this);
+                    dynamically_txt.setBackgroundColor(Color.rgb(220, 220, 220));
+
+                    LinearLayout.LayoutParams small_pm = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+                    small_llt.addView(dynamically_name, small_pm);
+                    small_llt.addView(dynamically_count, small_pm);
+
+                    miss_llt.addView(dynamically_txt, LinearLayout.LayoutParams.MATCH_PARENT, 3);
+                    miss_llt.addView(small_llt);
+                    break;
+                default:
+                    break;
             }
-        });
-    }
+            super.handleMessage(msg);
+        }
+    };
 
     /**
      * 確認是否有最新版本，進行更新
@@ -284,7 +321,7 @@ public class MenuActivity extends AppCompatActivity {
     private void CheckFirebaseVersion() {
         SharedPreferences fb_version = getSharedPreferences("fb_version", MODE_PRIVATE);
         final String version = fb_version.getString("FB_VER", "");
-        Log.e("MenuActivity", version);
+        Log.e("CalendarActivity", version);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("WQP");
@@ -298,10 +335,10 @@ public class MenuActivity extends AppCompatActivity {
                 //Log.d("現在在根結點上的資料是:", "Value is: " + value);
                 Map<String, String> map = (Map) dataSnapshot.getValue();
                 String data = map.toString().substring(9, 12);
-                Log.e("MenuActivity", "已讀取到值:" + data);
+                Log.e("CalendarActivity", "已讀取到值:" + data);
                 if (version.equals(data)) {
                 } else {
-                    new AlertDialog.Builder(MenuActivity.this)
+                    new AlertDialog.Builder(MissCountActivity.this)
                             .setTitle("更新通知")
                             .setMessage("檢測到軟體重大更新\n請更新最新版本")
                             .setIcon(R.drawable.bwt_icon)
@@ -314,18 +351,17 @@ public class MenuActivity extends AppCompatActivity {
                                                 @Override
                                                 public void run() {
                                                     super.run();
-                                                    MenuActivity.this.Update();
+                                                    MissCountActivity.this.Update();
                                                 }
                                             }.start();
                                         }
                                     }).show();
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.e("MenuActivity", "Failed to read value.", error.toException());
+                Log.e("CalendarActivity", "Failed to read value.", error.toException());
             }
         });
     }
@@ -363,7 +399,7 @@ public class MenuActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 
-            MenuActivity.this.runOnUiThread(new Runnable() {
+            MissCountActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Toast.makeText(getApplicationContext(), "開始安裝新版本", Toast.LENGTH_LONG).show();
@@ -373,32 +409,12 @@ public class MenuActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (IOException e) {
             Log.e("下載錯誤!", e.toString());
-            MenuActivity.this.runOnUiThread(new Runnable() {
+            MissCountActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Toast.makeText(getApplicationContext(), "更新失敗!", Toast.LENGTH_LONG).show();
                 }
             });
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d("MenuActivity", "onStop");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d("MenuActivity", "onDestroy");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d("MenuActivity", "omRestart");
-        //確認是否有最新版本，進行更新
-        CheckFirebaseVersion();
     }
 }

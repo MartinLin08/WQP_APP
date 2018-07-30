@@ -112,6 +112,18 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
+            android:name=".Workers.PointsActivity"
+            android:label="我的點數"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Workers.MissCountActivity"
+            android:label="各區未回單數量"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
             android:name=".Basic.QRCodeActivity"
             android:label="QRCode"
             android:launchMode="singleTask"
@@ -181,8 +193,6 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
-
-        <activity android:name=".Workers.PointsActivity"></activity>
     </application>
 
 </manifest>
