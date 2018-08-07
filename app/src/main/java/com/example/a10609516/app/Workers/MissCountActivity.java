@@ -217,8 +217,7 @@ public class MissCountActivity extends AppCompatActivity {
                             .build();
                     Log.i("MissCountActivity", user_id_data);
                     Request request = new Request.Builder()
-                            //.url("http://220.133.80.146/WQP/GroupMissCount.php")
-                            .url("http://192.168.0.172/WQP/GroupMissCount.php")
+                            .url("http://220.133.80.146/WQP/GroupMissCount.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -246,7 +245,7 @@ public class MissCountActivity extends AppCompatActivity {
                 String eng_name = jsonObject.getString("工務");
                 String miss_count = jsonObject.getString("未回單數量");
 
-                Log.e("SearchActivity", eng_name);
+                Log.e("MissCountActivity", eng_name);
 
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
@@ -321,7 +320,7 @@ public class MissCountActivity extends AppCompatActivity {
     private void CheckFirebaseVersion() {
         SharedPreferences fb_version = getSharedPreferences("fb_version", MODE_PRIVATE);
         final String version = fb_version.getString("FB_VER", "");
-        Log.e("CalendarActivity", version);
+        Log.e("MissCountActivity", version);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("WQP");
@@ -335,7 +334,7 @@ public class MissCountActivity extends AppCompatActivity {
                 //Log.d("現在在根結點上的資料是:", "Value is: " + value);
                 Map<String, String> map = (Map) dataSnapshot.getValue();
                 String data = map.toString().substring(9, 12);
-                Log.e("CalendarActivity", "已讀取到值:" + data);
+                Log.e("MissCountActivity", "已讀取到值:" + data);
                 if (version.equals(data)) {
                 } else {
                     new AlertDialog.Builder(MissCountActivity.this)
@@ -361,7 +360,7 @@ public class MissCountActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.e("CalendarActivity", "Failed to read value.", error.toException());
+                Log.e("MissCountActivity", "Failed to read value.", error.toException());
             }
         });
     }
@@ -371,17 +370,17 @@ public class MissCountActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.6.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.7.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
             c.connect();
 
-            //String PATH = Environment.getExternalStorageDirectory() + "/download/";
-            String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
+            String PATH = Environment.getExternalStorageDirectory() + "/Download/";
+            //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.6.apk");
+            File outputFile = new File(file, "wqp_1.7.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -395,7 +394,7 @@ public class MissCountActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.6.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.7.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 

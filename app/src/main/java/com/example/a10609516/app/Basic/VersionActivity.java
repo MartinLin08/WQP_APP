@@ -43,10 +43,14 @@ import java.util.Map;
 
 public class VersionActivity extends AppCompatActivity {
 
-    private TextView detail_txt0, detail_txt1, detail_txt2, detail_txt3, detail_txt4, detail_txt5;
-    private LinearLayout detail_llt0, detail_llt1, detail_llt2, detail_llt3, detail_llt4, detail_llt5;
-    private Button version_btn0, version_btn1, version_btn2, version_btn3, version_btn4, version_btn5;
-    private Button version_up_btn0, version_up_btn1, version_up_btn2, version_up_btn3, version_up_btn4, version_up_btn5;
+    private TextView detail_txt0, detail_txt1, detail_txt2, detail_txt3, detail_txt4, detail_txt5
+                    , detail_txt6;
+    private LinearLayout detail_llt0, detail_llt1, detail_llt2, detail_llt3, detail_llt4, detail_llt5
+                    , detail_llt6;
+    private Button version_btn0, version_btn1, version_btn2, version_btn3, version_btn4, version_btn5
+                    , version_btn6;
+    private Button version_up_btn0, version_up_btn1, version_up_btn2, version_up_btn3, version_up_btn4, version_up_btn5
+                    , version_up_btn6;
 
 
     /**
@@ -190,24 +194,28 @@ public class VersionActivity extends AppCompatActivity {
         detail_txt3 = (TextView) findViewById(R.id.detail_txt3);
         detail_txt4 = (TextView) findViewById(R.id.detail_txt4);
         detail_txt5 = (TextView) findViewById(R.id.detail_txt5);
+        detail_txt6 = (TextView) findViewById(R.id.detail_txt6);
         detail_llt0 = (LinearLayout) findViewById(R.id.detail_llt0);
         detail_llt1 = (LinearLayout) findViewById(R.id.detail_llt1);
         detail_llt2 = (LinearLayout) findViewById(R.id.detail_llt2);
         detail_llt3 = (LinearLayout) findViewById(R.id.detail_llt3);
         detail_llt4 = (LinearLayout) findViewById(R.id.detail_llt4);
         detail_llt5 = (LinearLayout) findViewById(R.id.detail_llt5);
+        detail_llt6 = (LinearLayout) findViewById(R.id.detail_llt6);
         version_btn0 = (Button) findViewById(R.id.version_btn0);
         version_btn1 = (Button) findViewById(R.id.version_btn1);
         version_btn2 = (Button) findViewById(R.id.version_btn2);
         version_btn3 = (Button) findViewById(R.id.version_btn3);
         version_btn4 = (Button) findViewById(R.id.version_btn4);
         version_btn5 = (Button) findViewById(R.id.version_btn5);
+        version_btn6 = (Button) findViewById(R.id.version_btn6);
         version_up_btn0 = (Button) findViewById(R.id.version_up_btn0);
         version_up_btn1 = (Button) findViewById(R.id.version_up_btn1);
         version_up_btn2 = (Button) findViewById(R.id.version_up_btn2);
         version_up_btn3 = (Button) findViewById(R.id.version_up_btn3);
         version_up_btn4 = (Button) findViewById(R.id.version_up_btn4);
         version_up_btn5 = (Button) findViewById(R.id.version_up_btn5);
+        version_up_btn6 = (Button) findViewById(R.id.version_up_btn6);
     }
 
     /**
@@ -215,21 +223,23 @@ public class VersionActivity extends AppCompatActivity {
      */
     private void DetailOfVersion() {
         detail_txt0.setText("1.新增工務部 - 行程資訊、派工行事曆、查詢派工資料 \n" +
-                "2.新增工務部 - 出勤維護回報功能 \n" +
-                "3.新增推播功能-工務(新派工、更新派工、取消派工) \n" +
-                "4.新增客戶電子簽名、QRCode功能");
+                            "2.新增工務部 - 出勤維護回報功能 \n" +
+                            "3.新增推播功能-工務(新派工、更新派工、取消派工) \n" +
+                            "4.新增客戶電子簽名、QRCode功能");
         detail_txt1.setText("1.新增業務部 - 報價單審核");
         detail_txt2.setText("1.關閉工務部 - 客戶電子簽名功能 \n" +
-                "2.新增工務部 - 回報派工頁面自動帶入當天日期與客戶預約時間 \n" +
-                "3.新增工務部 - 派工地址可長按點擊複製");
+                            "2.新增工務部 - 回報派工頁面自動帶入當天日期與客戶預約時間 \n" +
+                            "3.新增工務部 - 派工地址可長按點擊複製");
         detail_txt3.setText("1.新增APP線上更新功能 \n" +
-                "2.新增工務部 - 出勤回報的付款方式可更改(現金、匯款、支票、信用卡)");
+                            "2.新增工務部 - 出勤回報的付款方式可更改(現金、匯款、支票、信用卡)");
         detail_txt4.setText("1.新增工務部 - 可檢視當天當工的工務點數與工務獎金 \n" +
-                "2.新增工務部 - 工務點數獎金查詢(可查詢A點數、B點數、D點數、AB點數合計、工務獎金) \n" +
-                "3.新增業務部 - 報價單已讀功能");
+                            "2.新增工務部 - 工務點數獎金查詢(可查詢A點數、B點數、D點數、AB點數合計、工務獎金) \n" +
+                            "3.新增業務部 - 報價單已讀功能");
         detail_txt5.setText("1.新增工務部 - 可檢視當天當工的A點數與B點數 \n" +
-                "2.新增工務部 - 回報派工頁面可檢視客戶地址 \n" +
-                "3.新增工務部 - 工作說明的留言功能(工務秘書可見)");
+                            "2.新增工務部 - 回報派工頁面可檢視客戶地址 \n" +
+                            "3.新增工務部 - 工作說明的留言功能(工務秘書可見)");
+        detail_txt6.setText("1.部分內容修正及優化 \n" +
+                            "2.修正1.5版本前部分機型無法自動更新的問題");
     }
 
     /**
@@ -320,6 +330,20 @@ public class VersionActivity extends AppCompatActivity {
                 version_up_btn5.setVisibility(View.GONE);
             }
         });
+        version_btn6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt6.setVisibility(View.VISIBLE);
+                version_up_btn6.setVisibility(View.VISIBLE);
+            }
+        });
+        version_up_btn6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt6.setVisibility(View.GONE);
+                version_up_btn6.setVisibility(View.GONE);
+            }
+        });
     }
 
     /**
@@ -379,17 +403,17 @@ public class VersionActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.6.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.7.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
             c.connect();
 
-            //String PATH = Environment.getExternalStorageDirectory() + "/download/";
-            String PATH = Environment.getExternalStorageDirectory().getPath() + "/Download/";
+            String PATH = Environment.getExternalStorageDirectory() + "/Download/";
+            //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.6.apk");
+            File outputFile = new File(file, "wqp_1.7.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -403,7 +427,7 @@ public class VersionActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.6.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.7.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 
