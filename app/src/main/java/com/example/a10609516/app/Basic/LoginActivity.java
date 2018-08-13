@@ -235,7 +235,6 @@ public class LoginActivity extends AppCompatActivity {
                     //Toast.makeText(LoginActivity.this, "檢測到最新版本，請前往更新!!!", Toast.LENGTH_SHORT).show();
                 }
             }
-
             //執行中，在背景做任務
             @Override
             protected String doInBackground(String... params) {
