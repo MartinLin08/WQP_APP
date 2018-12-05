@@ -25,6 +25,7 @@ import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.app.DepartmentAndDIY.RecordActivity;
 import com.example.a10609516.app.DepartmentAndDIY.UploadActivity;
+import com.example.a10609516.app.Manager.InventoryActivity;
 import com.example.a10609516.app.Tools.CirclePgBar;
 import com.example.a10609516.app.R;
 import com.google.firebase.database.DataSnapshot;
@@ -74,7 +75,7 @@ public class PointsActivity extends AppCompatActivity {
         String user_id_data = user_id.getString("ID", "");
         SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
         String department_id_data = department_id.getString("D_ID", "");
-        if ((user_id_data.toString().equals("9706013")) || user_id_data.toString().equals("9908023") || user_id_data.toString().equals("10010039")
+        if ((user_id_data.toString().equals("09706013")) || user_id_data.toString().equals("09908023") || user_id_data.toString().equals("10010039")
                 || user_id_data.toString().equals("10012043") || user_id_data.toString().equals("10101046") || user_id_data.toString().equals("10405235")) {
             getMenuInflater().inflate(R.menu.workers_manager_menu, menu);
             return true;
@@ -122,7 +123,7 @@ public class PointsActivity extends AppCompatActivity {
                 startActivity(intent1);
                 Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
                 break; //進入查詢派工資料頁面
-            case R.id.signature_item:
+            /*case R.id.signature_item:
                 Intent intent2 = new Intent(PointsActivity.this, SignatureActivity.class);
                 startActivity(intent2);
                 Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
@@ -151,7 +152,7 @@ public class PointsActivity extends AppCompatActivity {
                 Intent intent6 = new Intent(PointsActivity.this, CorrectActivity.class);
                 startActivity(intent6);
                 Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
-                break; //進入日報修正頁面
+                break; //進入日報修正頁面*/
             case R.id.about_item:
                 Intent intent9 = new Intent(PointsActivity.this, VersionActivity.class);
                 startActivity(intent9);
@@ -175,6 +176,21 @@ public class PointsActivity extends AppCompatActivity {
                 startActivity(intent14);
                 Toast.makeText(this, "未回單數量", Toast.LENGTH_SHORT).show();
                 break; //進入工務未回單數量頁面
+            case R.id.inventory_item:
+                Intent intent15 = new Intent(PointsActivity.this, InventoryActivity.class);
+                startActivity(intent15);
+                Toast.makeText(this, "倉庫盤點", Toast.LENGTH_SHORT).show();
+                break; //進入倉庫盤點管理頁面
+            case R.id.map_item:
+                Intent intent17 = new Intent(PointsActivity.this, GPSActivity.class);
+                startActivity(intent17);
+                Toast.makeText(this, "工務打卡GPS", Toast.LENGTH_SHORT).show();
+                break; //進入GPS地圖頁面
+            case R.id.eng_points_item:
+                Intent intent18 = new Intent(PointsActivity.this, EngPointsActivity.class);
+                startActivity(intent18);
+                Toast.makeText(this, "工務點數明細", Toast.LENGTH_SHORT).show();
+                break; //進入工務點數明細頁面
             default:
         }
         return true;
@@ -444,7 +460,7 @@ public class PointsActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.8.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.9.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -454,7 +470,7 @@ public class PointsActivity extends AppCompatActivity {
             //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.8.apk");
+            File outputFile = new File(file, "wqp_1.9.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -468,7 +484,7 @@ public class PointsActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.8.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.9.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 

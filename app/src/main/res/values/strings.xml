@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">拓霖企業</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_workers_maps">WorkersMap</string>
 </resources>

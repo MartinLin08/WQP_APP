@@ -20,8 +20,14 @@
                 android:id="@+id/points_item"
                 android:title="工務點數獎金查詢" />
             <item
+                android:id="@+id/eng_points_item"
+                android:title="工務點數明細" />
+            <item
                 android:id="@+id/miss_item"
                 android:title="各區未回單數量" />
+            <item
+                android:id="@+id/map_item"
+                android:title="工務打卡GPS" />
         </menu>
     </item>
     <item

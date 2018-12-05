@@ -16,10 +16,14 @@ import android.widget.Toast;
 
 import com.example.a10609516.app.Basic.MenuActivity;
 import com.example.a10609516.app.Clerk.QuotationActivity;
+import com.example.a10609516.app.Manager.InventoryActivity;
 import com.example.a10609516.app.R;
 import com.example.a10609516.app.Basic.VersionActivity;
 import com.example.a10609516.app.Workers.CalendarActivity;
 import com.example.a10609516.app.Basic.QRCodeActivity;
+import com.example.a10609516.app.Workers.EngPointsActivity;
+import com.example.a10609516.app.Workers.GPSActivity;
+import com.example.a10609516.app.Workers.MissCountActivity;
 import com.example.a10609516.app.Workers.PointsActivity;
 import com.example.a10609516.app.Workers.ScheduleActivity;
 import com.example.a10609516.app.Workers.SearchActivity;
@@ -28,6 +32,7 @@ import java.util.Date;
 
 public class RecordActivity extends AppCompatActivity {
 
+    private TextView time_textView1, time_textView2, time_textView3, time_textView4, time_textView5, time_textView6, time_textView7;
 
     /**
      * 創建Menu
@@ -37,18 +42,25 @@ public class RecordActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        SharedPreferences user_id = getSharedPreferences("department_id" , MODE_PRIVATE);
-        String department_id_data = user_id.getString("D_ID" , "");
-        if (department_id_data.toString().equals("2100")) {
+        //接收LoginActivity傳過來的值
+        SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
+        String user_id_data = user_id.getString("ID", "");
+        SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
+        String department_id_data = department_id.getString("D_ID", "");
+        if ((user_id_data.toString().equals("09706013")) || user_id_data.toString().equals("09908023") || user_id_data.toString().equals("10010039")
+                || user_id_data.toString().equals("10012043") || user_id_data.toString().equals("10101046") || user_id_data.toString().equals("10405235")) {
+            getMenuInflater().inflate(R.menu.workers_manager_menu, menu);
+            return true;
+        }else if (department_id_data.toString().equals("2100")) {
             getMenuInflater().inflate(R.menu.clerk_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("2200")) {
+        } else if (department_id_data.toString().equals("2200")) {
             getMenuInflater().inflate(R.menu.diy_menu, menu);
             return true;
-        }else if (department_id_data.toString().equals("5200")) {
+        } else if (department_id_data.toString().equals("5200")) {
             getMenuInflater().inflate(R.menu.workers_menu, menu);
             return true;
-        }else{
+        } else {
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
         }
@@ -125,15 +137,37 @@ public class RecordActivity extends AppCompatActivity {
                 startActivity(intent12);
                 Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
                 break; //進入查詢工務點數頁面
+            case R.id.miss_item:
+                Intent intent14 = new Intent(RecordActivity.this, MissCountActivity.class);
+                startActivity(intent14);
+                Toast.makeText(this, "未回單數量", Toast.LENGTH_SHORT).show();
+                break; //進入工務未回單數量頁面
+            case R.id.inventory_item:
+                Intent intent15 = new Intent(RecordActivity.this, InventoryActivity.class);
+                startActivity(intent15);
+                Toast.makeText(this, "倉庫盤點", Toast.LENGTH_SHORT).show();
+                break; //進入倉庫盤點管理頁面
+            case R.id.map_item:
+                Intent intent17 = new Intent(RecordActivity.this, GPSActivity.class);
+                startActivity(intent17);
+                Toast.makeText(this, "工務打卡GPS", Toast.LENGTH_SHORT).show();
+                break; //進入GPS地圖頁面
+            case R.id.eng_points_item:
+                Intent intent18 = new Intent(RecordActivity.this, EngPointsActivity.class);
+                startActivity(intent18);
+                Toast.makeText(this, "工務點數明細", Toast.LENGTH_SHORT).show();
+                break; //進入工務點數明細頁面
             default:
         }
         return true;
     }
 
-
-    private TextView time_textView1, time_textView2, time_textView3, time_textView4, time_textView5, time_textView6, time_textView7;
-
-
+    /**
+     * 進入Menu各個頁面
+     *
+     * @param item
+     * @return
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

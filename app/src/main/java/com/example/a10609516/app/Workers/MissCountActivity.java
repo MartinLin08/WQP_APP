@@ -30,6 +30,7 @@ import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.app.DepartmentAndDIY.RecordActivity;
 import com.example.a10609516.app.DepartmentAndDIY.UploadActivity;
+import com.example.a10609516.app.Manager.InventoryActivity;
 import com.example.a10609516.app.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -73,7 +74,7 @@ public class MissCountActivity extends AppCompatActivity {
         String user_id_data = user_id.getString("ID", "");
         SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
         String department_id_data = department_id.getString("D_ID", "");
-        if ((user_id_data.toString().equals("9706013")) || user_id_data.toString().equals("9908023") || user_id_data.toString().equals("10010039")
+        if ((user_id_data.toString().equals("09706013")) || user_id_data.toString().equals("09908023") || user_id_data.toString().equals("10010039")
                 || user_id_data.toString().equals("10012043") || user_id_data.toString().equals("10101046") || user_id_data.toString().equals("10405235")) {
             getMenuInflater().inflate(R.menu.workers_manager_menu, menu);
             return true;
@@ -174,6 +175,21 @@ public class MissCountActivity extends AppCompatActivity {
             case R.id.miss_item:
                 Toast.makeText(this, "未回單數量", Toast.LENGTH_SHORT).show();
                 break; //顯示未回單數量
+            case R.id.inventory_item:
+                Intent intent15 = new Intent(MissCountActivity.this, InventoryActivity.class);
+                startActivity(intent15);
+                Toast.makeText(this, "倉庫盤點", Toast.LENGTH_SHORT).show();
+                break; //進入倉庫盤點管理頁面
+            case R.id.map_item:
+                Intent intent17 = new Intent(MissCountActivity.this, GPSActivity.class);
+                startActivity(intent17);
+                Toast.makeText(this, "工務打卡GPS", Toast.LENGTH_SHORT).show();
+                break; //進入GPS地圖頁面
+            case R.id.eng_points_item:
+                Intent intent18 = new Intent(MissCountActivity.this, EngPointsActivity.class);
+                startActivity(intent18);
+                Toast.makeText(this, "工務點數明細", Toast.LENGTH_SHORT).show();
+                break; //進入工務點數明細頁面
             default:
         }
         return true;
@@ -242,6 +258,7 @@ public class MissCountActivity extends AppCompatActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String eng_local = jsonObject.getString("地區");
                 String eng_name = jsonObject.getString("工務");
                 String miss_count = jsonObject.getString("未回單數量");
 
@@ -249,6 +266,7 @@ public class MissCountActivity extends AppCompatActivity {
 
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
+                JArrayList.add(eng_local);
                 JArrayList.add(eng_name);
                 JArrayList.add(miss_count);
 
@@ -281,18 +299,26 @@ public class MissCountActivity extends AppCompatActivity {
                     //int i = b.getStringArrayList("JSON_data").size();
                     JArrayList = jb.getStringArrayList("JSON_data");
 
-                    //顯示每筆TableLayout的Title
+                    //顯示每筆LinearLayout的地區
+                    TextView dynamically_local;
+                    dynamically_local = new TextView(MissCountActivity.this);
+                    dynamically_local.setText(JArrayList.get(0).substring(0, 2));
+                    dynamically_local.setGravity(Gravity.CENTER);
+                    //dynamically_local.setWidth(50);
+                    dynamically_local.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+
+                    //顯示每筆LinearLayout的工務
                     TextView dynamically_name;
                     dynamically_name = new TextView(MissCountActivity.this);
-                    dynamically_name.setText(JArrayList.get(0));
+                    dynamically_name.setText(JArrayList.get(1));
                     dynamically_name.setGravity(Gravity.CENTER);
                     //dynamically_name.setWidth(50);
                     dynamically_name.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
 
-                    //顯示每筆TableLayout的SQL資料
+                    //顯示每筆LinearLayout的數量
                     TextView dynamically_count;
                     dynamically_count = new TextView(MissCountActivity.this);
-                    dynamically_count.setText(JArrayList.get(1));
+                    dynamically_count.setText(JArrayList.get(2));
                     dynamically_count.setGravity(Gravity.CENTER);
                     dynamically_count.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
 
@@ -300,9 +326,11 @@ public class MissCountActivity extends AppCompatActivity {
                     TextView dynamically_txt = new TextView(MissCountActivity.this);
                     dynamically_txt.setBackgroundColor(Color.rgb(220, 220, 220));
 
-                    LinearLayout.LayoutParams small_pm = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
-                    small_llt.addView(dynamically_name, small_pm);
-                    small_llt.addView(dynamically_count, small_pm);
+                    LinearLayout.LayoutParams small_pm1 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.5f);
+                    LinearLayout.LayoutParams small_pm2 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+                    small_llt.addView(dynamically_local, small_pm1);
+                    small_llt.addView(dynamically_name, small_pm2);
+                    small_llt.addView(dynamically_count, small_pm2);
 
                     miss_llt.addView(dynamically_txt, LinearLayout.LayoutParams.MATCH_PARENT, 3);
                     miss_llt.addView(small_llt);
@@ -370,17 +398,19 @@ public class MissCountActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.8.apk");
+            URL url = new URL("http://192.168.0.201/wqp_1.9.apk");
+            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.9.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
             c.connect();
 
             String PATH = Environment.getExternalStorageDirectory() + "/Download/";
+            //String PATH2 = Environment.getExternalStorageDirectory().getPath() + "/Download/";
             //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.8.apk");
+            File outputFile = new File(file, "wqp_1.9.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -394,8 +424,9 @@ public class MissCountActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.8.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.9.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 
             MissCountActivity.this.runOnUiThread(new Runnable() {
