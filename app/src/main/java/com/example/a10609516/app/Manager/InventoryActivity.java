@@ -1,6 +1,7 @@
 package com.example.a10609516.app.Manager;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -44,6 +46,7 @@ import com.example.a10609516.app.DepartmentAndDIY.RecordActivity;
 import com.example.a10609516.app.DepartmentAndDIY.UploadActivity;
 import com.example.a10609516.app.R;
 import com.example.a10609516.app.Tools.ScannerActivity;
+import com.example.a10609516.app.Tools.WQPServiceActivity;
 import com.example.a10609516.app.Workers.CalendarActivity;
 import com.example.a10609516.app.Workers.EngPointsActivity;
 import com.example.a10609516.app.Workers.GPSActivity;
@@ -59,6 +62,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -77,21 +81,21 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class InventoryActivity extends AppCompatActivity {
+public class InventoryActivity extends WQPServiceActivity {
 
     private TextView date_txt;
-
     private ScrollView inventory_scv;
-    private LinearLayout inventory_record_llt, loss_llt, stock_llt, vendor_llt;
+    private LinearLayout warehouse_llt, inventory_record_llt, loss_llt, stock_llt, vendor_llt;
     private TextView item_number_txt, item_name_txt, item_format_txt, stock_txt, unit_txt1,
             unit_txt2, vendor_txt, safe_txt, recent_in_txt, recent_out_txt,
-            last_inventory_txt, loss_txt, record_txt;
-    private EditText actual_edt;
-    private Button upload_btn;
+            last_inventory_txt, loss_txt, record_txt, barcode_txt;
+    private EditText factory_id_edt, actual_edt;
+    private Button factory_id_btn, upload_btn;
 
     private String COMPANY, MB001, MB002, MB003, MB004, MB064,
             vendor_no, vendor_name, warehouse_no, warehouse_name, safe,
-            in, out, inventory, company_ch, user_name;
+            in, out, inventory, company_ch, user_name,
+            item_id, barcode;
     private String w_id, w_name, d_id;
 
     //轉畫面的Activity參數
@@ -106,150 +110,6 @@ public class InventoryActivity extends AppCompatActivity {
     private String[] empty = new String[]{"(請選擇)"};
     private String[] warehouse_list = new String[]{};
 
-    /**
-     * 創建Menu
-     *
-     * @param menu
-     * @return
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //接收LoginActivity傳過來的值
-        SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
-        String user_id_data = user_id.getString("ID", "");
-        SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
-        String department_id_data = department_id.getString("D_ID", "");
-        d_id = department_id.getString("D_ID", "");
-        if ((user_id_data.toString().equals("09706013")) || user_id_data.toString().equals("09908023") || user_id_data.toString().equals("10010039")
-                || user_id_data.toString().equals("10012043") || user_id_data.toString().equals("10101046") || user_id_data.toString().equals("10405235")) {
-            getMenuInflater().inflate(R.menu.workers_manager_menu, menu);
-            return true;
-        }else if (department_id_data.toString().equals("2100")) {
-            getMenuInflater().inflate(R.menu.clerk_menu, menu);
-            return true;
-        } else if (department_id_data.toString().equals("2200")) {
-            getMenuInflater().inflate(R.menu.diy_menu, menu);
-            return true;
-        } else if (department_id_data.toString().equals("5200")) {
-            getMenuInflater().inflate(R.menu.workers_menu, menu);
-            return true;
-        } else {
-            getMenuInflater().inflate(R.menu.main, menu);
-            return true;
-        }
-    }
-
-    /**
-     * 進入Menu各個頁面
-     *
-     * @param item
-     * @return
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.home_item:
-                Intent intent17 = new Intent(InventoryActivity.this, MenuActivity.class);
-                startActivity(intent17);
-                Toast.makeText(this, "HOME", Toast.LENGTH_SHORT).show();
-                break;  //進入首頁
-            case R.id.schedule_item:
-                Intent intent7 = new Intent(InventoryActivity.this, ScheduleActivity.class);
-                startActivity(intent7);
-                Toast.makeText(this, "行程資訊", Toast.LENGTH_SHORT).show();
-                break; //進入行程資訊頁面
-            case R.id.calendar_item:
-                Intent intent = new Intent(InventoryActivity.this, CalendarActivity.class);
-                startActivity(intent);
-                Toast.makeText(this, "派工行事曆", Toast.LENGTH_SHORT).show();
-                break; //進入派工行事曆頁面
-            case R.id.work_item:
-                Intent intent1 = new Intent(InventoryActivity.this, SearchActivity.class);
-                startActivity(intent1);
-                Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
-                break; //進入查詢派工資料頁面
-            case R.id.signature_item:
-                Intent intent2 = new Intent(InventoryActivity.this, SignatureActivity.class);
-                startActivity(intent2);
-                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
-                break; //進入客戶電子簽名頁面
-            case R.id.record_item:
-                Intent intent8 = new Intent(InventoryActivity.this, RecordActivity.class);
-                startActivity(intent8);
-                Toast.makeText(this, "上傳日報紀錄", Toast.LENGTH_SHORT).show();
-                break; //進入上傳日報紀錄頁面
-            case R.id.picture_item:
-                Intent intent3 = new Intent(InventoryActivity.this, PictureActivity.class);
-                startActivity(intent3);
-                Toast.makeText(this, "客戶訂單照片上傳", Toast.LENGTH_SHORT).show();
-                break; //進入客戶訂單照片上傳頁面
-            case R.id.customer_item:
-                Intent intent4 = new Intent(InventoryActivity.this, CustomerActivity.class);
-                startActivity(intent4);
-                Toast.makeText(this, "客戶訂單查詢", Toast.LENGTH_SHORT).show();
-                break; //進入客戶訂單查詢
-            case R.id.upload_item:
-                Intent intent5 = new Intent(InventoryActivity.this, UploadActivity.class);
-                startActivity(intent5);
-                Toast.makeText(this, "上傳日報", Toast.LENGTH_SHORT).show();
-                break; //進入上傳日報頁面
-            case R.id.correct_item:
-                Intent intent6 = new Intent(InventoryActivity.this, CorrectActivity.class);
-                startActivity(intent6);
-                Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
-                break; //進入日報修正頁面
-            case R.id.about_item:
-                Intent intent9 = new Intent(InventoryActivity.this, VersionActivity.class);
-                startActivity(intent9);
-                Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
-                break; //進入版本資訊頁面
-            case R.id.QRCode_item:
-                Intent intent10 = new Intent(InventoryActivity.this, QRCodeActivity.class);
-                startActivity(intent10);
-                Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
-                break; //進入QRCode頁面
-            case R.id.quotation_item:
-                Intent intent11 = new Intent(InventoryActivity.this, QuotationActivity.class);
-                startActivity(intent11);
-                Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
-                break; //進入報價單審核頁面
-            case R.id.points_item:
-                Intent intent12 = new Intent(InventoryActivity.this, PointsActivity.class);
-                startActivity(intent12);
-                Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
-                break; //進入查詢工務點數頁面
-            case R.id.miss_item:
-                Intent intent13 = new Intent(InventoryActivity.this, MissCountActivity.class);
-                startActivity(intent13);
-                Toast.makeText(this, "未回單數量", Toast.LENGTH_SHORT).show();
-                break; //進入工務未回單數量頁面
-            case R.id.inventory_item:
-                Toast.makeText(this, "倉庫盤點", Toast.LENGTH_SHORT).show();
-                break; //顯示倉庫盤點
-            /*case R.id.purchase_item:
-                Intent intent15 = new Intent(InventoryActivity.this, QRCodeActivity.class);
-                startActivity(intent15);
-                Toast.makeText(this, "倉庫進貨", Toast.LENGTH_SHORT).show();
-                break; //進入倉庫進貨管理頁面
-            case R.id.return_item:
-                Intent intent16 = new Intent(InventoryActivity.this, QRCodeActivity.class);
-                startActivity(intent16);
-                Toast.makeText(this, "倉庫調撥", Toast.LENGTH_SHORT).show();
-                break; //進入倉庫調撥管理頁面*/
-            case R.id.map_item:
-                Intent intent19 = new Intent(InventoryActivity.this, GPSActivity.class);
-                startActivity(intent19);
-                Toast.makeText(this, "工務打卡GPS", Toast.LENGTH_SHORT).show();
-                break; //進入GPS地圖頁面
-            case R.id.eng_points_item:
-                Intent intent18 = new Intent(InventoryActivity.this, EngPointsActivity.class);
-                startActivity(intent18);
-                Toast.makeText(this, "工務點數明細", Toast.LENGTH_SHORT).show();
-                break; //進入工務點數明細頁面
-            default:
-        }
-        return true;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -259,7 +119,7 @@ public class InventoryActivity extends AppCompatActivity {
         //獲取當天日期
         GetDate();
         //確認是否有最新版本，進行更新
-        CheckFirebaseVersion();
+        //CheckFirebaseVersion();
     }
 
     /**
@@ -271,6 +131,9 @@ public class InventoryActivity extends AppCompatActivity {
         item_number_txt = (TextView) findViewById(R.id.item_number_txt);
         item_name_txt = (TextView) findViewById(R.id.item_name_txt);
         item_format_txt = (TextView) findViewById(R.id.item_format_txt);
+        factory_id_edt = (EditText) findViewById(R.id.factory_id_edt);
+        factory_id_btn = (Button) findViewById(R.id.factory_id_btn);
+        barcode_txt = (TextView) findViewById(R.id.barcode_txt);
         company_spinner = (Spinner) findViewById(R.id.company_spinner);
         warehouse_spinner = (Spinner) findViewById(R.id.warehouse_spinner);
         unit_txt1 = (TextView) findViewById(R.id.unit_txt1);
@@ -282,6 +145,7 @@ public class InventoryActivity extends AppCompatActivity {
         recent_out_txt = (TextView) findViewById(R.id.recent_out_txt);
         last_inventory_txt = (TextView) findViewById(R.id.last_inventory_txt);
         actual_edt = (EditText) findViewById(R.id.actual_edt);
+        warehouse_llt = (LinearLayout) findViewById(R.id.warehouse_llt);
         inventory_record_llt = (LinearLayout) findViewById(R.id.inventory_record_llt);
         loss_llt = (LinearLayout) findViewById(R.id.loss_llt);
         stock_llt = (LinearLayout) findViewById(R.id.stock_llt);
@@ -289,6 +153,40 @@ public class InventoryActivity extends AppCompatActivity {
         upload_btn = (Button) findViewById(R.id.upload_btn);
         loss_txt = (TextView) findViewById(R.id.loss_txt);
         record_txt = (TextView) findViewById(R.id.record_txt);
+
+        warehouse_llt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            }
+        });
+
+        factory_id_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRequestWithOkHttpForFactoryID();
+                upload_btn.setVisibility(View.VISIBLE);
+                loss_llt.setVisibility(View.GONE);
+                actual_edt.setFocusable(true);
+                actual_edt.setFocusableInTouchMode(true);
+                actual_edt.requestFocus();
+                factory_id_edt.setFocusable(true);
+                factory_id_edt.setFocusableInTouchMode(true);
+                factory_id_edt.requestFocus();
+                item_number_txt.setText("");
+                item_name_txt.setText("");
+                item_format_txt.setText("");
+                stock_txt.setText("");
+                actual_edt.setText("");
+                recent_in_txt.setText("");
+                recent_out_txt.setText("");
+                last_inventory_txt.setText("");
+                inventory_record_llt.removeAllViews();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            }
+        });
 
         upload_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -320,113 +218,10 @@ public class InventoryActivity extends AppCompatActivity {
                 sendRequestWithOkHttpForWareHouseLog();
             }
         });
-    }
 
-    /**
-     * 確認是否有最新版本，進行更新
-     */
-    private void CheckFirebaseVersion() {
-        SharedPreferences fb_version = getSharedPreferences("fb_version", MODE_PRIVATE);
-        final String version = fb_version.getString("FB_VER", "");
-        Log.e("InventoryActivity", version);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("WQP");
-        // Read from the database
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                //String value = dataSnapshot.getValue(String.class);
-                //Log.d("現在在根結點上的資料是:", "Value is: " + value);
-                Map<String, String> map = (Map) dataSnapshot.getValue();
-                String data = map.toString().substring(9, 12);
-                Log.e("InventoryActivity", "已讀取到值:" + data);
-                if (version.equals(data)) {
-                } else {
-                    new AlertDialog.Builder(InventoryActivity.this)
-                            .setTitle("更新通知")
-                            .setMessage("檢測到軟體重大更新\n請更新最新版本")
-                            .setIcon(R.drawable.bwt_icon)
-                            .setNegativeButton("確定",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog,
-                                                            int which) {
-                                            new Thread() {
-                                                @Override
-                                                public void run() {
-                                                    super.run();
-                                                    InventoryActivity.this.Update();
-                                                }
-                                            }.start();
-                                        }
-                                    }).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.e("InventoryActivity", "Failed to read value.", error.toException());
-            }
-        });
-    }
-
-    /**
-     * 下載新版本APK
-     */
-    public void Update() {
-        try {
-            URL url = new URL("http://192.168.0.201/wqp_1.9.apk");
-            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.9.apk");
-            HttpURLConnection c = (HttpURLConnection) url.openConnection();
-            //c.setRequestMethod("GET");
-            //c.setDoOutput(true);
-            c.connect();
-
-            String PATH = Environment.getExternalStorageDirectory() + "/Download/";
-            //String PATH2 = Environment.getExternalStorageDirectory().getPath() + "/Download/";
-            //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
-            File file = new File(PATH);
-            file.mkdirs();
-            File outputFile = new File(file, "wqp_1.9.apk");
-            FileOutputStream fos = new FileOutputStream(outputFile);
-
-            InputStream is = c.getInputStream();
-
-            byte[] buffer = new byte[1024];
-            int len1 = 0;
-            while ((len1 = is.read(buffer)) != -1) {
-                fos.write(buffer, 0, len1);
-            }
-            fos.close();
-            is.close();//till here, it works fine - .apk is download to my sdcard in download file
-
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.9.apk")), "application/vnd.android.package-archive");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-
-            InventoryActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), "開始安裝新版本", Toast.LENGTH_LONG).show();
-                }
-            });
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            Log.e("下載錯誤!", e.toString());
-            InventoryActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), "更新失敗!", Toast.LENGTH_LONG).show();
-                }
-            });
-        }
+        //接收LoginActivity傳過來的值
+        SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
+        d_id = department_id.getString("D_ID", "");
     }
 
     /**
@@ -441,7 +236,7 @@ public class InventoryActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 //ZXing回傳的內容
                 String contents = intent.getStringExtra("SCAN_RESULT");
-                item_number_txt.setText(intent.getStringExtra("result_text"));
+                barcode_txt.setText(intent.getStringExtra("result_text"));
                 sendRequestWithOkHttpForWareHouseSearch();
             } else {
                 if (resultCode == RESULT_CANCELED) {
@@ -526,7 +321,7 @@ public class InventoryActivity extends AppCompatActivity {
                             .build();
                     Log.e("InventoryActivity", spinner_select);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/Warehouse.php")
+                            .url("http://a.wqp-water.com.tw/WQP/Warehouse.php")
                             //.url("http://192.168.0.172/WQP/Warehouse.php")
                             .post(requestBody)
                             .build();
@@ -596,6 +391,9 @@ public class InventoryActivity extends AppCompatActivity {
                     actual_edt.setFocusable(true);
                     actual_edt.setFocusableInTouchMode(true);
                     actual_edt.requestFocus();
+                    factory_id_edt.setFocusable(true);
+                    factory_id_edt.setFocusableInTouchMode(true);
+                    factory_id_edt.requestFocus();
                     //與WareHouseMoreSearch.PHP取得連線
                     sendRequestWithOkHttpForWareHouseMoreSearch();
                     if (d_id.toString().equals("1000")){
@@ -620,6 +418,9 @@ public class InventoryActivity extends AppCompatActivity {
         actual_edt.setFocusable(true);
         actual_edt.setFocusableInTouchMode(true);
         actual_edt.requestFocus();
+        factory_id_edt.setFocusable(true);
+        factory_id_edt.setFocusableInTouchMode(true);
+        factory_id_edt.requestFocus();
     }
 
     /**
@@ -640,23 +441,117 @@ public class InventoryActivity extends AppCompatActivity {
     }
 
     /**
+     * 與OKHttp連線(查詢原廠序號資料)
+     */
+    private void sendRequestWithOkHttpForFactoryID() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String f_id = factory_id_edt.getText().toString();
+                Log.e("PickingActivity8", f_id);
+
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    //POST
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("item_id", f_id)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("http://a.wqp-water.com.tw/WQP/WareHouseFactoryID.php")
+                            //.url("http://192.168.0.172/WQP/WareHouseFactoryID.php")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.e("PickingActivity", responseData);
+                    parseJSONWithJSONObjectForFactoryID(responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 取得撿貨之公司別、品號、品名、規格、單位、原廠序號、BarCode
+     *
+     * @param jsonData
+     */
+    private void parseJSONWithJSONObjectForFactoryID(String jsonData) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                //JSON格式改為字串
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                COMPANY = jsonObject.getString("公司別");
+                MB001 = jsonObject.getString("品號");
+                MB002 = jsonObject.getString("品名");
+                MB003 = jsonObject.getString("規格");
+                MB004 = jsonObject.getString("單位");
+                safe = jsonObject.getString("總安全庫存");
+                vendor_no = jsonObject.getString("廠商代號");
+                vendor_name = jsonObject.getString("廠商名稱");
+                item_id = jsonObject.getString("原廠序號");
+                barcode = jsonObject.getString("BarCode");
+
+                InventoryActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        item_number_txt.setText(MB001.toString());
+                        item_name_txt.setText(MB002.toString());
+                        item_format_txt.setText(MB003.toString());
+                        unit_txt1.setText(MB004.toString());
+                        unit_txt2.setText(MB004.toString());
+                        vendor_txt.setText(vendor_no.toString() + "|" + vendor_name.toString());
+                        safe_txt.setText(safe.toString());
+                        barcode_txt.setText(barcode.toString());
+                        company_spinner.setVisibility(View.VISIBLE);
+                        warehouse_spinner.setVisibility(View.VISIBLE);
+                        //公司別的Spinner下拉選單
+                        CompanySpinner();
+                        //倉庫庫別的Spinner下拉選單
+                        //WareHouseSpinner();
+                        //轉換公司別中英文
+                        if (COMPANY.toString().equals("WQP")) {
+                            company_ch = "拓霖";
+                        } else if (COMPANY.toString().equals("TYT")) {
+                            company_ch = "拓亞鈦";
+                        } else {
+                            company_ch = "倍偉特";
+                        }
+                        //當迴圈與COMPANY內容一致時跳出迴圈 並顯示該公司別的Spinner位置
+                        for (int c = 0; c < company_list.length; c++) {
+                            if (company_list[c].equals(company_ch)) {
+                                company_spinner.setSelection(c, true);
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 與OKHttp連線(查詢倉庫盤點資料)
      */
     private void sendRequestWithOkHttpForWareHouseSearch() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String MB001 = item_number_txt.getText().toString();
-                Log.e("InventoryActivity8", MB001);
+                String barcode = barcode_txt.getText().toString();
+                Log.e("InventoryActivity8", barcode);
 
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
                     RequestBody requestBody = new FormBody.Builder()
-                            .add("MB001", MB001)
+                            .add("barcode", barcode)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/WareHouseSearch.php")
+                            .url("http://a.wqp-water.com.tw/WQP/WareHouseSearch.php")
                             //.url("http://192.168.0.172/WQP/WareHouseSearch.php")
                             .post(requestBody)
                             .build();
@@ -683,18 +578,24 @@ public class InventoryActivity extends AppCompatActivity {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 COMPANY = jsonObject.getString("公司別");
+                MB001 = jsonObject.getString("品號");
                 MB002 = jsonObject.getString("品名");
                 MB003 = jsonObject.getString("規格");
                 MB004 = jsonObject.getString("單位");
+                //MB064 = jsonObject.getString("數量");
+                safe = jsonObject.getString("總安全庫存");
                 vendor_no = jsonObject.getString("廠商代號");
                 vendor_name = jsonObject.getString("廠商名稱");
-                safe = jsonObject.getString("總安全庫存");
+                item_id = jsonObject.getString("原廠序號");
+                barcode = jsonObject.getString("BarCode");
 
                 InventoryActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        item_number_txt.setText(MB001.toString());
                         item_name_txt.setText(MB002.toString());
                         item_format_txt.setText(MB003.toString());
+                        factory_id_edt.setText(item_id.toString());
                         unit_txt1.setText(MB004.toString());
                         unit_txt2.setText(MB004.toString());
                         vendor_txt.setText(vendor_no.toString() + "|" + vendor_name.toString());
@@ -772,7 +673,7 @@ public class InventoryActivity extends AppCompatActivity {
                             .add("WH_NO", w_id)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/WareHouseMoreSearch.php")
+                            .url("http://a.wqp-water.com.tw/WQP/WareHouseMoreSearch.php")
                             //.url("http://192.168.0.172/WQP/WareHouseMoreSearch.php")
                             .post(requestBody)
                             .build();
@@ -801,11 +702,12 @@ public class InventoryActivity extends AppCompatActivity {
                 warehouse_no = jsonObject.getString("倉庫代號");
                 warehouse_name = jsonObject.getString("倉庫名稱");
                 MB064 = jsonObject.getString("數量");
+                //safe = jsonObject.getString("安全庫存");
                 in = jsonObject.getString("最近入庫日");
                 out = jsonObject.getString("最近出貨日");
                 inventory = jsonObject.getString("上次盤點日");
 
-                Log.e("InventoryActivity", MB064);
+                Log.e("InventoryActivity11", MB064);
 
                 InventoryActivity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -849,6 +751,24 @@ public class InventoryActivity extends AppCompatActivity {
                     w_id = "WPA";
                 }else if (warehouse_no_select_log.equals("WQP(拓霖倉)")){
                     w_id = "WQP";
+                }else if (warehouse_no_select_log.equals("01-10000AT(拓霖AQT倉)")){
+                    w_id = "01-10000AT";
+                    w_name = "拓霖AQT倉";
+                }else if (warehouse_no_select_log.equals("01-10000TP(拓霖台北倉)")){
+                    w_id = "01-10000TP";
+                    w_name = "拓霖台北倉";
+                }else if (warehouse_no_select_log.equals("01-10000TY(拓霖桃園倉)")){
+                    w_id = "01-10000TY";
+                    w_name = "拓霖桃園倉";
+                }else if (warehouse_no_select_log.equals("01-10000HS(拓霖新竹倉)")){
+                    w_id = "01-10000HS";
+                    w_name = "拓霖新竹倉";
+                }else if (warehouse_no_select_log.equals("01-10000TC(拓霖台中倉)")){
+                    w_id = "01-10000TC";
+                    w_name = "拓霖台中倉";
+                }else if (warehouse_no_select_log.equals("01-10000KH(拓霖高雄倉)")){
+                    w_id = "01-10000KH";
+                    w_name = "拓霖高雄倉";
                 }
 
                 Log.e("InventoryActivity", MB001);
@@ -871,7 +791,7 @@ public class InventoryActivity extends AppCompatActivity {
                             .add("WH_NO", w_id)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/WareHouseLog.php")
+                            .url("http://a.wqp-water.com.tw/WQP/WareHouseLog.php")
                             //.url("http://192.168.0.172/WQP/WareHouseLog.php")
                             .post(requestBody)
                             .build();
@@ -1050,6 +970,24 @@ public class InventoryActivity extends AppCompatActivity {
                 }else if (warehouse_no_select.equals("WQP(拓霖倉)")){
                     w_id = "WQP";
                     w_name = "拓霖倉";
+                }else if (warehouse_no_select.equals("01-10000AT(拓霖AQT倉)")){
+                    w_id = "01-10000AT";
+                    w_name = "拓霖AQT倉";
+                }else if (warehouse_no_select.equals("01-10000TP(拓霖台北倉)")){
+                    w_id = "01-10000TP";
+                    w_name = "拓霖台北倉";
+                }else if (warehouse_no_select.equals("01-10000TY(拓霖桃園倉)")){
+                    w_id = "01-10000TY";
+                    w_name = "拓霖桃園倉";
+                }else if (warehouse_no_select.equals("01-10000HS(拓霖新竹倉)")){
+                    w_id = "01-10000HS";
+                    w_name = "拓霖新竹倉";
+                }else if (warehouse_no_select.equals("01-10000TC(拓霖台中倉)")){
+                    w_id = "01-10000TC";
+                    w_name = "拓霖台中倉";
+                }else if (warehouse_no_select.equals("01-10000KH(拓霖高雄倉)")){
+                    w_id = "01-10000KH";
+                    w_name = "拓霖高雄倉";
                 }
 
                 if (company_select_inventory.toString().equals("拓霖")) {
@@ -1078,7 +1016,7 @@ public class InventoryActivity extends AppCompatActivity {
                             .add("WH_NAME", w_name)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/WareHouseInventory.php")
+                            .url("http://a.wqp-water.com.tw/WQP/WareHouseInventory.php")
                             //.url("http://192.168.0.172/WQP/WareHouseInventory.php")
                             .post(requestBody)
                             .build();
