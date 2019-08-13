@@ -83,7 +83,7 @@ public class Day_Work extends AppCompatActivity {
                             .build();
                     Log.i("Day_Work", user_id_data);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/TodayScheduleData.php")
+                            .url("http://a.wqp-water.com.tw/WQP/TodayScheduleData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

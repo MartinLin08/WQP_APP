@@ -69,7 +69,7 @@ public class Week_Work extends AppCompatActivity {
                             .build();
                     Log.i("Week_Work", user_id_data);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/WeekScheduleData.php")
+                            .url("http://a.wqp-water.com.tw/WQP/WeekScheduleData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

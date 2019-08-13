@@ -19,6 +19,7 @@ import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.app.Manager.InventoryActivity;
 import com.example.a10609516.app.Tools.SignView;
 import com.example.a10609516.app.R;
+import com.example.a10609516.app.Tools.WQPServiceActivity;
 import com.example.a10609516.app.Workers.CalendarActivity;
 import com.example.a10609516.app.Workers.EngPointsActivity;
 import com.example.a10609516.app.Workers.GPSActivity;
@@ -42,7 +43,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class SignatureActivity extends AppCompatActivity {
+public class SignatureActivity extends WQPServiceActivity {
     private SignView mView;
     private Button commit_btn,clear_btn;
     private Bitmap mSignBitmap;
@@ -50,128 +51,6 @@ public class SignatureActivity extends AppCompatActivity {
     String sign_name;
 
     private OkHttpClient client;
-
-    /**
-     * 創建Menu
-     * @param menu
-     * @return
-     */
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //接收LoginActivity傳過來的值
-        SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
-        String user_id_data = user_id.getString("ID", "");
-        SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
-        String department_id_data = department_id.getString("D_ID", "");
-        if ((user_id_data.toString().equals("09706013")) || user_id_data.toString().equals("09908023") || user_id_data.toString().equals("10010039")
-                || user_id_data.toString().equals("10012043") || user_id_data.toString().equals("10101046") || user_id_data.toString().equals("10405235")) {
-            getMenuInflater().inflate(R.menu.workers_manager_menu, menu);
-            return true;
-        }else if (department_id_data.toString().equals("2100")) {
-            getMenuInflater().inflate(R.menu.clerk_menu, menu);
-            return true;
-        } else if (department_id_data.toString().equals("2200")) {
-            getMenuInflater().inflate(R.menu.diy_menu, menu);
-            return true;
-        } else if (department_id_data.toString().equals("5200")) {
-            getMenuInflater().inflate(R.menu.workers_menu, menu);
-            return true;
-        } else {
-            getMenuInflater().inflate(R.menu.main, menu);
-            return true;
-        }
-    }*/
-
-    /**
-     * 進入Menu各個頁面
-     * @param item
-     * @return
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.home_item:
-                Intent intent = new Intent(SignatureActivity.this, MenuActivity.class);
-                startActivity(intent);
-                Toast.makeText(this, "HOME", Toast.LENGTH_SHORT).show();
-                finish();
-                break; //返回首頁
-            case R.id.schedule_item:
-                Intent intent7 = new Intent(SignatureActivity.this, ScheduleActivity.class);
-                startActivity(intent7);
-                Toast.makeText(this, "行程資訊",Toast.LENGTH_SHORT).show();
-                break; //進入行程資訊頁面
-            case R.id.calendar_item:
-                Intent intent1 = new Intent(SignatureActivity.this, CalendarActivity.class);
-                startActivity(intent1);
-                Toast.makeText(this, "派工行事曆", Toast.LENGTH_SHORT).show();
-                break; //進入派工行事曆頁面
-            case R.id.work_item:
-                Intent intent2 = new Intent(SignatureActivity.this, SearchActivity.class);
-                startActivity(intent2);
-                Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
-                break; //進入查詢派工資料頁面
-            /*case R.id.signature_item:
-                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
-                break; //顯示客戶電子簽名*/
-            /*case R.id.record_item:
-                Intent intent8 = new Intent(SignatureActivity.this, RecordActivity.class);
-                startActivity(intent8);
-                Toast.makeText(this, "上傳日報紀錄",Toast.LENGTH_SHORT).show();
-                break; //進入上傳日報紀錄頁面*/
-            case R.id.picture_item:
-                Intent intent3 = new Intent(SignatureActivity.this, PictureActivity.class);
-                startActivity(intent3);
-                Toast.makeText(this, "客戶訂單照片上傳", Toast.LENGTH_SHORT).show();
-                break; //進入客戶訂單照片上傳頁面
-            case R.id.customer_item:
-                Intent intent4 = new Intent(SignatureActivity.this, CustomerActivity.class);
-                startActivity(intent4);
-                Toast.makeText(this, "客戶訂單查詢", Toast.LENGTH_SHORT).show();
-                break; //進入客戶訂單查詢頁面
-            /*case R.id.upload_item:
-                Intent intent5 = new Intent(SignatureActivity.this, UploadActivity.class);
-                startActivity(intent5);
-                Toast.makeText(this, "上傳日報", Toast.LENGTH_SHORT).show();
-                break; //進入上傳日報頁面
-            case R.id.correct_item:
-                Intent intent6 = new Intent(SignatureActivity.this, CorrectActivity.class);
-                startActivity(intent6);
-                Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
-                break; //進入日報修正頁面*/
-            case R.id.QRCode_item:
-                Intent intent10 = new Intent(SignatureActivity.this, QRCodeActivity.class);
-                startActivity(intent10);
-                Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
-                break; //進入QRCode頁面
-            case R.id.quotation_item:
-                Intent intent11 = new Intent(SignatureActivity.this, QuotationActivity.class);
-                startActivity(intent11);
-                Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
-                break; //進入報價單審核頁面
-            case R.id.points_item:
-                Intent intent12 = new Intent(SignatureActivity.this, PointsActivity.class);
-                startActivity(intent12);
-                Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
-                break; //進入查詢工務點數頁面
-            case R.id.inventory_item:
-                Intent intent15 = new Intent(SignatureActivity.this, InventoryActivity.class);
-                startActivity(intent15);
-                Toast.makeText(this, "倉庫盤點", Toast.LENGTH_SHORT).show();
-                break; //進入倉庫盤點管理頁面
-            case R.id.map_item:
-                Intent intent17 = new Intent(SignatureActivity.this, GPSActivity.class);
-                startActivity(intent17);
-                Toast.makeText(this, "工務打卡GPS", Toast.LENGTH_SHORT).show();
-                break; //進入GPS地圖頁面
-            case R.id.eng_points_item:
-                Intent intent18 = new Intent(SignatureActivity.this, EngPointsActivity.class);
-                startActivity(intent18);
-                Toast.makeText(this, "工務點數明細", Toast.LENGTH_SHORT).show();
-                break; //進入工務點數明細頁面
-            default:
-        }
-        return true;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,7 +125,7 @@ public class SignatureActivity extends AppCompatActivity {
                         .addFormDataPart("img_1", sign_name + ".png", RequestBody.create(MediaType.parse("image/png"),photoBytes));
                 MultipartBody build = builder.build();
                 okhttp3.Request bi = new okhttp3.Request.Builder()
-                        .url("http://220.133.80.146/WQP/SignaturePicture.php")
+                        .url("http://a.wqp-water.com.tw/WQP/SignaturePicture.php")
                         .post(build)
                         .build();
                 client.newCall(bi).enqueue(new Callback() {
@@ -303,7 +182,7 @@ public class SignatureActivity extends AppCompatActivity {
                     Log.e("SignatureActivity", SN_NO);
                     Log.e("SignatureActivity", sign_name+".png");
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/SignatureLog.php")
+                            .url("http://a.wqp-water.com.tw/WQP/SignatureLog.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

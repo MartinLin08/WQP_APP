@@ -69,7 +69,7 @@ public class Missing_Date_Record extends AppCompatActivity {
                             .build();
                     Log.i("Missing_Date_Record", user_id_data);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/MissingScheduleData.php")
+                            .url("http://a.wqp-water.com.tw/WQP/MissingScheduleData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

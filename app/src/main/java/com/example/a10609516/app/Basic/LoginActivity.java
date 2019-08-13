@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     String ver_no;
     String IDEdT, PwdEdT;
     String finalResult;
-    String HttpURL = "http://220.133.80.146/WQP/UserLogin.php";
+    String HttpURL = "http://a.wqp-water.com.tw/WQP/UserLogin.php";
     Boolean CheckEditText;
     ProgressDialog progressDialog;
     HashMap<String, String> hashMap = new HashMap<>();
@@ -325,7 +325,7 @@ public class LoginActivity extends AppCompatActivity {
                             .build();
                     Log.e("FCM", IDEdT);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/TokenID.php")
+                            .url("http://a.wqp-water.com.tw/WQP/TokenID.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -352,7 +352,7 @@ public class LoginActivity extends AppCompatActivity {
                             .add("version", "wqp-water")
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/Version.php")
+                            .url("http://a.wqp-water.com.tw/WQP/Version.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -462,7 +462,7 @@ public class LoginActivity extends AppCompatActivity {
                             .build();
                     Log.e("LoginActivity", IDEdT);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/DepartmentID.php")
+                            .url("http://a.wqp-water.com.tw/WQP/DepartmentID.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -507,7 +507,7 @@ public class LoginActivity extends AppCompatActivity {
                             .add("User_id", IDEdT)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/MissWorkCount.php")
+                            .url("http://a.wqp-water.com.tw/WQP/MissWorkCount.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

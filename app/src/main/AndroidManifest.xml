@@ -202,7 +202,12 @@
         <!-- 管理部 -->
         <activity
             android:name=".Manager.InventoryActivity"
-            android:label="倉庫盤點管理"
+            android:label="盤點單"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Manager.PickingActivity"
+            android:label="撿料單"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />

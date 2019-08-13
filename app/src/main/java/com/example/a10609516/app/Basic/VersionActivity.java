@@ -22,6 +22,7 @@ import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.app.Manager.InventoryActivity;
 import com.example.a10609516.app.R;
+import com.example.a10609516.app.Tools.WQPServiceActivity;
 import com.example.a10609516.app.Workers.CalendarActivity;
 import com.example.a10609516.app.Workers.EngPointsActivity;
 import com.example.a10609516.app.Workers.GPSActivity;
@@ -44,149 +45,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-public class VersionActivity extends AppCompatActivity {
+public class VersionActivity extends WQPServiceActivity {
 
     private TextView detail_txt0, detail_txt1, detail_txt2, detail_txt3, detail_txt4, detail_txt5
-            , detail_txt6, detail_txt7, detail_txt8;
+            , detail_txt6, detail_txt7, detail_txt8, detail_txt9;
     private LinearLayout detail_llt0, detail_llt1, detail_llt2, detail_llt3, detail_llt4, detail_llt5
-            , detail_llt6, detail_llt7, detail_llt8;
+            , detail_llt6, detail_llt7, detail_llt8, detail_llt9;
     private Button version_btn0, version_btn1, version_btn2, version_btn3, version_btn4, version_btn5
-            , version_btn6, version_btn7, version_btn8;
+            , version_btn6, version_btn7, version_btn8, version_btn9;
     private Button version_up_btn0, version_up_btn1, version_up_btn2, version_up_btn3, version_up_btn4, version_up_btn5
-            , version_up_btn6, version_up_btn7, version_up_btn8;
-
-
-    /**
-     * 創建Menu
-     *
-     * @param menu
-     * @return
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //接收LoginActivity傳過來的值
-        SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
-        String user_id_data = user_id.getString("ID", "");
-        SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
-        String department_id_data = department_id.getString("D_ID", "");
-        if ((user_id_data.toString().equals("09706013")) || user_id_data.toString().equals("09908023") || user_id_data.toString().equals("10010039")
-                || user_id_data.toString().equals("10012043") || user_id_data.toString().equals("10101046") || user_id_data.toString().equals("10405235")) {
-            getMenuInflater().inflate(R.menu.workers_manager_menu, menu);
-            return true;
-        } else if (department_id_data.toString().equals("2100")) {
-            getMenuInflater().inflate(R.menu.clerk_menu, menu);
-            return true;
-        } else if (department_id_data.toString().equals("2200")) {
-            getMenuInflater().inflate(R.menu.diy_menu, menu);
-            return true;
-        } else if (department_id_data.toString().equals("5200")) {
-            getMenuInflater().inflate(R.menu.workers_menu, menu);
-            return true;
-        } else {
-            getMenuInflater().inflate(R.menu.main, menu);
-            return true;
-        }
-    }
-
-    /**
-     * 進入Menu各個頁面
-     *
-     * @param item
-     * @return
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.home_item:
-                Intent intent = new Intent(VersionActivity.this, MenuActivity.class);
-                startActivity(intent);
-                Toast.makeText(this, "HOME", Toast.LENGTH_SHORT).show();
-                finish();
-                break; //返回首頁
-            case R.id.schedule_item:
-                Intent intent7 = new Intent(VersionActivity.this, ScheduleActivity.class);
-                startActivity(intent7);
-                Toast.makeText(this, "行程資訊", Toast.LENGTH_SHORT).show();
-                break; //進入行程資訊頁面
-            case R.id.calendar_item:
-                Intent intent1 = new Intent(VersionActivity.this, CalendarActivity.class);
-                startActivity(intent1);
-                Toast.makeText(this, "派工行事曆", Toast.LENGTH_SHORT).show();
-                break; //進入派工行事曆頁面
-            case R.id.work_item:
-                Intent intent2 = new Intent(VersionActivity.this, SearchActivity.class);
-                startActivity(intent2);
-                Toast.makeText(this, "查詢派工資料", Toast.LENGTH_SHORT).show();
-                break; //進入查詢派工資料頁面
-            /*case R.id.signature_item:
-                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
-                break; //顯示客戶電子簽名*/
-            /*case R.id.record_item:
-                Intent intent8 = new Intent(VersionActivity.this, RecordActivity.class);
-                startActivity(intent8);
-                Toast.makeText(this, "上傳日報紀錄",Toast.LENGTH_SHORT).show();
-                break; //進入上傳日報紀錄頁面*/
-            case R.id.picture_item:
-                Intent intent3 = new Intent(VersionActivity.this, PictureActivity.class);
-                startActivity(intent3);
-                Toast.makeText(this, "客戶訂單照片上傳", Toast.LENGTH_SHORT).show();
-                break; //進入客戶訂單照片上傳頁面
-            case R.id.customer_item:
-                Intent intent4 = new Intent(VersionActivity.this, CustomerActivity.class);
-                startActivity(intent4);
-                Toast.makeText(this, "客戶訂單查詢", Toast.LENGTH_SHORT).show();
-                break; //進入客戶訂單查詢頁面
-            /*case R.id.upload_item:
-                Intent intent5 = new Intent(VersionActivity.this, UploadActivity.class);
-                startActivity(intent5);
-                Toast.makeText(this, "上傳日報", Toast.LENGTH_SHORT).show();
-                break; //進入上傳日報頁面
-            case R.id.correct_item:
-                Intent intent6 = new Intent(VersionActivity.this, CorrectActivity.class);
-                startActivity(intent6);
-                Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
-                break; //進入日報修正頁面*/
-            case R.id.about_item:
-                Toast.makeText(this, "版本資訊", Toast.LENGTH_SHORT).show();
-                break; //顯示版本資訊
-            case R.id.QRCode_item:
-                Intent intent10 = new Intent(VersionActivity.this, QRCodeActivity.class);
-                startActivity(intent10);
-                Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
-                break; //進入QRCode頁面
-            case R.id.quotation_item:
-                Intent intent11 = new Intent(VersionActivity.this, QuotationActivity.class);
-                startActivity(intent11);
-                Toast.makeText(this, "報價單審核", Toast.LENGTH_SHORT).show();
-                break; //進入報價單審核頁面
-            case R.id.points_item:
-                Intent intent12 = new Intent(VersionActivity.this, PointsActivity.class);
-                startActivity(intent12);
-                Toast.makeText(this, "我的點數", Toast.LENGTH_SHORT).show();
-                break; //進入查詢工務點數頁面
-            case R.id.miss_item:
-                Intent intent14 = new Intent(VersionActivity.this, MissCountActivity.class);
-                startActivity(intent14);
-                Toast.makeText(this, "未回單數量", Toast.LENGTH_SHORT).show();
-                break; //進入工務未回單數量頁面
-            case R.id.inventory_item:
-                Intent intent15 = new Intent(VersionActivity.this, InventoryActivity.class);
-                startActivity(intent15);
-                Toast.makeText(this, "倉庫盤點", Toast.LENGTH_SHORT).show();
-                break; //進入倉庫盤點管理頁面
-            case R.id.map_item:
-                Intent intent17 = new Intent(VersionActivity.this, GPSActivity.class);
-                startActivity(intent17);
-                Toast.makeText(this, "工務打卡GPS", Toast.LENGTH_SHORT).show();
-                break; //進入GPS地圖頁面
-            case R.id.eng_points_item:
-                Intent intent18 = new Intent(VersionActivity.this, EngPointsActivity.class);
-                startActivity(intent18);
-                Toast.makeText(this, "工務點數明細", Toast.LENGTH_SHORT).show();
-                break; //進入工務點數明細頁面
-            default:
-        }
-        return true;
-    }
+            , version_up_btn6, version_up_btn7, version_up_btn8, version_up_btn9;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,7 +67,7 @@ public class VersionActivity extends AppCompatActivity {
         //查看版本
         CheckWhatDetail();
         //確認是否有最新版本，進行更新
-        CheckFirebaseVersion();
+        //CheckFirebaseVersion();
     }
 
     /**
@@ -215,6 +83,7 @@ public class VersionActivity extends AppCompatActivity {
         detail_txt6 = (TextView) findViewById(R.id.detail_txt6);
         detail_txt7 = (TextView) findViewById(R.id.detail_txt7);
         detail_txt8 = (TextView) findViewById(R.id.detail_txt8);
+        detail_txt9 = (TextView) findViewById(R.id.detail_txt9);
         detail_llt0 = (LinearLayout) findViewById(R.id.detail_llt0);
         detail_llt1 = (LinearLayout) findViewById(R.id.detail_llt1);
         detail_llt2 = (LinearLayout) findViewById(R.id.detail_llt2);
@@ -224,6 +93,7 @@ public class VersionActivity extends AppCompatActivity {
         detail_llt6 = (LinearLayout) findViewById(R.id.detail_llt6);
         detail_llt7 = (LinearLayout) findViewById(R.id.detail_llt7);
         detail_llt8 = (LinearLayout) findViewById(R.id.detail_llt8);
+        detail_llt9 = (LinearLayout) findViewById(R.id.detail_llt9);
         version_btn0 = (Button) findViewById(R.id.version_btn0);
         version_btn1 = (Button) findViewById(R.id.version_btn1);
         version_btn2 = (Button) findViewById(R.id.version_btn2);
@@ -233,6 +103,7 @@ public class VersionActivity extends AppCompatActivity {
         version_btn6 = (Button) findViewById(R.id.version_btn6);
         version_btn7 = (Button) findViewById(R.id.version_btn7);
         version_btn8 = (Button) findViewById(R.id.version_btn8);
+        version_btn9 = (Button) findViewById(R.id.version_btn9);
         version_up_btn0 = (Button) findViewById(R.id.version_up_btn0);
         version_up_btn1 = (Button) findViewById(R.id.version_up_btn1);
         version_up_btn2 = (Button) findViewById(R.id.version_up_btn2);
@@ -242,6 +113,7 @@ public class VersionActivity extends AppCompatActivity {
         version_up_btn6 = (Button) findViewById(R.id.version_up_btn6);
         version_up_btn7 = (Button) findViewById(R.id.version_up_btn7);
         version_up_btn8 = (Button) findViewById(R.id.version_up_btn8);
+        version_up_btn9 = (Button) findViewById(R.id.version_up_btn9);
     }
 
     /**
@@ -268,7 +140,9 @@ public class VersionActivity extends AppCompatActivity {
                             "2.修正1.5版本前部分機型無法自動更新的問題");
         detail_txt7.setText("1.部分內容修正bug及優化");
         detail_txt8.setText("1.部分內容修正bug及優化 \n" +
-                "2.新增工務部 - 工務點數明細(可直接查詢一個月內所有派工出勤的點數)");
+                            "2.新增工務部 - 工務點數明細(可直接查詢一個月內所有派工出勤的點數)");
+        detail_txt9.setText("1.部分內容修正bug及優化 \n" +
+                            "2.新增管理部 - 盤點單、撿料單");
     }
 
     /**
@@ -401,110 +275,19 @@ public class VersionActivity extends AppCompatActivity {
                 version_up_btn8.setVisibility(View.GONE);
             }
         });
-    }
-
-    /**
-     * 確認是否有最新版本，進行更新
-     */
-    private void CheckFirebaseVersion() {
-        SharedPreferences fb_version = getSharedPreferences("fb_version", MODE_PRIVATE);
-        final String version = fb_version.getString("FB_VER", "");
-        Log.e("VersionActivity", version);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("WQP");
-        // Read from the database
-        myRef.addValueEventListener(new ValueEventListener() {
+        version_btn9.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                //String value = dataSnapshot.getValue(String.class);
-                //Log.d("現在在根結點上的資料是:", "Value is: " + value);
-                Map<String, String> map = (Map) dataSnapshot.getValue();
-                String data = map.toString().substring(9, 12);
-                Log.e("VersionActivity", "已讀取到值:" + data);
-                if (version.equals(data)) {
-                } else {
-                    new AlertDialog.Builder(VersionActivity.this)
-                            .setTitle("更新通知")
-                            .setMessage("檢測到軟體重大更新\n請更新最新版本")
-                            .setIcon(R.drawable.bwt_icon)
-                            .setNegativeButton("確定",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog,
-                                                            int which) {
-                                            new Thread() {
-                                                @Override
-                                                public void run() {
-                                                    super.run();
-                                                    VersionActivity.this.Update();
-                                                }
-                                            }.start();
-                                        }
-                                    }).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.e("VersionActivity", "Failed to read value.", error.toException());
+            public void onClick(View v) {
+                detail_llt9.setVisibility(View.VISIBLE);
+                version_up_btn9.setVisibility(View.VISIBLE);
             }
         });
-    }
-
-    /**
-     * 下載新版本APK
-     */
-    public void Update() {
-        try {
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.9.apk");
-            HttpURLConnection c = (HttpURLConnection) url.openConnection();
-            //c.setRequestMethod("GET");
-            //c.setDoOutput(true);
-            c.connect();
-
-            String PATH = Environment.getExternalStorageDirectory() + "/Download/";
-            //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
-            File file = new File(PATH);
-            file.mkdirs();
-            File outputFile = new File(file, "wqp_1.9.apk");
-            FileOutputStream fos = new FileOutputStream(outputFile);
-
-            InputStream is = c.getInputStream();
-
-            byte[] buffer = new byte[1024];
-            int len1 = 0;
-            while ((len1 = is.read(buffer)) != -1) {
-                fos.write(buffer, 0, len1);
+        version_up_btn9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt9.setVisibility(View.GONE);
+                version_up_btn9.setVisibility(View.GONE);
             }
-            fos.close();
-            is.close();//till here, it works fine - .apk is download to my sdcard in download file
-
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.9.apk")), "application/vnd.android.package-archive");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-
-            VersionActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), "開始安裝新版本", Toast.LENGTH_LONG).show();
-                }
-            });
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            Log.e("下載錯誤!", e.toString());
-            VersionActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), "更新失敗!", Toast.LENGTH_LONG).show();
-                }
-            });
-        }
+        });
     }
 }

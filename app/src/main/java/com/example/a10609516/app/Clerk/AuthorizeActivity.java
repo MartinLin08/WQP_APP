@@ -178,7 +178,7 @@ public class AuthorizeActivity extends AppCompatActivity {
                     Log.e("AuthorizeActivity112", company);
                     Log.e("AuthorizeActivity112", quotation_read);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/QuotationRead.php")
+                            .url("http://a.wqp-water.com.tw/WQP/QuotationRead.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -216,7 +216,7 @@ public class AuthorizeActivity extends AppCompatActivity {
                             .add("TA002", TA002TB002)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/QuotationMaster.php")
+                            .url("http://a.wqp-water.com.tw/WQP/QuotationMaster.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -415,7 +415,7 @@ public class AuthorizeActivity extends AppCompatActivity {
                             .add("TB002", TA002TB002)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/QuotationDetail.php")
+                            .url("http://a.wqp-water.com.tw/WQP/QuotationDetail.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -600,7 +600,7 @@ public class AuthorizeActivity extends AppCompatActivity {
                             .add("TA005",TA005N)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/QuotationApproved.php")
+                            .url("http://a.wqp-water.com.tw/WQP/QuotationApproved.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -642,7 +642,7 @@ public class AuthorizeActivity extends AppCompatActivity {
                             .add("TA005",TA005N)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/QuotationReject.php")
+                            .url("http://a.wqp-water.com.tw/WQP/QuotationReject.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

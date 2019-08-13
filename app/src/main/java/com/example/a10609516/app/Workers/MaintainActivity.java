@@ -349,6 +349,10 @@ public class MaintainActivity extends AppCompatActivity {
         if (arrive_button.getText().toString().equals("1900-01-01")) {
             arrive_button.setText("");
         }
+        //如果派工類別為"臨時取消",則把OK按鈕隱藏
+        if(ResponseText0.equals("臨時取消")) {
+            check_button.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -566,6 +570,10 @@ public class MaintainActivity extends AppCompatActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String date = simpleDateFormat.format(new java.util.Date());
         arrive_button.setText(date);
+
+        Log.e("MaintainActivity", time_period_name_txt.getText().toString());
+        String booking_date = time_period_name_txt.getText().toString().substring(0, 11);
+        arrive_button.setText(booking_date);
     }
 
     /**
@@ -663,7 +671,7 @@ public class MaintainActivity extends AppCompatActivity {
                     Log.e("MaintainActivity", get_money_type);
                     Log.e("MaintainActivity", work_points);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/wqp/UpdateMaintainData.php")
+                            .url("http://a.wqp-water.com.tw/wqp/UpdateMaintainData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -744,7 +752,7 @@ public class MaintainActivity extends AppCompatActivity {
                     Log.e("MaintainActivity", get_money_type);
                     Log.e("MaintainActivity", work_points);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/wqp/UpdateMaintainData.php")
+                            .url("http://a.wqp-water.com.tw/wqp/UpdateMaintainData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -825,7 +833,7 @@ public class MaintainActivity extends AppCompatActivity {
                     //Log.e("MaintainActivity", get_money_type);
                     Log.e("MaintainActivity", work_points);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/wqp/UpdateMaintainData.php")
+                            .url("http://a.wqp-water.com.tw/wqp/UpdateMaintainData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -906,7 +914,7 @@ public class MaintainActivity extends AppCompatActivity {
                     //Log.e("MaintainActivity", get_money_type);
                     Log.e("MaintainActivity", work_points);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/wqp/UpdateMaintainData.php")
+                            .url("http://a.wqp-water.com.tw/wqp/UpdateMaintainData.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -937,7 +945,7 @@ public class MaintainActivity extends AppCompatActivity {
                             .add("User_id", user_id_data)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/WorkMoney.php")
+                            .url("http://a.wqp-water.com.tw/WQP/WorkMoney.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -994,7 +1002,7 @@ public class MaintainActivity extends AppCompatActivity {
                             .add("ESVD_SERVICE_NO", service_no)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/WorkPoints.php")
+                            .url("http://a.wqp-water.com.tw/WQP/WorkPoints.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
