@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.example.a10609516.app.Basic.MenuActivity;
 import com.example.a10609516.app.Basic.QRCodeActivity;
-import com.example.a10609516.app.Basic.SignatureActivity;
+import com.example.a10609516.app.Workers.Worker_SignatureActivity;
 import com.example.a10609516.app.Basic.VersionActivity;
 import com.example.a10609516.app.Clerk.QuotationActivity;
 import com.example.a10609516.app.DepartmentAndDIY.CorrectActivity;
@@ -27,7 +27,7 @@ import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.app.DepartmentAndDIY.RecordActivity;
 import com.example.a10609516.app.DepartmentAndDIY.UploadActivity;
 import com.example.a10609516.app.Manager.InventoryActivity;
-import com.example.a10609516.app.Manager.PickingActivity;
+import com.example.a10609516.app.Manager.OrderSearchActivity;
 import com.example.a10609516.app.R;
 import com.example.a10609516.app.Workers.CalendarActivity;
 import com.example.a10609516.app.Workers.EngPointsActivity;
@@ -144,6 +144,11 @@ public class WQPServiceActivity extends AppCompatActivity {
                 startActivity(intent7);
                 Toast.makeText(this, "工務打卡GPS", Toast.LENGTH_SHORT).show();
                 break; //進入GPS地圖頁面
+            case R.id.signature_item:
+                Intent intent42 = new Intent(this, Worker_SignatureActivity.class);
+                startActivity(intent42);
+                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
+                break; //進入客戶電子簽名頁面
             /**業務部Menu*/
             case R.id.quotation_item:
                 Intent intent11 = new Intent(this, QuotationActivity.class);
@@ -183,7 +188,7 @@ public class WQPServiceActivity extends AppCompatActivity {
                 Toast.makeText(this, "倉庫盤點", Toast.LENGTH_SHORT).show();
                 break; //進入倉庫盤點管理頁面
             case R.id.picking_item:
-                Intent intent19 = new Intent(this, PickingActivity.class);
+                Intent intent19 = new Intent(this, OrderSearchActivity.class);
                 startActivity(intent19);
                 Toast.makeText(this, "撿料單", Toast.LENGTH_SHORT).show();
                 break; //進入撿料單頁面
@@ -193,11 +198,6 @@ public class WQPServiceActivity extends AppCompatActivity {
                 startActivity(intent41);
                 Toast.makeText(this, "QRCode", Toast.LENGTH_SHORT).show();
                 break; //進入QRCode頁面
-            case R.id.signature_item:
-                Intent intent42 = new Intent(this, SignatureActivity.class);
-                startActivity(intent42);
-                Toast.makeText(this, "客戶電子簽名", Toast.LENGTH_SHORT).show();
-                break; //進入客戶電子簽名頁面
             case R.id.about_item:
                 Intent intent43 = new Intent(this, VersionActivity.class);
                 startActivity(intent43);
@@ -278,8 +278,8 @@ public class WQPServiceActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://192.168.0.201/wqp_2.0.apk");
-            //URL url = new URL("http://m.wqp-water.com.tw/wqp_1.9.apk");
+            //URL url = new URL("http://192.168.0.201/wqp_2.1.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.1.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -290,7 +290,7 @@ public class WQPServiceActivity extends AppCompatActivity {
             //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_2.0.apk");
+            File outputFile = new File(file, "wqp_2.1.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -304,7 +304,7 @@ public class WQPServiceActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.0.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.1.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

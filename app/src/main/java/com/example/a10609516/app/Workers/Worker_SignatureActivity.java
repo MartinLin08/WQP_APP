@@ -1,4 +1,4 @@
-package com.example.a10609516.app.Basic;
+package com.example.a10609516.app.Workers;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,7 +43,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class SignatureActivity extends WQPServiceActivity {
+public class Worker_SignatureActivity extends WQPServiceActivity {
     private SignView mView;
     private Button commit_btn,clear_btn;
     private Bitmap mSignBitmap;
@@ -55,7 +55,7 @@ public class SignatureActivity extends WQPServiceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signature);
+        setContentView(R.layout.activity_worker_signature);
         //動態取得 View 物件
         InItFunction();
         client = new OkHttpClient();
@@ -106,14 +106,15 @@ public class SignatureActivity extends WQPServiceActivity {
             //接收LoginActivity傳過來的值
             SharedPreferences user_id = getSharedPreferences("user_id_data" , MODE_PRIVATE);
             String user_id_data = user_id.getString("ID" , "");
-            Log.e("SignatureActivity",user_id_data);
+            Log.e("WorkerSignatureActivity",user_id_data);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
             String date = simpleDateFormat.format(new java.util.Date());
             Bundle bundle = getIntent().getExtras();
-            String SN_NO = bundle.getString("ResponseText1");
+            String res_txt1 = bundle.getString("ResponseText1");
+            String res_txt2 = bundle.getString("ResponseText2");
             String sign_dir = Environment.getExternalStorageDirectory().getPath() + "/Pictures/";
-            _path = sign_dir + "Sign_"  + SN_NO + "_" +user_id_data + "_" + date+".png";
-            sign_name = "Sign_" + SN_NO + "_" +user_id_data + "_" + date;
+            _path = sign_dir + "Sign_"  + res_txt1 + "-" + res_txt2 + "_" + user_id_data + "_" + date +".png";
+            sign_name = "Sign_" + res_txt1 + "-" + res_txt2 + "_" + user_id_data + "_" + date;
             Log.e("TAG",_path);
             byteArrayOutputStream = new ByteArrayOutputStream();
             mSignBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
@@ -131,11 +132,11 @@ public class SignatureActivity extends WQPServiceActivity {
                 client.newCall(bi).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        Log.i("SignatureActivity","onFailure : 失敗");
+                        Log.i("WorkerSignatureActivity","onFailure : 失敗");
                     }
                     @Override
                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                        Log.i("SignatureActivity","onResponse : "+response.body().string());
+                        Log.i("WorkerSignatureActivity","onResponse : "+response.body().string());
                         //提交成功處理結果
                     }
                 });
@@ -163,31 +164,31 @@ public class SignatureActivity extends WQPServiceActivity {
                 //接收LoginActivity傳過來的值
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
                 String user_id_data = user_id.getString("ID", "");
-                Log.i("SignatureActivity", user_id_data);
+                Log.i("WorkerSignatureActivity", user_id_data);
 
                 Bundle bundle = getIntent().getExtras();
-                String SN_NO = bundle.getString("ResponseText1");
-                String SEQ_ID = bundle.getString("ResponseText2");
+                String response_txt1 = bundle.getString("ResponseText1");
+                String response_txt2 = bundle.getString("ResponseText2");
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
                     RequestBody requestBody = new FormBody.Builder()
                             .add("User_id", user_id_data)
-                            .add("ESVD_SEQ_ID", SEQ_ID)
-                            .add("ESVD_SERVICE_NO", SN_NO)
-                            .add("SIGN_FILE_NAME", sign_name+".png")
+                            .add("ESVD_SEQ_ID", response_txt1)
+                            .add("ESVD_SERVICE_NO", response_txt2)
+                            .add("SIGN_FILE_NAME", sign_name + ".png")
                             .build();
-                    Log.e("SignatureActivity", user_id_data);
-                    Log.e("SignatureActivity", SEQ_ID);
-                    Log.e("SignatureActivity", SN_NO);
-                    Log.e("SignatureActivity", sign_name+".png");
+                    Log.e("WorkerSignatureActivity", user_id_data);
+                    Log.e("WorkerSignatureActivity", response_txt1);
+                    Log.e("WorkerSignatureActivity", response_txt2);
+                    Log.e("WorkerSignatureActivity", sign_name + ".png");
                     Request request = new Request.Builder()
-                            .url("http://a.wqp-water.com.tw/WQP/SignatureLog.php")
+                            .url("http://a.wqp-water.com.tw/WQP/WorkSignatureLog.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.e("SignatureActivity", responseData);
+                    Log.e("WorkerSignatureActivity", responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -201,7 +202,7 @@ public class SignatureActivity extends WQPServiceActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("SignatureActivity", "onDestroy");
+        Log.d("WorkerSignatureActivity", "onDestroy");
         if (mSignBitmap != null){
             mSignBitmap.recycle();
         }

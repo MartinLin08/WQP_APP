@@ -527,6 +527,8 @@ public class SearchActivity extends WQPServiceActivity {
     protected void onRestart() {
         super.onRestart();
         Log.d("SearchActivity", "onRestart");
+        //建立SearchData.php OKHttp連線
+        sendRequestWithOkHttp();
         //取得未回派工數量
         sendRequestWithOkHttpForMissCount();
     }
