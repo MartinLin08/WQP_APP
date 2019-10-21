@@ -1,6 +1,7 @@
 package com.example.a10609516.app.Manager;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -80,6 +81,8 @@ public class InventoryActivity extends WQPServiceActivity {
         InItFunction();
         //獲取當天日期
         GetDate();
+        //公司別的Spinner下拉選單
+        CompanySpinner();
         //確認是否有最新版本，進行更新
         //CheckFirebaseVersion();
     }
@@ -127,7 +130,6 @@ public class InventoryActivity extends WQPServiceActivity {
         factory_id_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendRequestWithOkHttpForFactoryID();
                 upload_btn.setVisibility(View.VISIBLE);
                 loss_llt.setVisibility(View.GONE);
                 actual_edt.setFocusable(true);
@@ -145,6 +147,7 @@ public class InventoryActivity extends WQPServiceActivity {
                 recent_out_txt.setText("");
                 last_inventory_txt.setText("");
                 inventory_record_llt.removeAllViews();
+                sendRequestWithOkHttpForFactoryID();
                 InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
             }
@@ -275,13 +278,22 @@ public class InventoryActivity extends WQPServiceActivity {
             @Override
             public void run() {
                 String spinner_select = String.valueOf(company_spinner.getSelectedItem());
+
+                if (spinner_select.equals("拓霖")) {
+                    company_ch = "WQP";
+                } else if (spinner_select.equals("拓亞鈦")) {
+                    company_ch = "TYT";
+                } else {
+                    company_ch = "BWT";
+                }
+
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
                     RequestBody requestBody = new FormBody.Builder()
-                            .add("COMPANY", spinner_select)
+                            .add("COMPANY", company_ch)
                             .build();
-                    Log.e("InventoryActivity", spinner_select);
+                    Log.e("InventoryActivity", company_ch);
                     Request request = new Request.Builder()
                             .url("http://a.wqp-water.com.tw/WQP/Warehouse.php")
                             //.url("http://192.168.0.172/WQP/Warehouse.php")
@@ -311,7 +323,7 @@ public class InventoryActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String warehouse_id = jsonObject.getString("庫別") + "(" + jsonObject.getString("庫名") + ")";
+                String warehouse_id = jsonObject.getString("MC001") + "(" + jsonObject.getString("MC002") + ")";
                 //JSONArray加入SearchData資料
                 JArrayList.add(warehouse_id);
                 warehouse_list = JArrayList.toArray(new String[i]);
@@ -383,6 +395,9 @@ public class InventoryActivity extends WQPServiceActivity {
         factory_id_edt.setFocusable(true);
         factory_id_edt.setFocusableInTouchMode(true);
         factory_id_edt.requestFocus();
+        if (d_id.toString().equals("1000")){
+            stock_llt.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -410,7 +425,7 @@ public class InventoryActivity extends WQPServiceActivity {
             @Override
             public void run() {
                 String f_id = factory_id_edt.getText().toString();
-                Log.e("PickingActivity8", f_id);
+                Log.e("InventoryActivity", f_id);
 
                 try {
                     OkHttpClient client = new OkHttpClient();
@@ -425,7 +440,7 @@ public class InventoryActivity extends WQPServiceActivity {
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.e("PickingActivity", responseData);
+                    Log.e("InventoryActivity", responseData);
                     parseJSONWithJSONObjectForFactoryID(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -445,15 +460,15 @@ public class InventoryActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                COMPANY = jsonObject.getString("公司別");
-                MB001 = jsonObject.getString("品號");
-                MB002 = jsonObject.getString("品名");
-                MB003 = jsonObject.getString("規格");
-                MB004 = jsonObject.getString("單位");
-                safe = jsonObject.getString("總安全庫存");
-                vendor_no = jsonObject.getString("廠商代號");
-                vendor_name = jsonObject.getString("廠商名稱");
-                item_id = jsonObject.getString("原廠序號");
+                COMPANY = jsonObject.getString("COMPANY");
+                MB001 = jsonObject.getString("MB001");
+                MB002 = jsonObject.getString("MB002");
+                MB003 = jsonObject.getString("MB003");
+                MB004 = jsonObject.getString("MB004");
+                //safe = jsonObject.getString("總安全庫存");
+                //vendor_no = jsonObject.getString("廠商代號");
+                //vendor_name = jsonObject.getString("廠商名稱");
+                item_id = jsonObject.getString("ITEM");
                 barcode = jsonObject.getString("BarCode");
 
                 InventoryActivity.this.runOnUiThread(new Runnable() {
@@ -464,12 +479,17 @@ public class InventoryActivity extends WQPServiceActivity {
                         item_format_txt.setText(MB003.toString());
                         unit_txt1.setText(MB004.toString());
                         unit_txt2.setText(MB004.toString());
-                        vendor_txt.setText(vendor_no.toString() + "|" + vendor_name.toString());
-                        safe_txt.setText(safe.toString());
+                        //vendor_txt.setText(vendor_no.toString() + "|" + vendor_name.toString());
+                        //safe_txt.setText(safe.toString());
                         barcode_txt.setText(barcode.toString());
-                        company_spinner.setVisibility(View.VISIBLE);
-                        warehouse_spinner.setVisibility(View.VISIBLE);
-                        //公司別的Spinner下拉選單
+                        if (d_id.toString().equals("1000")){
+                            stock_llt.setVisibility(View.VISIBLE);
+                        }
+                        //company_spinner.setVisibility(View.VISIBLE);
+                        //warehouse_spinner.setVisibility(View.VISIBLE);
+                        //與OKHttp連線(查詢倉庫盤點資料)
+                        sendRequestWithOkHttpForWareHouseMoreSearch();
+                        /*//公司別的Spinner下拉選單
                         CompanySpinner();
                         //倉庫庫別的Spinner下拉選單
                         //WareHouseSpinner();
@@ -487,7 +507,7 @@ public class InventoryActivity extends WQPServiceActivity {
                                 company_spinner.setSelection(c, true);
                                 break;
                             }
-                        }
+                        }*/
                     }
                 });
             }
@@ -539,16 +559,16 @@ public class InventoryActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                COMPANY = jsonObject.getString("公司別");
-                MB001 = jsonObject.getString("品號");
-                MB002 = jsonObject.getString("品名");
-                MB003 = jsonObject.getString("規格");
-                MB004 = jsonObject.getString("單位");
+                //COMPANY = jsonObject.getString("COMPANY");
+                MB001 = jsonObject.getString("MB001");
+                MB002 = jsonObject.getString("MB002");
+                MB003 = jsonObject.getString("MB003");
+                MB004 = jsonObject.getString("MB004");
                 //MB064 = jsonObject.getString("數量");
-                safe = jsonObject.getString("總安全庫存");
-                vendor_no = jsonObject.getString("廠商代號");
-                vendor_name = jsonObject.getString("廠商名稱");
-                item_id = jsonObject.getString("原廠序號");
+                safe = jsonObject.getString("SAFE");
+                vendor_no = jsonObject.getString("V_NO");
+                vendor_name = jsonObject.getString("V_NAME");
+                item_id = jsonObject.getString("ITEM");
                 barcode = jsonObject.getString("BarCode");
 
                 InventoryActivity.this.runOnUiThread(new Runnable() {
@@ -562,9 +582,11 @@ public class InventoryActivity extends WQPServiceActivity {
                         unit_txt2.setText(MB004.toString());
                         vendor_txt.setText(vendor_no.toString() + "|" + vendor_name.toString());
                         safe_txt.setText(safe.toString());
-                        company_spinner.setVisibility(View.VISIBLE);
-                        warehouse_spinner.setVisibility(View.VISIBLE);
-                        //公司別的Spinner下拉選單
+                        //company_spinner.setVisibility(View.VISIBLE);
+                        //warehouse_spinner.setVisibility(View.VISIBLE);
+                        //與OKHttp連線(查詢倉庫盤點資料)
+                        sendRequestWithOkHttpForWareHouseMoreSearch();
+                        /*//公司別的Spinner下拉選單
                         CompanySpinner();
                         //倉庫庫別的Spinner下拉選單
                         //WareHouseSpinner();
@@ -582,7 +604,7 @@ public class InventoryActivity extends WQPServiceActivity {
                                 company_spinner.setSelection(c, true);
                                 break;
                             }
-                        }
+                        }*/
                     }
                 });
             }
@@ -661,13 +683,13 @@ public class InventoryActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                warehouse_no = jsonObject.getString("倉庫代號");
-                warehouse_name = jsonObject.getString("倉庫名稱");
-                MB064 = jsonObject.getString("數量");
+                warehouse_no = jsonObject.getString("W_NO");
+                warehouse_name = jsonObject.getString("W_NAME");
+                MB064 = jsonObject.getString("ACTUAL");
                 //safe = jsonObject.getString("安全庫存");
-                in = jsonObject.getString("最近入庫日");
-                out = jsonObject.getString("最近出貨日");
-                inventory = jsonObject.getString("上次盤點日");
+                in = jsonObject.getString("R_IN");
+                out = jsonObject.getString("R_OUT");
+                inventory = jsonObject.getString("R_LAST");
 
                 Log.e("InventoryActivity11", MB064);
 
@@ -779,11 +801,11 @@ public class InventoryActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String user_name_log = jsonObject.getString("盤點人員");
-                String quantity_log = jsonObject.getString("系統數量");
-                String actual_log = jsonObject.getString("實際數量");
-                String warehouse_name_log = jsonObject.getString("倉庫名稱");
-                String inventory_log = jsonObject.getString("盤點日期");
+                String user_name_log = jsonObject.getString("USERS");
+                String quantity_log = jsonObject.getString("QUANTITY");
+                String actual_log = jsonObject.getString("ACTUAL");
+                String warehouse_name_log = jsonObject.getString("W_NAME");
+                String inventory_log = jsonObject.getString("DATE");
 
                 Log.e("InventoryActivity", quantity_log);
 
@@ -811,6 +833,7 @@ public class InventoryActivity extends WQPServiceActivity {
     /**
      * 更新UI
      */
+    @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

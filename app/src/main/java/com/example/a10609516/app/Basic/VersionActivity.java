@@ -48,13 +48,17 @@ import java.util.Map;
 public class VersionActivity extends WQPServiceActivity {
 
     private TextView detail_txt0, detail_txt1, detail_txt2, detail_txt3, detail_txt4, detail_txt5
-            , detail_txt6, detail_txt7, detail_txt8, detail_txt9, detail_txt10;
+            , detail_txt6, detail_txt7, detail_txt8, detail_txt9, detail_txt10
+            , detail_txt11, detail_txt12;
     private LinearLayout detail_llt0, detail_llt1, detail_llt2, detail_llt3, detail_llt4, detail_llt5
-            , detail_llt6, detail_llt7, detail_llt8, detail_llt9, detail_llt10;
+            , detail_llt6, detail_llt7, detail_llt8, detail_llt9, detail_llt10
+            , detail_llt11, detail_llt12;
     private Button version_btn0, version_btn1, version_btn2, version_btn3, version_btn4, version_btn5
-            , version_btn6, version_btn7, version_btn8, version_btn9, version_btn10;
+            , version_btn6, version_btn7, version_btn8, version_btn9, version_btn10
+            , version_btn11, version_btn12;
     private Button version_up_btn0, version_up_btn1, version_up_btn2, version_up_btn3, version_up_btn4, version_up_btn5
-            , version_up_btn6, version_up_btn7, version_up_btn8, version_up_btn9, version_up_btn10;
+            , version_up_btn6, version_up_btn7, version_up_btn8, version_up_btn9, version_up_btn10
+            , version_up_btn11, version_up_btn12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,8 @@ public class VersionActivity extends WQPServiceActivity {
         detail_txt8 = (TextView) findViewById(R.id.detail_txt8);
         detail_txt9 = (TextView) findViewById(R.id.detail_txt9);
         detail_txt10 = (TextView) findViewById(R.id.detail_txt10);
+        detail_txt11 = (TextView) findViewById(R.id.detail_txt11);
+        detail_txt12 = (TextView) findViewById(R.id.detail_txt12);
         detail_llt0 = (LinearLayout) findViewById(R.id.detail_llt0);
         detail_llt1 = (LinearLayout) findViewById(R.id.detail_llt1);
         detail_llt2 = (LinearLayout) findViewById(R.id.detail_llt2);
@@ -96,6 +102,8 @@ public class VersionActivity extends WQPServiceActivity {
         detail_llt8 = (LinearLayout) findViewById(R.id.detail_llt8);
         detail_llt9 = (LinearLayout) findViewById(R.id.detail_llt9);
         detail_llt10 = (LinearLayout) findViewById(R.id.detail_llt10);
+        detail_llt11 = (LinearLayout) findViewById(R.id.detail_llt11);
+        detail_llt12 = (LinearLayout) findViewById(R.id.detail_llt12);
         version_btn0 = (Button) findViewById(R.id.version_btn0);
         version_btn1 = (Button) findViewById(R.id.version_btn1);
         version_btn2 = (Button) findViewById(R.id.version_btn2);
@@ -107,6 +115,8 @@ public class VersionActivity extends WQPServiceActivity {
         version_btn8 = (Button) findViewById(R.id.version_btn8);
         version_btn9 = (Button) findViewById(R.id.version_btn9);
         version_btn10 = (Button) findViewById(R.id.version_btn10);
+        version_btn11 = (Button) findViewById(R.id.version_btn11);
+        version_btn12 = (Button) findViewById(R.id.version_btn12);
         version_up_btn0 = (Button) findViewById(R.id.version_up_btn0);
         version_up_btn1 = (Button) findViewById(R.id.version_up_btn1);
         version_up_btn2 = (Button) findViewById(R.id.version_up_btn2);
@@ -118,6 +128,8 @@ public class VersionActivity extends WQPServiceActivity {
         version_up_btn8 = (Button) findViewById(R.id.version_up_btn8);
         version_up_btn9 = (Button) findViewById(R.id.version_up_btn9);
         version_up_btn10 = (Button) findViewById(R.id.version_up_btn10);
+        version_up_btn11 = (Button) findViewById(R.id.version_up_btn11);
+        version_up_btn12 = (Button) findViewById(R.id.version_up_btn12);
     }
 
     /**
@@ -148,7 +160,10 @@ public class VersionActivity extends WQPServiceActivity {
         detail_txt9.setText("1.部分內容修正bug及優化 \n" +
                             "2.新增管理部 - 盤點單、撿料單");
         detail_txt10.setText("1.部分內容修正bug及優化 \n" +
-                            "2.撿料單功能優化");
+                             "2.撿料單功能優化");
+        detail_txt11.setText("1.部分內容修正bug及優化");
+        detail_txt12.setText("1.部分內容修正bug及優化 \n" +
+                             "2.盤點單功能優化");
     }
 
     /**
@@ -307,6 +322,34 @@ public class VersionActivity extends WQPServiceActivity {
             public void onClick(View v) {
                 detail_llt10.setVisibility(View.GONE);
                 version_up_btn10.setVisibility(View.GONE);
+            }
+        });
+        version_btn11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt11.setVisibility(View.VISIBLE);
+                version_up_btn11.setVisibility(View.VISIBLE);
+            }
+        });
+        version_up_btn11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt11.setVisibility(View.GONE);
+                version_up_btn11.setVisibility(View.GONE);
+            }
+        });
+        version_btn12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt12.setVisibility(View.VISIBLE);
+                version_up_btn12.setVisibility(View.VISIBLE);
+            }
+        });
+        version_up_btn12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt12.setVisibility(View.GONE);
+                version_up_btn12.setVisibility(View.GONE);
             }
         });
     }

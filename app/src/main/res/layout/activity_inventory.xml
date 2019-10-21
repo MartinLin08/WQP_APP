@@ -63,9 +63,9 @@
             android:textSize="20dp" />
 
         <LinearLayout
-            android:id="@+id/warehouse_llt"
+            android:id="@+id/spinner_llt"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/QRCode_btn"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -76,7 +76,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
                 android:layout_marginLeft="5dp"
                 android:orientation="horizontal">
 
@@ -90,10 +89,44 @@
                 <Spinner
                     android:id="@+id/company_spinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"/>
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="3dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="庫別 : "
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/warehouse_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/warehouse_llt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/spinner_llt"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical"
+            android:background="@drawable/titleline">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -247,28 +280,6 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAccent"
                     android:textSize="18sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:layout_marginLeft="5dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="庫別 : "
-                    android:textColor="@color/colorAccent"
-                    android:textSize="18sp" />
-
-                <Spinner
-                    android:id="@+id/warehouse_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
 
             </LinearLayout>
 

@@ -629,13 +629,21 @@ public class PickingActivity extends WQPServiceActivity {
             @Override
             public void run() {
                 String spinner_select = String.valueOf(company_spinner.getSelectedItem());
+
+                if (spinner_select.equals("拓霖")) {
+                    company_ch = "WQP";
+                } else if (spinner_select.equals("拓亞鈦")) {
+                    company_ch = "TYT";
+                } else {
+                    company_ch = "BWT";
+                }
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
                     RequestBody requestBody = new FormBody.Builder()
-                            .add("COMPANY", spinner_select)
+                            .add("COMPANY", company_ch)
                             .build();
-                    Log.e("InventoryActivity", spinner_select);
+                    Log.e("PickingActivity", company_ch);
                     Request request = new Request.Builder()
                             .url("http://a.wqp-water.com.tw/WQP/Warehouse.php")
                             //.url("http://192.168.0.172/WQP/Warehouse.php")
@@ -643,7 +651,7 @@ public class PickingActivity extends WQPServiceActivity {
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.e("InventoryActivity", responseData);
+                    Log.e("PickingActivity", responseData);
                     parseJSONWithJSONObjectForWareHouse(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -665,7 +673,7 @@ public class PickingActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String warehouse_id = jsonObject.getString("庫別") + "(" + jsonObject.getString("庫名") + ")";
+                String warehouse_id = jsonObject.getString("MC001") + "(" + jsonObject.getString("MC002") + ")";
                 //JSONArray加入SearchData資料
                 JArrayList.add(warehouse_id);
                 warehouse_list = JArrayList.toArray(new String[i]);
