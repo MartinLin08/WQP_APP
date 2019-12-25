@@ -12,7 +12,7 @@ import android.icu.util.UniversalTimeScale;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.RequiresApi;
+//import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
@@ -85,6 +85,10 @@ public class PickingActivity extends WQPServiceActivity {
         GetResponseData();
         //與資料庫WareHousePickingSearch.php進行連線(查詢有無建立撿料單)
         sendRequestWithOkHttpForPickingSearch();
+        //領/還料的Spinner
+        TypeSpinner();
+        //公司別的Spinner下拉選單
+        CompanySpinner();
     }
 
     /**
@@ -169,7 +173,7 @@ public class PickingActivity extends WQPServiceActivity {
                 id_llt.setVisibility(View.GONE);
                 check_btn.setVisibility(View.VISIBLE);
                 //領/還料的Spinner
-                TypeSpinner();
+                //TypeSpinner();
                 InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
             }
@@ -191,6 +195,12 @@ public class PickingActivity extends WQPServiceActivity {
                             //與WareHouseLog.PHP取得連線
                             sendRequestWithOkHttpForPickingDetail();
                             check_btn.setVisibility(View.GONE);
+                            //取得今日LOG
+                            today_record_txt.setTextColor(Color.rgb(0, 127, 255));
+                            past_record_txt.setTextColor(Color.rgb(62, 58, 57));
+                            picking_record_llt.removeAllViews();
+                            //與PickingLogToday.PHP取得連線
+                            sendRequestWithOkHttpForPickingLogToday();
                         }
                     }
                 } else {
@@ -337,7 +347,7 @@ public class PickingActivity extends WQPServiceActivity {
                 picking_edt.setText("");
                 note_edt.setText("");
                 //領/還料的Spinner
-                TypeSpinner();
+                //TypeSpinner();
                 factory_id_edt.setText("");
             } else {
                 if (resultCode == RESULT_CANCELED) {
@@ -433,12 +443,12 @@ public class PickingActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                COMPANY = jsonObject.getString("公司別");
-                MB001 = jsonObject.getString("品號");
-                MB002 = jsonObject.getString("品名");
-                MB003 = jsonObject.getString("規格");
-                MB004 = jsonObject.getString("單位");
-                item_id = jsonObject.getString("原廠序號");
+                COMPANY = jsonObject.getString("COMPANY");
+                MB001 = jsonObject.getString("MB001");
+                MB002 = jsonObject.getString("MB002");
+                MB003 = jsonObject.getString("MB003");
+                MB004 = jsonObject.getString("MB004");
+                item_id = jsonObject.getString("ITEM");
                 barcode = jsonObject.getString("BarCode");
 
                 PickingActivity.this.runOnUiThread(new Runnable() {
@@ -449,15 +459,17 @@ public class PickingActivity extends WQPServiceActivity {
                         item_format_txt.setText(MB003.toString());
                         unit_txt.setText(MB004.toString());
                         barcode_txt.setText(barcode.toString());
-                        //公司別的Spinner下拉選單
-                        CompanySpinner();
+                        /*//公司別的Spinner下拉選單
+                        CompanySpinner();*/
                         //轉換公司別中英文
                         if (COMPANY.toString().equals("WQP")) {
                             company_ch = "拓霖";
                         } else if (COMPANY.toString().equals("TYT")) {
                             company_ch = "拓亞鈦";
-                        } else {
+                        } else if (COMPANY.toString().equals("BWT")){
                             company_ch = "倍偉特";
+                        } else {
+                            company_ch = "請選擇";
                         }
                         //當迴圈與COMPANY內容一致時跳出迴圈 並顯示該公司別的Spinner位置
                         for (int c = 0; c < company_list.length; c++) {
@@ -622,7 +634,7 @@ public class PickingActivity extends WQPServiceActivity {
     };*/
 
     /**
-     * 與OkHttp建立連線(DIYStore)
+     * 與OkHttp建立連線(倉庫別)
      */
     private void sendRequestWithOkHttpForWareHouse() {
         new Thread(new Runnable() {
@@ -634,7 +646,7 @@ public class PickingActivity extends WQPServiceActivity {
                     company_ch = "WQP";
                 } else if (spinner_select.equals("拓亞鈦")) {
                     company_ch = "TYT";
-                } else {
+                } else if (spinner_select.equals("倍偉特")) {
                     company_ch = "BWT";
                 }
                 try {
@@ -673,7 +685,7 @@ public class PickingActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String warehouse_id = jsonObject.getString("MC001") + "(" + jsonObject.getString("MC002") + ")";
+                String warehouse_id = jsonObject.getString("MC001").trim() + "(" + jsonObject.getString("MC002").trim() + ")";
                 //JSONArray加入SearchData資料
                 JArrayList.add(warehouse_id);
                 warehouse_list = JArrayList.toArray(new String[i]);
@@ -742,6 +754,7 @@ public class PickingActivity extends WQPServiceActivity {
                     Log.e("PickingActivity88", COMPANY + "-" + TE001 + "-" + TE002);
                     Request request = new Request.Builder()
                             .url("http://a.wqp-water.com.tw/WQP/WareHousePickingSearch.php")
+                            //.url("http://192.168.0.172/WQP/WareHousePickingSearch.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -809,6 +822,7 @@ public class PickingActivity extends WQPServiceActivity {
                     Log.e("PickingActivity88", COMPANY + "-" + TE001 + "-" + TE002 + "-" + user_id_data);
                     Request request = new Request.Builder()
                             .url("http://a.wqp-water.com.tw/WQP/WareHousePickingMaster.php")
+                            //.url("http://192.168.0.172/WQP/WareHousePickingMaster.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -834,50 +848,71 @@ public class PickingActivity extends WQPServiceActivity {
                 Log.e("PickingActivity", user_id_data);
 
                 Bundle bundle = getIntent().getExtras();
-                String TE001 = bundle.getString("ResponseText" + 1);
-                String TE002 = bundle.getString("ResponseText" + 2);
-                String COMPANY = String.valueOf(company_spinner.getSelectedItem());
-                String TE004 = item_number_txt.getText().toString();
-                String TE005 = picking_edt.getText().toString();
-                String TE006 = unit_txt.getText().toString();
-                String TE008 = String.valueOf(warehouse_spinner.getSelectedItem());
-                String NOTE = note_edt.getText().toString();
-                String GET_BACK = String.valueOf(type_spinner.getSelectedItem());
+                String TE001 = bundle.getString("ResponseText" + 1).trim();
+                String TE002 = bundle.getString("ResponseText" + 2).trim();
+                String COMPANY = String.valueOf(company_spinner.getSelectedItem()).trim();
+                String TE004 = item_number_txt.getText().toString().trim();
+                String TE005 = picking_edt.getText().toString().trim();
+                String TE006 = unit_txt.getText().toString().trim();
+                String TE008 = String.valueOf(warehouse_spinner.getSelectedItem()).trim();
+                String NOTE = note_edt.getText().toString().trim();
+                String GET_BACK = String.valueOf(type_spinner.getSelectedItem()).trim();
                 Log.e("PickingActivity8", TE004);
 
-                if (TE008.equals("BWT(BWT總倉)")) {
+                if (warehouse_spinner.getSelectedItemId() == 0) {
+                    Log.e("123456", String.valueOf(warehouse_spinner.getSelectedItem()));
+                } else if (warehouse_spinner.getSelectedItemId() == 1) {
+                    Log.e("123456", String.valueOf(warehouse_spinner.getSelectedItem()));
+                }
+
+                if(TE008.equals("BWT(BWT總倉)")){
                     w_id = "BWT";
                     w_name = "BWT總倉";
-                } else if (TE008.equals("BWT-De(BWT不良品)")) {
+                }else if (TE008.equals("BWT-De(BWT不良品)")){
                     w_id = "BWT-De";
                     w_name = "BWT不良品";
-                } else if (TE008.equals("OM-BZA(委外-鉑中)")) {
+                }else if (TE008.equals("OM-BZA(委外-鉑中)")){
                     w_id = "OM-BZA";
                     w_name = "委外-鉑中";
-                } else if (TE008.equals("WPA(暫存倉)")) {
+                }else if (TE008.equals("WPA(暫存倉)")){
                     w_id = "WPA";
                     w_name = "暫存倉";
-                } else if (TE008.equals("WQP(拓霖倉)")) {
+                }else if (TE008.equals("WQP(拓霖倉)")){
                     w_id = "WQP";
                     w_name = "拓霖倉";
-                } else if (TE008.equals("01-10000AT(拓霖AQT倉)")) {
+                }else if (TE008.equals("BRT(測試研發倉)")){
+                    w_id = "BRT";
+                    w_name = "測試研發倉";
+                }else if (TE008.equals("DSV(百及倉)")){
+                    w_id = "DSV";
+                    w_name = "百及倉";
+                }else if (TE008.equals("OM-SOL(委外-利騏)")){
+                    w_id = "OM-SOL";
+                    w_name = "委外-利騏";
+                }else if (TE008.equals("Borrow(場外借用)")){
+                    w_id = "Borrow";
+                    w_name = "場外借用";
+                }else if (TE008.equals("01-10000AT(拓霖AQT倉)")){
                     w_id = "01-10000AT";
                     w_name = "拓霖AQT倉";
-                } else if (TE008.equals("01-10000TP(拓霖台北倉)")) {
+                }else if (TE008.equals("01-10000TP(拓霖台北倉)")){
                     w_id = "01-10000TP";
                     w_name = "拓霖台北倉";
-                } else if (TE008.equals("01-10000TY(拓霖桃園倉)")) {
+                }else if (TE008.equals("01-10000TY(拓霖桃園倉)")){
                     w_id = "01-10000TY";
                     w_name = "拓霖桃園倉";
-                } else if (TE008.equals("01-10000HS(拓霖新竹倉)")) {
+                }else if (TE008.equals("01-10000HS(拓霖新竹倉)")){
                     w_id = "01-10000HS";
                     w_name = "拓霖新竹倉";
-                } else if (TE008.equals("01-10000TC(拓霖台中倉)")) {
+                }else if (TE008.equals("01-10000TC(拓霖台中倉)")){
                     w_id = "01-10000TC";
                     w_name = "拓霖台中倉";
-                } else if (TE008.equals("01-10000KH(拓霖高雄倉)")) {
+                }else if (TE008.equals("01-10000KH(拓霖高雄倉)")){
                     w_id = "01-10000KH";
                     w_name = "拓霖高雄倉";
+                }else if (TE008.equals("01-00001TY(新百及倉庫)")){
+                    w_id = "01-00001TY";
+                    w_name = "新百及倉庫";
                 }
 
                 if (COMPANY.toString().equals("拓霖")) {
@@ -910,6 +945,7 @@ public class PickingActivity extends WQPServiceActivity {
                     Log.e("PickActivity9", COMPANY + "-" + TE004 + "-" + TE005 + "-" + TE006 + "-" + w_id);
                     Request request = new Request.Builder()
                             .url("http://a.wqp-water.com.tw/WQP/WareHousePickingDetail.php")
+                            //.url("http://192.168.0.172/WQP/WareHousePickingDetail.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

@@ -9,7 +9,7 @@
         <menu>
             <item
                 android:id="@+id/inventory_item"
-                android:title="倉庫盤點管理" />
+                android:title="盤點單" />
             <!--<item
                 android:id="@+id/purchase_item"
                 android:title="倉庫進貨管理" />
@@ -24,9 +24,9 @@
     <item
         android:id="@+id/QRCode_item"
         android:title="QRCode" />
-    <item
+    <!--<item
         android:id="@+id/signature_item"
-        android:title="客戶電子簽名" />
+        android:title="客戶電子簽名" />-->
     <item
         android:id="@+id/about_item"
         android:title="版本資訊" />

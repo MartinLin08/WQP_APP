@@ -172,6 +172,9 @@ public class InventoryActivity extends WQPServiceActivity {
                         inventory_scv.fullScroll(ScrollView.FOCUS_UP);
                     }
                 });
+                inventory_record_llt.removeAllViews();
+                //與WareHouseLog.PHP取得連線
+                sendRequestWithOkHttpForWareHouseLog();
             }
         });
 
@@ -202,7 +205,11 @@ public class InventoryActivity extends WQPServiceActivity {
                 //ZXing回傳的內容
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 barcode_txt.setText(intent.getStringExtra("result_text"));
+                actual_edt.setText("");
                 sendRequestWithOkHttpForWareHouseSearch();
+                inventory_record_llt.removeAllViews();
+                //與WareHouseLog.PHP取得連線
+                sendRequestWithOkHttpForWareHouseLog();
             } else {
                 if (resultCode == RESULT_CANCELED) {
                     Toast.makeText(InventoryActivity.this, "取消掃描", Toast.LENGTH_LONG).show();
@@ -323,7 +330,7 @@ public class InventoryActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String warehouse_id = jsonObject.getString("MC001") + "(" + jsonObject.getString("MC002") + ")";
+                String warehouse_id = jsonObject.getString("MC001").trim() + "(" + jsonObject.getString("MC002").trim() + ")";
                 //JSONArray加入SearchData資料
                 JArrayList.add(warehouse_id);
                 warehouse_list = JArrayList.toArray(new String[i]);
@@ -727,14 +734,31 @@ public class InventoryActivity extends WQPServiceActivity {
                 //String w_id_log = warehouse_no_select_log.substring(0, warehouse_no_select_log.indexOf(":|:"));
                 if(warehouse_no_select_log.equals("BWT(BWT總倉)")){
                     w_id = "BWT";
+                    w_name = "BWT總倉";
                 }else if (warehouse_no_select_log.equals("BWT-De(BWT不良品)")){
                     w_id = "BWT-De";
+                    w_name = "BWT不良品";
                 }else if (warehouse_no_select_log.equals("OM-BZA(委外-鉑中)")){
                     w_id = "OM-BZA";
+                    w_name = "委外-鉑中";
                 }else if (warehouse_no_select_log.equals("WPA(暫存倉)")){
                     w_id = "WPA";
+                    w_name = "暫存倉";
                 }else if (warehouse_no_select_log.equals("WQP(拓霖倉)")){
                     w_id = "WQP";
+                    w_name = "拓霖倉";
+                }else if (warehouse_no_select_log.equals("BRT(測試研發倉)")){
+                    w_id = "BRT";
+                    w_name = "測試研發倉";
+                }else if (warehouse_no_select_log.equals("DSV(百及倉)")){
+                    w_id = "DSV";
+                    w_name = "百及倉";
+                }else if (warehouse_no_select_log.equals("OM-SOL(委外-利騏)")){
+                    w_id = "OM-SOL";
+                    w_name = "委外-利騏";
+                }else if (warehouse_no_select_log.equals("Borrow(場外借用)")){
+                    w_id = "Borrow";
+                    w_name = "場外借用";
                 }else if (warehouse_no_select_log.equals("01-10000AT(拓霖AQT倉)")){
                     w_id = "01-10000AT";
                     w_name = "拓霖AQT倉";
@@ -753,6 +777,9 @@ public class InventoryActivity extends WQPServiceActivity {
                 }else if (warehouse_no_select_log.equals("01-10000KH(拓霖高雄倉)")){
                     w_id = "01-10000KH";
                     w_name = "拓霖高雄倉";
+                }else if (warehouse_no_select_log.equals("01-00001TY(新百及倉庫)")){
+                    w_id = "01-00001TY";
+                    w_name = "新百及倉庫";
                 }
 
                 Log.e("InventoryActivity", MB001);
@@ -933,7 +960,7 @@ public class InventoryActivity extends WQPServiceActivity {
                 Log.e("InventoryActivity", user_id_data);
 
                 String company_select_inventory = String.valueOf(company_spinner.getSelectedItem());
-                String MB001 = item_number_txt.getText().toString();
+                String MB001 = item_number_txt.getText().toString().trim();
                 String quantity = stock_txt.getText().toString();
                 String actual = actual_edt.getText().toString();
                 String warehouse_no_select = String.valueOf(warehouse_spinner.getSelectedItem());
@@ -955,6 +982,18 @@ public class InventoryActivity extends WQPServiceActivity {
                 }else if (warehouse_no_select.equals("WQP(拓霖倉)")){
                     w_id = "WQP";
                     w_name = "拓霖倉";
+                }else if (warehouse_no_select.equals("BRT(測試研發倉)")){
+                    w_id = "BRT";
+                    w_name = "測試研發倉";
+                }else if (warehouse_no_select.equals("DSV(百及倉)")){
+                    w_id = "DSV";
+                    w_name = "百及倉";
+                }else if (warehouse_no_select.equals("OM-SOL(委外-利騏)")){
+                    w_id = "OM-SOL";
+                    w_name = "委外-利騏";
+                }else if (warehouse_no_select.equals("Borrow(場外借用)")){
+                    w_id = "Borrow";
+                    w_name = "場外借用";
                 }else if (warehouse_no_select.equals("01-10000AT(拓霖AQT倉)")){
                     w_id = "01-10000AT";
                     w_name = "拓霖AQT倉";
@@ -973,6 +1012,9 @@ public class InventoryActivity extends WQPServiceActivity {
                 }else if (warehouse_no_select.equals("01-10000KH(拓霖高雄倉)")){
                     w_id = "01-10000KH";
                     w_name = "拓霖高雄倉";
+                }else if (warehouse_no_select.equals("01-00001TY(新百及倉庫)")){
+                    w_id = "01-00001TY";
+                    w_name = "新百及倉庫";
                 }
 
                 if (company_select_inventory.toString().equals("拓霖")) {

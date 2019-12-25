@@ -184,6 +184,7 @@ public class OrderSearchActivity extends WQPServiceActivity {
                     Log.e("OrderSearchActivity", customer);
                     Request request = new Request.Builder()
                             .url("http://a.wqp-water.com.tw/WQP/OrderSearch.php")
+                            //.url("http://192.168.0.172/WQP/OrderSearch.php")
                             .post(requestBody)
                             .build();
                     Log.e("OrderSearchActivity", requestBody.toString());
