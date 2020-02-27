@@ -279,9 +279,9 @@ public class EngPointsActivity extends WQPServiceActivity {
                     small_llt2.addView(dynamically_type, small_pm);
                     line_llt3.addView(dynamically_txt3, LinearLayout.LayoutParams.MATCH_PARENT, 3);
                     small_llt3.addView(dynamically_a_points, small_pm);
-                    small_llt3.addView(dynamically_txt5, 3, LinearLayout.LayoutParams.MATCH_PARENT);
+                    small_llt3.addView(dynamically_txt4, 3, LinearLayout.LayoutParams.MATCH_PARENT);
                     small_llt3.addView(dynamically_b_points, small_pm);
-                    line_llt4.addView(dynamically_txt4, LinearLayout.LayoutParams.MATCH_PARENT, 3);
+                    line_llt4.addView(dynamically_txt5, LinearLayout.LayoutParams.MATCH_PARENT, 3);
                     small_llt4.addView(dynamically_d_points, small_pm);
                     small_llt4.addView(dynamically_txt6, 3, LinearLayout.LayoutParams.MATCH_PARENT);
                     small_llt4.addView(dynamically_eng_money, small_pm);

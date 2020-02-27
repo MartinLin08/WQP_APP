@@ -298,7 +298,8 @@
             android:onClick="GoTopBtn"
             app:backgroundTint="#FFFF4D"
             app:fabSize="mini"
-            app:srcCompat="@drawable/btn_backtotop" />
+            app:srcCompat="@drawable/btn_backtotop"
+            android:scaleType="centerInside"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

@@ -46,7 +46,24 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     public void onDateSet(DatePicker view, int year, int month, int day){
         Button button = (Button) getActivity().findViewById(vid);
-        //月的起始值是0,所以要加1
-        button.setText(""+year+"-"+(month+1)+"-"+day);
+        if (month > 8) {
+            if (day < 10) {
+                //月的起始值是0,所以要加1
+                //日小於10,前面補0
+                button.setText("" + year + "-" + (month + 1) + "-0" + day);
+            } else {
+                //月的起始值是0,所以要加1
+                button.setText("" + year + "-" + (month + 1) + "-" + day);
+            }
+        } else {
+            if (day < 10) {
+                //月的起始值是0,所以要加1
+                //日小於10,前面補0
+                button.setText("" + year + "-0" + (month + 1) + "-0" + day);
+            } else {
+                //月的起始值是0,所以要加1
+                button.setText("" + year + "-0" + (month + 1) + "-" + day);
+            }
+        }
     }
 }

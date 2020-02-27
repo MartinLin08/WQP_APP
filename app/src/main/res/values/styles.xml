@@ -8,4 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Toolbar">
+        <item name="android:theme">@style/Album.Theme.Toolbar</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?actionBarSize</item>
+        <item name="android:background">?colorPrimary</item>
+        <item name="navigationIcon">@drawable/ic_back_white</item>
+        <item name="titleTextColor">@color/albumFontLight</item>
+        <item name="subtitleTextColor">@color/albumFontLight</item>
+        <item name="popupTheme">@style/Album.Theme.Toolbar.Popup</item>
+    </style>
+
 </resources>

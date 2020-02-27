@@ -169,7 +169,8 @@ public class VersionActivity extends WQPServiceActivity {
         detail_txt12.setText("1.部分內容修正bug及優化 \n" +
                              "2.盤點單功能優化");
         detail_txt13.setText("1.部分內容修正bug及優化 \n" +
-                             "2.撿料單功能優化");
+                             "2.撿料單功能優化 \n" +
+                             "3.新增 資訊/行銷需求單 及 進度查詢");
     }
 
     /**

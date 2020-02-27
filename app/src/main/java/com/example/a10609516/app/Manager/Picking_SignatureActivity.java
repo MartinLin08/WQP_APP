@@ -99,7 +99,7 @@ public class Picking_SignatureActivity extends WQPServiceActivity {
             String res_txt1 = bundle.getString("ResponseText1");
             String res_txt2 = bundle.getString("ResponseText2");
             String res_txt3 = bundle.getString("ResponseText3");
-            String sign_dir = Environment.getExternalStorageDirectory().getPath() + "/Pictures/";
+            String sign_dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/";
             _path = sign_dir + "Sign_"  + res_txt1 + "-" + res_txt2 + "_" + res_txt3 + "_" + user_id_data + "_" + date +".png";
             sign_name = "Sign_" + res_txt1 + "-" + res_txt2 + "_" + res_txt3  + "_" + user_id_data + "_" + date;
             Log.e("TAG",_path);

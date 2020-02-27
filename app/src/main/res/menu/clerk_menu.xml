@@ -11,7 +11,16 @@
                 android:title="報價單審核" />
         </menu>
     </item>
-
+    <item android:title="資訊/行銷需求單">
+        <menu>
+            <item
+                android:id="@+id/requisition_item"
+                android:title="需求申請單" />
+            <item
+                android:id="@+id/progress_item"
+                android:title="進度查詢" />
+        </menu>
+    </item>
     <item
         android:id="@+id/QRCode_item"
         android:title="QRCode" />

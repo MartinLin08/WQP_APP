@@ -144,7 +144,7 @@
             android:layout_marginTop="20dp"
             android:layout_weight="8"
             android:gravity="end"
-            android:text="拓霖企業 2019 Ⓒ ver."
+            android:text="拓霖企業 2020 Ⓒ ver."
             android:textColor="#0000ff"
             android:textSize="15sp" />
 

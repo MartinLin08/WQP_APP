@@ -117,7 +117,7 @@
                         android:layout_weight="4.5"
                         android:ems="10"
                         android:hint="報價單號"
-                        android:inputType="textPersonName" />
+                        android:inputType="number" />
 
                 </LinearLayout>
 
@@ -177,7 +177,7 @@
                         android:layout_weight="4.5"
                         android:ems="10"
                         android:hint="業務員編"
-                        android:inputType="textPersonName" />
+                        android:inputType="number" />
 
                 </LinearLayout>
 

@@ -743,7 +743,12 @@
             android:clickable="true"
             android:onClick="GoTopBtn"
             app:backgroundTint="#E0FFFF"
-            app:fabSize="mini"
-            app:srcCompat="@drawable/ic_gotop" />
+            app:fabSize="auto"
+            app:srcCompat="@drawable/btn_backtotop"
+            app:maxImageSize="48dp"
+            app:fabCustomSize="60dp"
+            android:scaleType="centerInside"/>
+
     </android.support.design.widget.CoordinatorLayout>
+
 </FrameLayout>

@@ -112,7 +112,7 @@ public class Worker_SignatureActivity extends WQPServiceActivity {
             Bundle bundle = getIntent().getExtras();
             String res_txt1 = bundle.getString("ResponseText1");
             String res_txt2 = bundle.getString("ResponseText2");
-            String sign_dir = Environment.getExternalStorageDirectory().getPath() + "/Pictures/";
+            String sign_dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/";
             _path = sign_dir + "Sign_"  + res_txt1 + "-" + res_txt2 + "_" + user_id_data + "_" + date +".png";
             sign_name = "Sign_" + res_txt1 + "-" + res_txt2 + "_" + user_id_data + "_" + date;
             Log.e("TAG",_path);
