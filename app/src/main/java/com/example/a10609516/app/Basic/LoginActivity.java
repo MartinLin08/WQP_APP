@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a10609516.app.BuildConfig;
 import com.example.a10609516.app.Tools.HttpParse;
 import com.example.a10609516.app.R;
 
@@ -223,9 +225,8 @@ public class LoginActivity extends AppCompatActivity {
                                             }.start();
                                         }
                                     }).show();
-                    /**
-                     *動態跑出安裝APK網址
-                     */
+
+                    //動態跑出安裝APK網址
                     /*TextView Hyperlink_txt = new TextView(LoginActivity.this);
                     Hyperlink_txt.setText("http://m.wqp-water.com.tw/APP");
                     Hyperlink_txt.setAutoLinkMask(Linkify.WEB_URLS);
@@ -258,7 +259,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.4.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.5.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -268,7 +269,7 @@ public class LoginActivity extends AppCompatActivity {
             //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_2.4.apk");
+            File outputFile = new File(file, "wqp_2.5.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -281,8 +282,11 @@ public class LoginActivity extends AppCompatActivity {
             fos.close();
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
 
+            File apkFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "wqp_2.5.apk");
+            Uri apkUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
+
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + "wqp_2.4.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + "wqp_2.5.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -359,7 +363,9 @@ public class LoginActivity extends AppCompatActivity {
                             .url("http://a.wqp-water.com.tw/WQP/Version.php")
                             .post(requestBody)
                             .build();
+                    Log.e("LoginActivity", requestBody.toString());
                     Response response = client.newCall(request).execute();
+                    Log.e("LoginActivity", response.toString());
                     String responseData = response.body().string();
                     Log.e("LoginActivity", responseData);
                     parseJSONWithJSONObjectOfVersion(responseData);
