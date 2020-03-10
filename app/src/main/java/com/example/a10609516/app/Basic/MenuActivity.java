@@ -1,11 +1,14 @@
 package com.example.a10609516.app.Basic;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a10609516.app.BuildConfig;
 import com.example.a10609516.app.Clerk.QuotationActivity;
 import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
@@ -61,6 +65,7 @@ public class MenuActivity extends WQPServiceActivity {
     private ArrayAdapter listAdapter;
     private Spinner announcement_spinner;
     private TextView name_textView;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,17 +227,19 @@ public class MenuActivity extends WQPServiceActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_1.9.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.6.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
             c.connect();
 
             String PATH = Environment.getExternalStorageDirectory() + "/Download/";
+            //String PATH = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/";
             //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
+            Log.e("MenuActivity", PATH);
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_1.9.apk");
+            File outputFile = new File(file, "wqp_2.6.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -244,12 +251,37 @@ public class MenuActivity extends WQPServiceActivity {
             }
             fos.close();
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
+            Log.e("MenuActivity", "下載完成");
+
+            File apkFile = new File((Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.6.apk"));
+            Uri apkUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_1.9.apk")), "application/vnd.android.package-archive");
+            //判断是否是AndroidN以及更高的版本
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
+                intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            } else {
+                intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            }
+            startActivity(intent);
+
+            /*Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.6.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            startActivity(intent);*/
 
             MenuActivity.this.runOnUiThread(new Runnable() {
                 @Override
@@ -267,6 +299,7 @@ public class MenuActivity extends WQPServiceActivity {
                     Toast.makeText(getApplicationContext(), "更新失敗!", Toast.LENGTH_LONG).show();
                 }
             });
+
         }
     }
 
@@ -287,6 +320,6 @@ public class MenuActivity extends WQPServiceActivity {
         super.onRestart();
         Log.d("MenuActivity", "omRestart");
         //確認是否有最新版本，進行更新
-        CheckFirebaseVersion();
+        //CheckFirebaseVersion();
     }
 }

@@ -1,12 +1,15 @@
 package com.example.a10609516.app.Tools;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,8 +25,8 @@ import com.example.a10609516.app.Basic.MenuActivity;
 import com.example.a10609516.app.Basic.QRCodeActivity;
 import com.example.a10609516.app.Basic.RequisitionActivity;
 import com.example.a10609516.app.Basic.RequisitionSearchActivity;
-import com.example.a10609516.app.Workers.Worker_SignatureActivity;
 import com.example.a10609516.app.Basic.VersionActivity;
+import com.example.a10609516.app.BuildConfig;
 import com.example.a10609516.app.Clerk.QuotationActivity;
 import com.example.a10609516.app.DepartmentAndDIY.CorrectActivity;
 import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
@@ -40,6 +43,7 @@ import com.example.a10609516.app.Workers.MissCountActivity;
 import com.example.a10609516.app.Workers.PointsActivity;
 import com.example.a10609516.app.Workers.ScheduleActivity;
 import com.example.a10609516.app.Workers.SearchActivity;
+import com.example.a10609516.app.Workers.Worker_SignatureActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -56,6 +60,8 @@ import java.net.URL;
 import java.util.Map;
 
 public class WQPServiceActivity extends AppCompatActivity {
+
+    private Context context;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +122,7 @@ public class WQPServiceActivity extends AppCompatActivity {
                 Intent intent0 = new Intent(this, MenuActivity.class);
                 startActivity(intent0);
                 Toast.makeText(this, "HOME",Toast.LENGTH_SHORT).show();
-                finish();
+                //finish();
                 break; //返回首頁
             /**工務部Menu*/
             case R.id.schedule_item:
@@ -311,19 +317,19 @@ public class WQPServiceActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            //URL url = new URL("http://192.168.0.201/wqp_2.5.apk");
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.5.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.6.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
             c.connect();
 
-            String PATH = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/";
-            //String PATH2 = Environment.getExternalStorageDirectory().getPath() + "/Download/";
+            String PATH = Environment.getExternalStorageDirectory() + "/Download/";
+            //String PATH = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/";
             //String PATH = System.getenv("SECONDARY_STORAGE") + "/Download/";
+            Log.e("WQPServiceActivity", PATH);
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_2.5.apk");
+            File outputFile = new File(file, "wqp_2.6.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -335,11 +341,28 @@ public class WQPServiceActivity extends AppCompatActivity {
             }
             fos.close();
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
+            Log.e("WQPServiceActivity", "下載完成");
+
+            File apkFile = new File((Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.6.apk"));
+            Uri apkUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + "wqp_2.5.apk")), "application/vnd.android.package-archive");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //判斷是否是AndroidN以及更高的版本
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                //intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
+                intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            } else {
+                intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            }
             startActivity(intent);
 
             this.runOnUiThread(new Runnable() {

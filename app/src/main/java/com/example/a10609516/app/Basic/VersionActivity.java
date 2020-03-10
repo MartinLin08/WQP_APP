@@ -49,16 +49,16 @@ public class VersionActivity extends WQPServiceActivity {
 
     private TextView detail_txt0, detail_txt1, detail_txt2, detail_txt3, detail_txt4, detail_txt5
             , detail_txt6, detail_txt7, detail_txt8, detail_txt9, detail_txt10
-            , detail_txt11, detail_txt12, detail_txt13, detail_txt14;
+            , detail_txt11, detail_txt12, detail_txt13, detail_txt14, detail_txt15;
     private LinearLayout detail_llt0, detail_llt1, detail_llt2, detail_llt3, detail_llt4, detail_llt5
             , detail_llt6, detail_llt7, detail_llt8, detail_llt9, detail_llt10
-            , detail_llt11, detail_llt12, detail_llt13, detail_llt14;
+            , detail_llt11, detail_llt12, detail_llt13, detail_llt14, detail_llt15;
     private Button version_btn0, version_btn1, version_btn2, version_btn3, version_btn4, version_btn5
             , version_btn6, version_btn7, version_btn8, version_btn9, version_btn10
-            , version_btn11, version_btn12, version_btn13, version_btn14;
+            , version_btn11, version_btn12, version_btn13, version_btn14, version_btn15;
     private Button version_up_btn0, version_up_btn1, version_up_btn2, version_up_btn3, version_up_btn4, version_up_btn5
             , version_up_btn6, version_up_btn7, version_up_btn8, version_up_btn9, version_up_btn10
-            , version_up_btn11, version_up_btn12, version_up_btn13, version_up_btn14;
+            , version_up_btn11, version_up_btn12, version_up_btn13, version_up_btn14, version_up_btn15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +93,7 @@ public class VersionActivity extends WQPServiceActivity {
         detail_txt12 = (TextView) findViewById(R.id.detail_txt12);
         detail_txt13 = (TextView) findViewById(R.id.detail_txt13);
         detail_txt14 = (TextView) findViewById(R.id.detail_txt14);
+        detail_txt15 = (TextView) findViewById(R.id.detail_txt15);
         detail_llt0 = (LinearLayout) findViewById(R.id.detail_llt0);
         detail_llt1 = (LinearLayout) findViewById(R.id.detail_llt1);
         detail_llt2 = (LinearLayout) findViewById(R.id.detail_llt2);
@@ -108,6 +109,7 @@ public class VersionActivity extends WQPServiceActivity {
         detail_llt12 = (LinearLayout) findViewById(R.id.detail_llt12);
         detail_llt13 = (LinearLayout) findViewById(R.id.detail_llt13);
         detail_llt14 = (LinearLayout) findViewById(R.id.detail_llt14);
+        detail_llt15 = (LinearLayout) findViewById(R.id.detail_llt15);
         version_btn0 = (Button) findViewById(R.id.version_btn0);
         version_btn1 = (Button) findViewById(R.id.version_btn1);
         version_btn2 = (Button) findViewById(R.id.version_btn2);
@@ -123,6 +125,7 @@ public class VersionActivity extends WQPServiceActivity {
         version_btn12 = (Button) findViewById(R.id.version_btn12);
         version_btn13 = (Button) findViewById(R.id.version_btn13);
         version_btn14 = (Button) findViewById(R.id.version_btn14);
+        version_btn15 = (Button) findViewById(R.id.version_btn15);
         version_up_btn0 = (Button) findViewById(R.id.version_up_btn0);
         version_up_btn1 = (Button) findViewById(R.id.version_up_btn1);
         version_up_btn2 = (Button) findViewById(R.id.version_up_btn2);
@@ -138,6 +141,7 @@ public class VersionActivity extends WQPServiceActivity {
         version_up_btn12 = (Button) findViewById(R.id.version_up_btn12);
         version_up_btn13 = (Button) findViewById(R.id.version_up_btn13);
         version_up_btn14 = (Button) findViewById(R.id.version_up_btn14);
+        version_up_btn15 = (Button) findViewById(R.id.version_up_btn15);
     }
 
     /**
@@ -176,6 +180,7 @@ public class VersionActivity extends WQPServiceActivity {
                              "2.撿料單功能優化 \n" +
                              "3.新增 資訊/行銷需求單 及 進度查詢");
         detail_txt14.setText("1.修正 Android Q/10 無法登入問題");
+        detail_txt15.setText("1.修正無法線上更新的問題");
     }
 
     /**
@@ -390,6 +395,20 @@ public class VersionActivity extends WQPServiceActivity {
             public void onClick(View v) {
                 detail_llt14.setVisibility(View.GONE);
                 version_up_btn14.setVisibility(View.GONE);
+            }
+        });
+        version_btn15.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt15.setVisibility(View.VISIBLE);
+                version_up_btn15.setVisibility(View.VISIBLE);
+            }
+        });
+        version_up_btn15.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt15.setVisibility(View.GONE);
+                version_up_btn15.setVisibility(View.GONE);
             }
         });
     }
