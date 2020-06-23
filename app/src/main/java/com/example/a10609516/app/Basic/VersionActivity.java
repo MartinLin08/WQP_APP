@@ -180,7 +180,9 @@ public class VersionActivity extends WQPServiceActivity {
                              "2.撿料單功能優化 \n" +
                              "3.新增 資訊/行銷需求單 及 進度查詢");
         detail_txt14.setText("1.修正 Android Q/10 無法登入問題");
-        detail_txt15.setText("1.修正無法線上更新的問題");
+        detail_txt15.setText("1.修正無法線上更新的問題 \n" +
+                             "2.新增百貨/DIY通路部 - 日報上傳作業 \n" +
+                             "3.新增百貨/DIY通路部 - 日報查詢/修正");
     }
 
     /**
