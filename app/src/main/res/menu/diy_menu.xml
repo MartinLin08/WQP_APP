@@ -10,18 +10,24 @@
             <!--<item
                 android:id="@+id/record_item"
                 android:title="上傳日報紀錄(已停用)" />-->
-            <item
+            <!--<item
                 android:id="@+id/picture_item"
-                android:title="客戶訂單照片上傳" />
+                android:title="客戶訂單照片上傳(已停用)" />
             <item
                 android:id="@+id/customer_item"
-                android:title="客戶訂單查詢" />
+                android:title="客戶訂單查詢(已停用)" />-->
             <!--<item
                 android:id="@+id/upload_item"
                 android:title="上傳日報(已停用)" />-->
             <!--<item
                 android:id="@+id/correct_item"
                 android:title="日報修正(已停用)" />-->
+            <item
+                android:id="@+id/report_item"
+                android:title="日報上傳作業" />
+            <item
+                android:id="@+id/report_search_item"
+                android:title="日報查詢/修正" />
         </menu>
     </item>
     <item android:title="資訊/行銷需求單">
@@ -34,9 +40,9 @@
                 android:title="進度查詢" />
         </menu>
     </item>
-    <item
+    <!--<item
         android:id="@+id/QRCode_item"
-        android:title="QRCode" />
+        android:title="QRCode" />-->
     <item
         android:id="@+id/about_item"
         android:title="版本資訊"/>

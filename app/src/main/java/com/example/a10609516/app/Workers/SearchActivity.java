@@ -140,6 +140,45 @@ public class SearchActivity extends WQPServiceActivity {
     }
 
     /**
+     * 派工類別的Spinner下拉選單
+     */
+    private void WorkTypeSpinner() {
+        //Spinner下拉選單
+        final String[] select = {"選擇", "換濾心", "換濾料", "加鹽", "末端", "小前置", "全屋", "社區保養", "檢修(一)", "檢修(二)", "臨時取消"};
+        ArrayAdapter<String> selectList = new ArrayAdapter<>(SearchActivity.this,
+                android.R.layout.simple_spinner_dropdown_item,
+                select);
+        SelectList.setAdapter(selectList);
+    }
+
+    /**
+     * 回報狀態的Spinner下拉選單
+     */
+    private void ReturnsSpinner() {
+        //Spinner下拉選單
+        final String[] returns = {"未回報", "已回報", "未結案", "已結案", "全部"};
+        ArrayAdapter<String> returnsList = new ArrayAdapter<>(SearchActivity.this,
+                android.R.layout.simple_spinner_dropdown_item,
+                returns);
+        ReturnsList.setAdapter(returnsList);
+    }
+
+    /**
+     * 實現畫面置頂按鈕
+     *
+     * @param view
+     */
+    public void GoTopBtn(View view) {
+        Handler mHandler = new Handler();
+        mHandler.post(new Runnable() {
+            public void run() {
+                //實現畫面置頂按鈕
+                search_scrollView.fullScroll(ScrollView.FOCUS_UP);
+            }
+        });
+    }
+
+    /**
      * 與OkHttp建立連線
      */
     private void sendRequestWithOkHttp() {
@@ -153,9 +192,10 @@ public class SearchActivity extends WQPServiceActivity {
                 //獲取日期挑選器的數據
                 String time_start = time_start_button.getText().toString();
                 String time_end = time_end_button.getText().toString();
-                String customer_edt = customer_editText.getText().toString();
+                //String customer_edt = customer_editText.getText().toString();
                 String type_select = String.valueOf(SelectList.getSelectedItem());
                 String returns_select = String.valueOf(ReturnsList.getSelectedItem());
+                String ttt = String.valueOf(SelectList.getSelectedItemId());
                 try {
                     OkHttpClient client = new OkHttpClient();
                     //POST
@@ -163,20 +203,21 @@ public class SearchActivity extends WQPServiceActivity {
                             .add("User_id", user_id_data)
                             .add("ESVD_BEGIN_DATE1", time_start)
                             .add("ESVD_BEGIN_DATE2", time_end)
-                            .add("ESV_NOTE", customer_edt)
+                            //.add("ESV_NOTE", customer_edt)
                             .add("WORK_TYPE_NAME", type_select)
                             .add("RETURNS", returns_select)
                             .build();
-                    Log.i("SearchActivity", time_start);
-                    Log.i("SearchActivity", time_end);
-                    Log.i("SearchActivity", returns_select);
+                    Log.e("SearchActivity", time_start);
+                    Log.e("SearchActivity", time_end);
+                    Log.e("SearchActivity", returns_select);
+                    Log.e("SearchActivity123456",ttt);
                     Request request = new Request.Builder()
-                            .url("http://a.wqp-water.com.tw/WQP/SearchData.php")
+                            .url("http://a.wqp-water.com.tw/WQP/SearchData2.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.i("SearchActivity", responseData);
+                    Log.i("SearchActivity1", responseData);
                     parseJSONWithJSONObject(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -197,32 +238,32 @@ public class SearchActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String work_type_name = jsonObject.getString("派工類別");
-                String esvd_service_no = jsonObject.getString("派工單號");
-                String esv_note = jsonObject.getString("送貨客戶");
-                String time_period_name = jsonObject.getString("預約日期時段");
-                String esv_contactor = jsonObject.getString("聯絡人");
-                String esv_tel_no1 = jsonObject.getString("主要電話");
-                String esv_tel_no2 = jsonObject.getString("次要電話");
-                String esv_address = jsonObject.getString("派工地址");
-                String cp_name = jsonObject.getString("付款方式");
-                String esvd_is_get_money = jsonObject.getString("是否要收款");
-                String esvd_is_money = jsonObject.getString("應收款金額");
-                String esvd_is_eng_money = jsonObject.getString("是否已收款");
-                String esvd_get_eng_money = jsonObject.getString("已收款金額");
-                String esvd_begin_date = jsonObject.getString("抵達日期");
-                String esvd_begin_time = jsonObject.getString("抵達時間");
-                String esvd_end_time = jsonObject.getString("結束時間");
-                String esvd_booking_remark = jsonObject.getString("任務說明");
-                String esv_item_remark = jsonObject.getString("料品說明");
-                String esvd_remark = jsonObject.getString("工作說明");
-                String esvd_seq_id = jsonObject.getString("派工資料識別碼");
-                String esvd_eng_points = jsonObject.getString("工務點數");
-                String esvd_booking_period = jsonObject.getString("預約開始時間");
-                String esvd_booking_period_end = jsonObject.getString("預約結束時間");
-                String my_ontype = jsonObject.getString("狀態");
+                String work_type_name = jsonObject.getString("WORK_TYPE");
+                String esvd_service_no = jsonObject.getString("SERVICE_NO");
+                String esv_note = jsonObject.getString("CUST_NAME");
+                String time_period_name = jsonObject.getString("DATE_TIME");
+                String esv_contactor = jsonObject.getString("CONTACT_PERSON");
+                String esv_tel_no1 = jsonObject.getString("TEL1");
+                String esv_tel_no2 = jsonObject.getString("TEL2");
+                String esv_address = jsonObject.getString("ADDRESS");
+                String cp_name = jsonObject.getString("PAY_MODE");
+                String esvd_is_get_money = jsonObject.getString("WHETHER_RECEIVABLE");
+                String esvd_is_money = jsonObject.getString("RECEIVABLE_AMOUNT");
+                String esvd_is_eng_money = jsonObject.getString("WHETHER_RECEIVED");
+                String esvd_get_eng_money = jsonObject.getString("RECEIVED_AMOUNT");
+                String esvd_begin_date = jsonObject.getString("BEGIN_DATE");
+                String esvd_begin_time = jsonObject.getString("BEGIN_TIME");
+                String esvd_end_time = jsonObject.getString("END_TIME");
+                String esvd_booking_remark = jsonObject.getString("TASK_REMARK");
+                String esv_item_remark = jsonObject.getString("MATERIAL_REMARK");
+                String esvd_remark = jsonObject.getString("WORK_REMARK");
+                String esvd_seq_id = jsonObject.getString("MAINTAIN_ID");
+                String esvd_eng_points = jsonObject.getString("D_POINTS");
+                String esvd_booking_period = jsonObject.getString("BOOKING_BEGIN");
+                String esvd_booking_period_end = jsonObject.getString("BOOKING_END");
+                String my_ontype = jsonObject.getString("STATUS");
 
-                Log.e("SearchActivity", esvd_seq_id);
+                Log.e("SearchActivity1", esvd_seq_id);
 
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
@@ -322,8 +363,12 @@ public class SearchActivity extends WQPServiceActivity {
                         //search_TableLayout.addView(tr1);
                         small_tb.addView(tr1);
                         //如果日期為0000-00-00,則把該TextView改為空值
-                        if (dynamically_txt.getText().toString().equals("1900-01-01")) {
+                        if (dynamically_txt.getText().toString().equals("1900-01-01 00:00:00.000")) {
                             dynamically_txt.setText("");
+                        }
+                        //如果金額為.0000,則把該TextView改為0
+                        if (dynamically_txt.getText().toString().equals(".0000")){
+                            dynamically_txt.setText("0");
                         }
                     }
                     small_tb.getChildAt(19).setVisibility(View.GONE);
@@ -378,6 +423,7 @@ public class SearchActivity extends WQPServiceActivity {
                                         //將SQL裡的資料傳到MaintainActivity
                                         Bundle bundle = new Bundle();
                                         bundle.putString("ResponseText" + x, ResponseText);
+                                        Log.e("MAINTAIN   ResponseText" + x, ResponseText);
 
                                         //intent_maintain.putExtra("TitleText" + x, TitleText);//可放所有基本類別
                                         intent_maintain.putExtras(bundle);//可放所有基本類別
@@ -430,45 +476,6 @@ public class SearchActivity extends WQPServiceActivity {
             super.handleMessage(msg);
         }
     };
-
-    /**
-     * 派工類別的Spinner下拉選單
-     */
-    private void WorkTypeSpinner() {
-        //Spinner下拉選單
-        final String[] select = {"選擇", "臨時取消", "換濾心", "換濾料", "加鹽", "末端", "小前置", "全屋", "社區保養", "檢修(一)", "檢修(二)"};
-        ArrayAdapter<String> selectList = new ArrayAdapter<>(SearchActivity.this,
-                android.R.layout.simple_spinner_dropdown_item,
-                select);
-        SelectList.setAdapter(selectList);
-    }
-
-    /**
-     * 回報狀態的Spinner下拉選單
-     */
-    private void ReturnsSpinner() {
-        //Spinner下拉選單
-        final String[] returns = {"未回報", "已回報", "未結案", "已結案", "全部"};
-        ArrayAdapter<String> returnsList = new ArrayAdapter<>(SearchActivity.this,
-                android.R.layout.simple_spinner_dropdown_item,
-                returns);
-        ReturnsList.setAdapter(returnsList);
-    }
-
-    /**
-     * 實現畫面置頂按鈕
-     *
-     * @param view
-     */
-    public void GoTopBtn(View view) {
-        Handler mHandler = new Handler();
-        mHandler.post(new Runnable() {
-            public void run() {
-                //實現畫面置頂按鈕
-                search_scrollView.fullScroll(ScrollView.FOCUS_UP);
-            }
-        });
-    }
 
     /**
      * 與OkHttp建立連線(未回派工數量)

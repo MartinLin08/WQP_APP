@@ -241,21 +241,21 @@ public class AuthorizeActivity extends AppCompatActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                COMPANY = jsonObject.getString("公司別");
+                COMPANY = jsonObject.getString("COMPANY");
                 //TA001 = jsonObject.getString("單別");
-                TA001TA002 = jsonObject.getString("單號");
-                TA005 = jsonObject.getString("業務姓名");
+                TA001TA002 = jsonObject.getString("NUMBER");
+                TA005 = jsonObject.getString("CLERK");
                 //TA004 = jsonObject.getString("客戶代號");
-                TA004TA006 = jsonObject.getString("客戶全名");
-                TA009 = jsonObject.getString("報價金額");
-                TRANSATION = jsonObject.getString("付款方式");
-                TA011 = jsonObject.getString("付款條件");
-                TA010 = jsonObject.getString("價格條件");
-                TA020 = jsonObject.getString("備註一");
-                TA021 = jsonObject.getString("備註二");
-                PERCENTAGE = jsonObject.getString("訂金");
-                PROCESS = jsonObject.getString("狀態");
-                LOCKING = jsonObject.getString("鎖單");
+                TA004TA006 = jsonObject.getString("CUST");
+                TA009 = jsonObject.getString("Q_MONEY");
+                TRANSATION = jsonObject.getString("PAY_MODE");
+                TA011 = jsonObject.getString("PAY_CONDITION");
+                TA010 = jsonObject.getString("MONEY_CONDITION");
+                TA020 = jsonObject.getString("NOTE1");
+                TA021 = jsonObject.getString("NOTE2");
+                PERCENTAGE = jsonObject.getString("PERCENTAGE");
+                PROCESS = jsonObject.getString("PROCESS");
+                LOCKING = jsonObject.getString("LOCK");
 
                 if (COMPANY.toString().equals("WQP")) {
                     COMPANY = "拓霖";
@@ -440,12 +440,12 @@ public class AuthorizeActivity extends AppCompatActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                TB003 = jsonObject.getString("項次");
-                TB004TB005 = jsonObject.getString("品號");
-                TB007TB008 = jsonObject.getString("數量");
-                TB009 = jsonObject.getString("單價");
-                TB010 = jsonObject.getString("金額");
-                TB025TB024 = jsonObject.getString("報價單金額");
+                TB003 = jsonObject.getString("ITEMS");
+                TB004TB005 = jsonObject.getString("TB004TB005");
+                TB007TB008 = jsonObject.getString("QUANTITY");
+                TB009 = jsonObject.getString("PRICE");
+                TB010 = jsonObject.getString("TOTAL_MONEY");
+                TB025TB024 = jsonObject.getString("Q_MONEY");
 
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();

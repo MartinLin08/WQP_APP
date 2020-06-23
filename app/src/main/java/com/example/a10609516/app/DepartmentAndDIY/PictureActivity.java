@@ -336,7 +336,7 @@ public class PictureActivity extends AppCompatActivity {
                             .build();
                     Log.e("PictureActivity", spinner_select);
                     Request request = new Request.Builder()
-                            .url("http://220.133.80.146/WQP/DIYStore.php")
+                            .url("http://a.wqp-water.com.tw/WQP/DIYStore.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

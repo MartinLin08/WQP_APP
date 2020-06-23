@@ -31,9 +31,9 @@
                 android:title="進度查詢" />
         </menu>
     </item>
-    <item
+    <!--<item
         android:id="@+id/QRCode_item"
-        android:title="QRCode" />
+        android:title="QRCode" />-->
     <!--<item
         android:id="@+id/signature_item"
         android:title="客戶電子簽名" />-->

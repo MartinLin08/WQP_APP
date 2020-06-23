@@ -200,12 +200,14 @@ public class QuotationActivity extends WQPServiceActivity {
                     Log.e("QuotationActivity", quotation_type);
                     Log.e("QuotationActivity", quotation_no);
                     Log.e("QuotationActivity", quotation_mode);
-                    Request request = new Request.Builder()
+                     Request request = new Request.Builder()
                             .url("http://a.wqp-water.com.tw/WQP/QuotationSearch.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
+                    Log.e("QuotationActivity1", requestBody.toString());
+                    Log.e("QuotationActivity1", response.toString());
                     Log.e("QuotationActivity1", responseData);
                     parseJSONWithJSONObjectForQuotation(responseData);
                 } catch (Exception e) {
@@ -227,10 +229,10 @@ public class QuotationActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String COMPANY = jsonObject.getString("公司別");
-                String TA002 = jsonObject.getString("單號");
-                String TA004 = jsonObject.getString("客戶代號");
-                String TA005 = jsonObject.getString("業務姓名");
+                String COMPANY = jsonObject.getString("COMPANY");
+                String TA002 = jsonObject.getString("NUMBER");
+                String TA004 = jsonObject.getString("CUST");
+                String TA005 = jsonObject.getString("CLERK");
 
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
@@ -238,6 +240,11 @@ public class QuotationActivity extends WQPServiceActivity {
                 JArrayList.add(TA002);
                 JArrayList.add(TA004);
                 JArrayList.add(TA005);
+
+                Log.e("QuotationActivity1", COMPANY);
+                Log.e("QuotationActivity1", TA002);
+                Log.e("QuotationActivity1", TA004);
+                Log.e("QuotationActivity1", TA005);
 
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();

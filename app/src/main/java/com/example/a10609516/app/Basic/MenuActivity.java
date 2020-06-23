@@ -43,6 +43,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -124,7 +127,7 @@ public class MenuActivity extends WQPServiceActivity {
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
                     Log.i("MenuActivity", responseData);
-                    showResponse(responseData);
+                    parseJSONWithJSONObjectOfUserName(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -133,17 +136,22 @@ public class MenuActivity extends WQPServiceActivity {
     }
 
     /**
-     * 在TextView上SHOW出回傳的員工姓名
-     *
-     * @param response
+     * 獲得JSON字串並解析成String字串
+     *在TextView上SHOW出回傳的員工姓名
+     * @param jsonData
      */
-    private void showResponse(final String response) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                name_textView.setText(response);
+    private void parseJSONWithJSONObjectOfUserName(String jsonData) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                //JSON格式改為字串
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String user_name = jsonObject.getString("MV002");
+                name_textView.setText(user_name);
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

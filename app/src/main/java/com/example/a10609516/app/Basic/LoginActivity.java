@@ -526,12 +526,35 @@ public class LoginActivity extends AppCompatActivity {
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
                     Log.i("LoginActivity", responseData);
+                    parseJSONWithJSONObjectOfDepartment(responseData);
                     showResponse(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }).start();
+    }
+
+    /**
+     * 獲得JSON字串並解析成String字串
+     *在TextView上SHOW出回傳的所屬部門
+     * @param jsonData
+     */
+    private void parseJSONWithJSONObjectOfDepartment(String jsonData) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                //JSON格式改為字串
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String department = jsonObject.getString("Department");
+                department_txt.setText(department);
+
+                SharedPreferences sharedPreferences = getSharedPreferences("department_id", MODE_PRIVATE);
+                sharedPreferences.edit().putString("D_ID", department_txt.getText().toString()).apply();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

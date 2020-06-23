@@ -25,12 +25,12 @@
                 android:title="進度查詢" />
         </menu>
     </item>
-    <item
+    <!--<item
         android:id="@+id/QRCode_item"
         android:title="QRCode" />
     <item
         android:id="@+id/signature_item"
-        android:title="客戶電子簽名" />
+        android:title="客戶電子簽名" />-->
     <item
         android:id="@+id/about_item"
         android:title="版本資訊" />

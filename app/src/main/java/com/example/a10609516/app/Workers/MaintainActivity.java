@@ -525,6 +525,12 @@ public class MaintainActivity extends AppCompatActivity {
         String ResponseText22 = bundle.getString("ResponseText" + 22);
         String ResponseText23 = bundle.getString("ResponseText" + 23);
         char on_type = ResponseText23.charAt(0);
+        Log.e("MAINTAIN1", String.valueOf(on_type));
+        Log.e("MAINTAIN2", ResponseText14);
+        Log.e("MAINTAIN3", ResponseText15);
+        Log.e("MAINTAIN4", ResponseText21);
+        Log.e("MAINTAIN5", ResponseText22);
+        Log.e("MAINTAIN6", ResponseText23);
         switch (on_type) {
             case '0':
                 time_listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, time);

@@ -32,6 +32,8 @@ import com.example.a10609516.app.DepartmentAndDIY.CorrectActivity;
 import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
 import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.app.DepartmentAndDIY.RecordActivity;
+import com.example.a10609516.app.DepartmentAndDIY.StationReportActivity;
+import com.example.a10609516.app.DepartmentAndDIY.StationReportSearchActivity;
 import com.example.a10609516.app.DepartmentAndDIY.UploadActivity;
 import com.example.a10609516.app.Manager.InventoryActivity;
 import com.example.a10609516.app.Manager.OrderSearchActivity;
@@ -197,6 +199,16 @@ public class WQPServiceActivity extends AppCompatActivity {
                 startActivity(intent25);
                 Toast.makeText(this, "日報修正", Toast.LENGTH_SHORT).show();
                 break; //進入日報修正頁面
+            case R.id.report_item:
+                Intent intent26 = new Intent(this, StationReportActivity.class);
+                startActivity(intent26);
+                Toast.makeText(this, "日報上傳作業", Toast.LENGTH_SHORT).show();
+                break; //進入上傳日報頁面
+            case R.id.report_search_item:
+                Intent intent27 = new Intent(this, StationReportSearchActivity.class);
+                startActivity(intent27);
+                Toast.makeText(this, "日報查詢/修正", Toast.LENGTH_SHORT).show();
+                break; //日報查詢/修正
             /**管理部Menu*/
             case R.id.inventory_item:
                 Intent intent31 = new Intent(this, InventoryActivity.class);
