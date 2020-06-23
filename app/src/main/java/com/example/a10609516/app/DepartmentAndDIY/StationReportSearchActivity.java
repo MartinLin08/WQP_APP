@@ -170,6 +170,21 @@ public class StationReportSearchActivity extends WQPServiceActivity {
                 if (date_btn.getText().toString().equals("") || type_spinner.getSelectedItemId() == 0 || store_spinner.getSelectedItemId() == 0) {
                     Toast.makeText(StationReportSearchActivity.this, "請輸入完整查詢條件", Toast.LENGTH_SHORT).show();
                 } else {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            type_txt.setText("");
+                            store_txt.setText("");
+                            date_txt.setText("");
+                            day_amount_edt.setText("");
+                            return_count_edt.setText("");
+                            return_money_edt.setText("");
+                            reason_edt.setText("");
+                            response_edt.setText("");
+                        }
+                    });
+
                     search_llt.setVisibility(View.GONE);
                     search_up_txt.setVisibility(View.GONE);
                     search_down_txt.setVisibility(View.VISIBLE);
