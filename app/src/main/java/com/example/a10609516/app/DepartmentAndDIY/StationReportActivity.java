@@ -630,7 +630,7 @@ public class StationReportActivity extends WQPServiceActivity {
                                 if (check_count_txt.getText().toString().equals("0")) {
                                     //與OKHttp連線(上傳日報)
                                     sendRequestWithOkHttpForReport();
-                                    Toast.makeText(StationReportActivity.this, "$0 日報上傳成功!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(StationReportActivity.this, "日報上傳成功!", Toast.LENGTH_SHORT).show();
 
                                     //歸0
                                     //載入下拉選單
