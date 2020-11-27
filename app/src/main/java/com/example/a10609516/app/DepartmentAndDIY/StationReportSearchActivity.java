@@ -7,11 +7,11 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -31,10 +31,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.a10609516.app.Clerk.AuthorizeActivity;
-import com.example.a10609516.app.Clerk.QuotationActivity;
-import com.example.a10609516.app.Manager.OrderSearchActivity;
-import com.example.a10609516.app.Manager.PickingActivity;
 import com.example.a10609516.app.R;
 import com.example.a10609516.app.Tools.Adapter;
 import com.example.a10609516.app.Tools.WQPServiceActivity;
@@ -303,6 +299,21 @@ public class StationReportSearchActivity extends WQPServiceActivity {
             public void run() {
                 //實現畫面置頂按鈕
                 search_scv.fullScroll(ScrollView.FOCUS_UP);
+            }
+        });
+    }
+
+    /**
+     * 實現畫面置底按鈕
+     *
+     * @param view
+     */
+    public void GoDownBtn(View view) {
+        Handler mHandler = new Handler();
+        mHandler.post(new Runnable() {
+            public void run() {
+                //實現畫面置底按鈕
+                search_scv.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
     }

@@ -10,8 +10,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -72,6 +72,8 @@ public class InventoryActivity extends WQPServiceActivity {
     private String[] company_list = new String[]{"拓霖", "拓亞鈦", "倍偉特"};
     private String[] empty = new String[]{"(請選擇)"};
     private String[] warehouse_list = new String[]{};
+
+    private String LOG = "InventoryActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,32 +195,6 @@ public class InventoryActivity extends WQPServiceActivity {
     }
 
     /**
-     * 取回掃描回傳值或取消掃描
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param intent
-     */
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                //ZXing回傳的內容
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                barcode_txt.setText(intent.getStringExtra("result_text"));
-                actual_edt.setText("");
-                sendRequestWithOkHttpForWareHouseSearch();
-                inventory_record_llt.removeAllViews();
-                //與WareHouseLog.PHP取得連線
-                sendRequestWithOkHttpForWareHouseLog();
-            } else {
-                if (resultCode == RESULT_CANCELED) {
-                    Toast.makeText(InventoryActivity.this, "取消掃描", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-    }
-
-    /**
      * 獲取當天日期
      */
     private void GetDate() {
@@ -300,7 +276,7 @@ public class InventoryActivity extends WQPServiceActivity {
                     RequestBody requestBody = new FormBody.Builder()
                             .add("COMPANY", company_ch)
                             .build();
-                    Log.e("InventoryActivity", company_ch);
+                    Log.e(LOG, company_ch);
                     Request request = new Request.Builder()
                             .url("http://a.wqp-water.com.tw/WQP/Warehouse.php")
                             //.url("http://192.168.0.172/WQP/Warehouse.php")
@@ -308,7 +284,7 @@ public class InventoryActivity extends WQPServiceActivity {
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.e("InventoryActivity", responseData);
+                    Log.e(LOG, responseData);
                     parseJSONWithJSONObjectForWareHouse(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -425,6 +401,32 @@ public class InventoryActivity extends WQPServiceActivity {
     }
 
     /**
+     * 取回掃描回傳值或取消掃描
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param intent
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                //ZXing回傳的內容
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                barcode_txt.setText(intent.getStringExtra("result_text"));
+                actual_edt.setText("");
+                sendRequestWithOkHttpForWareHouseSearch();
+                inventory_record_llt.removeAllViews();
+                //與WareHouseLog.PHP取得連線
+                sendRequestWithOkHttpForWareHouseLog();
+            } else {
+                if (resultCode == RESULT_CANCELED) {
+                    Toast.makeText(InventoryActivity.this, "取消掃描", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+    /**
      * 與OKHttp連線(查詢原廠序號資料)
      */
     private void sendRequestWithOkHttpForFactoryID() {
@@ -432,7 +434,7 @@ public class InventoryActivity extends WQPServiceActivity {
             @Override
             public void run() {
                 String f_id = factory_id_edt.getText().toString();
-                Log.e("InventoryActivity", f_id);
+                Log.e( LOG, f_id);
 
                 try {
                     OkHttpClient client = new OkHttpClient();
@@ -447,7 +449,7 @@ public class InventoryActivity extends WQPServiceActivity {
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.e("InventoryActivity", responseData);
+                    Log.e(LOG, responseData);
                     parseJSONWithJSONObjectForFactoryID(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -531,7 +533,7 @@ public class InventoryActivity extends WQPServiceActivity {
             @Override
             public void run() {
                 String barcode = barcode_txt.getText().toString();
-                Log.e("InventoryActivity8", barcode);
+                Log.e(LOG, barcode);
 
                 try {
                     OkHttpClient client = new OkHttpClient();
@@ -546,7 +548,7 @@ public class InventoryActivity extends WQPServiceActivity {
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.e("InventoryActivity", responseData);
+                    Log.e(LOG, responseData);
                     parseJSONWithJSONObjectForWareHouseSearch(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -643,9 +645,9 @@ public class InventoryActivity extends WQPServiceActivity {
                     w_id = "WQP";
                 }*/
 
-                Log.e("InventoryActivity", MB001);
-                Log.e("InventoryActivity2", warehouse_no_select_more);
-                Log.e("InventoryActivity3", w_id);
+                Log.e(LOG, MB001);
+                Log.e(LOG, warehouse_no_select_more);
+                Log.e(LOG, w_id);
 
                 if (company_select_more.toString().equals("拓霖")) {
                     company_select_more = "WQP";
@@ -670,7 +672,7 @@ public class InventoryActivity extends WQPServiceActivity {
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.e("InventoryActivity_r", responseData);
+                    Log.e(LOG, responseData);
                     parseJSONWithJSONObjectForWareHouseMoreSearch(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -698,7 +700,7 @@ public class InventoryActivity extends WQPServiceActivity {
                 out = jsonObject.getString("R_OUT");
                 inventory = jsonObject.getString("R_LAST");
 
-                Log.e("InventoryActivity11", MB064);
+                Log.e(LOG, MB064);
 
                 InventoryActivity.this.runOnUiThread(new Runnable() {
                     @Override
@@ -731,8 +733,8 @@ public class InventoryActivity extends WQPServiceActivity {
                 String company_select_log = String.valueOf(company_spinner.getSelectedItem());
                 String MB001 = item_number_txt.getText().toString();
                 String warehouse_no_select_log = String.valueOf(warehouse_spinner.getSelectedItem());
-                //String w_id_log = warehouse_no_select_log.substring(0, warehouse_no_select_log.indexOf(":|:"));
-                if(warehouse_no_select_log.equals("BWT(BWT總倉)")){
+                String w_id_log = warehouse_no_select_log.substring(0, warehouse_no_select_log.indexOf("("));
+                /*if(warehouse_no_select_log.equals("BWT(BWT總倉)")){
                     w_id = "BWT";
                     w_name = "BWT總倉";
                 }else if (warehouse_no_select_log.equals("BWT-De(BWT不良品)")){
@@ -780,10 +782,44 @@ public class InventoryActivity extends WQPServiceActivity {
                 }else if (warehouse_no_select_log.equals("01-00001TY(新百及倉庫)")){
                     w_id = "01-00001TY";
                     w_name = "新百及倉庫";
-                }
+                }else if (warehouse_no_select_log.equals("04-00005(PCHOME倉庫)")){
+                    w_id = "04-00005";
+                    w_name = "PCHOME倉庫";
+                }else if (warehouse_no_select_log.equals("04-00012(MOMO購物)")){
+                    w_id = "04-00012";
+                    w_name = "MOMO購物";
+                }else if (warehouse_no_select_log.equals("04-00019(YAHOO購物)")){
+                    w_id = "04-00019";
+                    w_name = "YAHOO購物";
+                }else if (warehouse_no_select_log.equals("04-00020(全國北倉)")){
+                    w_id = "04-00020";
+                    w_name = "全國北倉";
+                }else if (warehouse_no_select_log.equals("04-00021(全國中倉)")){
+                    w_id = "04-00021";
+                    w_name = "全國中倉";
+                }else if (warehouse_no_select_log.equals("04-00022(全國南倉)")){
+                    w_id = "04-00022";
+                    w_name = "全國南倉";
+                }else if (warehouse_no_select_log.equals("04-00023(全國花東倉)")){
+                    w_id = "04-00023";
+                    w_name = "全國花東倉";
+                }else if (warehouse_no_select_log.equals("04-00024(全國宜蘭倉)")){
+                    w_id = "04-00024";
+                    w_name = "全國宜蘭倉";
+                }else if (warehouse_no_select_log.equals("04-00028(樂購商城)")){
+                    w_id = "04-00028";
+                    w_name = "樂購商城";
+                }else if (warehouse_no_select_log.equals("04-00029(東森購物)")){
+                    w_id = "04-00029";
+                    w_name = "東森購物";
+                }else if (warehouse_no_select_log.equals("04-00030(燦坤寄倉)")){
+                    w_id = "04-00030";
+                    w_name = "燦坤寄倉";
+                }*/
 
-                Log.e("InventoryActivity", MB001);
-                Log.e("InventoryActivity", warehouse_no_select_log);
+                Log.e(LOG, MB001);
+                Log.e(LOG, warehouse_no_select_log);
+                Log.e(LOG, w_id_log);
 
                 if (company_select_log.toString().equals("拓霖")) {
                     company_select_log = "WQP";
@@ -799,7 +835,7 @@ public class InventoryActivity extends WQPServiceActivity {
                     RequestBody requestBody = new FormBody.Builder()
                             .add("COMPANY", company_select_log)
                             .add("MB001", MB001)
-                            .add("WH_NO", w_id)
+                            .add("WH_NO", w_id_log)
                             .build();
                     Request request = new Request.Builder()
                             .url("http://a.wqp-water.com.tw/WQP/WareHouseLog.php")
@@ -808,7 +844,7 @@ public class InventoryActivity extends WQPServiceActivity {
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.e("InventoryActivity", responseData);
+                    Log.e(LOG, responseData);
                     parseJSONWithJSONObjectForWareHouseLog(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -834,7 +870,7 @@ public class InventoryActivity extends WQPServiceActivity {
                 String warehouse_name_log = jsonObject.getString("W_NAME");
                 String inventory_log = jsonObject.getString("DATE");
 
-                Log.e("InventoryActivity", quantity_log);
+                Log.e(LOG, quantity_log);
 
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
@@ -957,17 +993,17 @@ public class InventoryActivity extends WQPServiceActivity {
                 //接收LoginActivity傳過來的值
                 SharedPreferences user_id = getSharedPreferences("user_id_data", MODE_PRIVATE);
                 String user_id_data = user_id.getString("ID", "");
-                Log.e("InventoryActivity", user_id_data);
+                Log.e(LOG, user_id_data);
 
                 String company_select_inventory = String.valueOf(company_spinner.getSelectedItem());
                 String MB001 = item_number_txt.getText().toString().trim();
                 String quantity = stock_txt.getText().toString();
                 String actual = actual_edt.getText().toString();
                 String warehouse_no_select = String.valueOf(warehouse_spinner.getSelectedItem());
-                //String w_id_no = warehouse_no_select.substring(0, warehouse_no_select.indexOf(":|:"));
+                String w_id_no = warehouse_no_select.substring(0, warehouse_no_select.indexOf("("));
                 //String warehouse_name_select = String.valueOf(warehouse_spinner.getSelectedItem());
                 //String w_id_name = warehouse_name_select.substring(warehouse_name_select.indexOf(":|:"), warehouse_name_select.length());
-                if(warehouse_no_select.equals("BWT(BWT總倉)")){
+                /*if(warehouse_no_select.equals("BWT(BWT總倉)")){
                     w_id = "BWT";
                     w_name = "BWT總倉";
                 }else if (warehouse_no_select.equals("BWT-De(BWT不良品)")){
@@ -1015,7 +1051,40 @@ public class InventoryActivity extends WQPServiceActivity {
                 }else if (warehouse_no_select.equals("01-00001TY(新百及倉庫)")){
                     w_id = "01-00001TY";
                     w_name = "新百及倉庫";
-                }
+                }else if (warehouse_no_select.equals("04-00005(PCHOME倉庫)")){
+                    w_id = "04-00005";
+                    w_name = "PCHOME倉庫";
+                }else if (warehouse_no_select.equals("04-00012(MOMO購物)")){
+                    w_id = "04-00012";
+                    w_name = "MOMO購物";
+                }else if (warehouse_no_select.equals("04-00019(YAHOO購物)")){
+                    w_id = "04-00019";
+                    w_name = "YAHOO購物";
+                }else if (warehouse_no_select.equals("04-00020(全國北倉)")){
+                    w_id = "04-00020";
+                    w_name = "全國北倉";
+                }else if (warehouse_no_select.equals("04-00021(全國中倉)")){
+                    w_id = "04-00021";
+                    w_name = "全國中倉";
+                }else if (warehouse_no_select.equals("04-00022(全國南倉)")){
+                    w_id = "04-00022";
+                    w_name = "全國南倉";
+                }else if (warehouse_no_select.equals("04-00023(全國花東倉)")){
+                    w_id = "04-00023";
+                    w_name = "全國花東倉";
+                }else if (warehouse_no_select.equals("04-00024(全國宜蘭倉)")){
+                    w_id = "04-00024";
+                    w_name = "全國宜蘭倉";
+                }else if (warehouse_no_select.equals("04-00028(樂購商城)")){
+                    w_id = "04-00028";
+                    w_name = "樂購商城";
+                }else if (warehouse_no_select.equals("04-00029(東森購物)")){
+                    w_id = "04-00029";
+                    w_name = "東森購物";
+                }else if (warehouse_no_select.equals("04-00030(燦坤寄倉)")){
+                    w_id = "04-00030";
+                    w_name = "燦坤寄倉";
+                }*/
 
                 if (company_select_inventory.toString().equals("拓霖")) {
                     company_select_inventory = "WQP";
@@ -1025,10 +1094,11 @@ public class InventoryActivity extends WQPServiceActivity {
                     company_select_inventory = "BWT";
                 }
 
-                Log.e("InventoryActivity", MB001);
-                Log.e("InventoryActivity", actual);
-                Log.e("InventoryActivity", w_id);
-                Log.e("InventoryActivity", w_name);
+                Log.e(LOG, MB001);
+                Log.e(LOG, actual);
+                //Log.e("InventoryActivity", w_id);
+                //Log.e("InventoryActivity", w_name);
+                Log.e( LOG, w_id_no);
 
                 try {
                     OkHttpClient client = new OkHttpClient();
@@ -1039,8 +1109,8 @@ public class InventoryActivity extends WQPServiceActivity {
                             .add("MB001", MB001)
                             .add("quantity", quantity)
                             .add("actual", actual)
-                            .add("WH_NO", w_id)
-                            .add("WH_NAME", w_name)
+                            .add("WH_NO", w_id_no)
+                            //.add("WH_NAME", w_name)
                             .build();
                     Request request = new Request.Builder()
                             .url("http://a.wqp-water.com.tw/WQP/WareHouseInventory.php")
@@ -1049,7 +1119,7 @@ public class InventoryActivity extends WQPServiceActivity {
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    Log.e("InventoryActivity", responseData);
+                    Log.e(LOG, responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

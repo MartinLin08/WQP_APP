@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -27,7 +27,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.a10609516.app.Basic.LoginActivity;
 import com.example.a10609516.app.Tools.DatePickerFragment;
 import com.example.a10609516.app.Tools.ScannerActivity;
 import com.example.a10609516.app.R;
@@ -794,7 +793,7 @@ public class MaintainActivity extends AppCompatActivity {
                 String check_reason = String.valueOf(reason_spinner.getSelectedItem());
                 String useless_work = String.valueOf(useless_spinner.getSelectedItem());
                 String work_remark = esvd_remark_txt.getText().toString();
-                //String get_money_type = esvd_is_eng_money_txt.getText().toString();
+                String get_money_type = esvd_is_eng_money_txt.getText().toString();
                 String work_points = esvd_eng_points_txt.getText().toString();
                 String pay_mode = String.valueOf(cp_name_spinner.getSelectedItem());
 
@@ -823,7 +822,7 @@ public class MaintainActivity extends AppCompatActivity {
                             .add("ESVD_CENSON_TYPE", check_reason)
                             .add("ESVD_INVALID_FLAG", useless_work)
                             .add("ESVD_REMARK", work_remark)
-                            //.add("ESVD_IS_ENG_MONEY", get_money_type)
+                            .add("ESVD_IS_ENG_MONEY", get_money_type)
                             .add("ESVD_ENG_POINTS", work_points)
                             .add("CP_NAME", pay_mode)
                             .build();
@@ -836,7 +835,7 @@ public class MaintainActivity extends AppCompatActivity {
                     Log.e("MaintainActivity", check_reason);
                     Log.e("MaintainActivity", useless_work);
                     Log.e("MaintainActivity", work_remark);
-                    //Log.e("MaintainActivity", get_money_type);
+                    Log.e("MaintainActivity", get_money_type);
                     Log.e("MaintainActivity", work_points);
                     Request request = new Request.Builder()
                             .url("http://a.wqp-water.com.tw/wqp/UpdateMaintainData.php")
@@ -875,7 +874,7 @@ public class MaintainActivity extends AppCompatActivity {
                 String check_reason = String.valueOf(reason_spinner.getSelectedItem());
                 String useless_work = String.valueOf(useless_spinner.getSelectedItem());
                 String work_remark = esvd_remark_txt.getText().toString();
-                //String get_money_type = esvd_is_eng_money_txt.getText().toString();
+                String get_money_type = esvd_is_eng_money_txt.getText().toString();
                 String work_points = esvd_eng_points_txt.getText().toString();
                 String pay_mode = String.valueOf(cp_name_spinner.getSelectedItem());
 
@@ -904,7 +903,7 @@ public class MaintainActivity extends AppCompatActivity {
                             .add("ESVD_CENSON_TYPE", check_reason)
                             .add("ESVD_INVALID_FLAG", useless_work)
                             .add("ESVD_REMARK", work_remark)
-                            //.add("ESVD_IS_ENG_MONEY", get_money_type)
+                            .add("ESVD_IS_ENG_MONEY", get_money_type)
                             .add("ESVD_ENG_POINTS", work_points)
                             .add("CP_NAME", pay_mode)
                             .build();
@@ -917,7 +916,7 @@ public class MaintainActivity extends AppCompatActivity {
                     Log.e("MaintainActivity", check_reason);
                     Log.e("MaintainActivity", useless_work);
                     Log.e("MaintainActivity", work_remark);
-                    //Log.e("MaintainActivity", get_money_type);
+                    Log.e("MaintainActivity", get_money_type);
                     Log.e("MaintainActivity", work_points);
                     Request request = new Request.Builder()
                             .url("http://a.wqp-water.com.tw/wqp/UpdateMaintainData.php")
@@ -925,6 +924,9 @@ public class MaintainActivity extends AppCompatActivity {
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
+                    Log.e("MaintainActivity", requestBody.toString());
+                    Log.e("MaintainActivity", request.toString());
+                    Log.e("MaintainActivity", response.toString());
                     Log.e("MaintainActivity", responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -934,7 +936,7 @@ public class MaintainActivity extends AppCompatActivity {
     }
 
     /**
-     * 與OKHttp連線(工務獎金)
+     * 與OKHttp連線(工務獎金)_new
      */
     private void sendRequestWithOkHttpForWorkMoney() {
         new Thread(new Runnable() {
@@ -957,7 +959,7 @@ public class MaintainActivity extends AppCompatActivity {
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
                     Log.e("MaintainActivity", responseData);
-                    parseJSONWithJSONObjectForWorkMoney(responseData);
+                    parseJSONWithJSONObjectOfWorkMoney(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -966,24 +968,31 @@ public class MaintainActivity extends AppCompatActivity {
     }
 
     /**
-     * 取得工務點數獎金
-     *
-     * @param distribution_money
+     * 獲得JSON字串並解析成String字串
+     *取得工務點數獎金
+     * @param jsonData
      */
-    private void parseJSONWithJSONObjectForWorkMoney(final String distribution_money) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+    private void parseJSONWithJSONObjectOfWorkMoney(String jsonData) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                //JSON格式改為字串
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String distribution_money = jsonObject.getString("ASSIGN_MONEY");
                 Log.e("MaintainActivity", "MONEY : " + distribution_money);
                 float points = Float.parseFloat(esvd_eng_points_txt.getText().toString());
-                int money = Integer.parseInt(distribution_money.toString());
-                esvd_eng_money_txt.setText(String.valueOf(points * money));
+                float money = Float.parseFloat(distribution_money);
+                float total = points * money;
+                esvd_eng_money_txt.setText(String.valueOf(total));
+                Log.e("MaintainActivity", "MONEY2 : " + esvd_eng_money_txt.getText().toString());
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
-     * 與OKHttp連線(工務點數)
+     * 與OKHttp連線(工務點數)_new
      */
     private void sendRequestWithOkHttpForWorkPoints() {
         new Thread(new Runnable() {
@@ -1033,8 +1042,8 @@ public class MaintainActivity extends AppCompatActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                final String esvd_a_point = jsonObject.getString("A點數");
-                final String esvd_b_point = jsonObject.getString("B點數");
+                final String esvd_a_point = jsonObject.getString("A_POINTS");
+                final String esvd_b_point = jsonObject.getString("B_POINTS");
 
                 Log.e("MaintainActivity", esvd_a_point);
                 Log.e("MaintainActivity", esvd_b_point);

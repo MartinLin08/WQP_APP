@@ -92,9 +92,9 @@ public class MissCountActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String eng_local = jsonObject.getString("地區");
-                String eng_name = jsonObject.getString("工務");
-                String miss_count = jsonObject.getString("未回單數量");
+                String eng_local = jsonObject.getString("LOCAL_PLACE");
+                String eng_name = jsonObject.getString("ENG_EMP");
+                String miss_count = jsonObject.getString("MISSED");
 
                 Log.e("MissCountActivity", eng_name);
 

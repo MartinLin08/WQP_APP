@@ -8,7 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -140,6 +140,21 @@ public class OrderSearchActivity extends WQPServiceActivity {
             public void run() {
                 //實現畫面置頂按鈕
                 search_scv.fullScroll(ScrollView.FOCUS_UP);
+            }
+        });
+    }
+
+    /**
+     * 實現畫面置底按鈕
+     *
+     * @param view
+     */
+    public void GoDownBtn(View view) {
+        Handler mHandler = new Handler();
+        mHandler.post(new Runnable() {
+            public void run() {
+                //實現畫面置底按鈕
+                search_scv.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
     }

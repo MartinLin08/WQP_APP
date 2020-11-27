@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.widget.SwipeRefreshLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -67,7 +67,7 @@ public class EngPointsActivity extends WQPServiceActivity {
     }
 
     /**
-     * 與OKHttp連線(工務點數明細)
+     * 與OKHttp連線(工務點數明細)_new
      */
     private void sendRequestWithOkHttpForWorkPointsDetail() {
         new Thread(new Runnable() {
@@ -110,13 +110,13 @@ public class EngPointsActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String service_date = jsonObject.getString("派工日期");
-                String esvd_service_no = jsonObject.getString("派工單號");
-                String work_type_name = jsonObject.getString("派工類別");
-                String esvd_a_point = jsonObject.getString("A點數");
-                String esvd_b_point = jsonObject.getString("B點數");
-                String esvd_d_point = jsonObject.getString("D點數");
-                String esvd_eng_money = jsonObject.getString("點數獎金");
+                String service_date = jsonObject.getString("WISH_DATETIME");
+                String esvd_service_no = jsonObject.getString("SERVICE_NO");
+                String work_type_name = jsonObject.getString("WORK_TYPE");
+                String esvd_a_point = jsonObject.getString("A_POINTS");
+                String esvd_b_point = jsonObject.getString("B_POINTS");
+                String esvd_d_point = jsonObject.getString("D_POINTS");
+                String esvd_eng_money = jsonObject.getString("POINTS_MONEY");
 
                 Log.e("EngPointsActivity", work_type_name);
                 Log.e("EngPointsActivity", esvd_a_point);
@@ -319,6 +319,21 @@ public class EngPointsActivity extends WQPServiceActivity {
             public void run() {
                 //實現畫面置頂按鈕
                 points_scv.fullScroll(ScrollView.FOCUS_UP);
+            }
+        });
+    }
+
+    /**
+     * 實現畫面置底按鈕
+     *
+     * @param view
+     */
+    public void GoDownBtn(View view) {
+        Handler mHandler = new Handler();
+        mHandler.post(new Runnable() {
+            public void run() {
+                //實現畫面置底按鈕
+                points_scv.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
     }

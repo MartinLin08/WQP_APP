@@ -1,64 +1,34 @@
 package com.example.a10609516.app.Basic;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Environment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.a10609516.app.Clerk.QuotationActivity;
-import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
-import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
-import com.example.a10609516.app.Manager.InventoryActivity;
 import com.example.a10609516.app.R;
 import com.example.a10609516.app.Tools.WQPServiceActivity;
-import com.example.a10609516.app.Workers.CalendarActivity;
-import com.example.a10609516.app.Workers.EngPointsActivity;
-import com.example.a10609516.app.Workers.GPSActivity;
-import com.example.a10609516.app.Workers.MissCountActivity;
-import com.example.a10609516.app.Workers.PointsActivity;
-import com.example.a10609516.app.Workers.ScheduleActivity;
-import com.example.a10609516.app.Workers.SearchActivity;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Map;
 
 public class VersionActivity extends WQPServiceActivity {
 
     private TextView detail_txt0, detail_txt1, detail_txt2, detail_txt3, detail_txt4, detail_txt5
             , detail_txt6, detail_txt7, detail_txt8, detail_txt9, detail_txt10
-            , detail_txt11, detail_txt12, detail_txt13, detail_txt14, detail_txt15;
+            , detail_txt11, detail_txt12, detail_txt13, detail_txt14, detail_txt15
+            , detail_txt16, detail_txt17;
     private LinearLayout detail_llt0, detail_llt1, detail_llt2, detail_llt3, detail_llt4, detail_llt5
             , detail_llt6, detail_llt7, detail_llt8, detail_llt9, detail_llt10
-            , detail_llt11, detail_llt12, detail_llt13, detail_llt14, detail_llt15;
+            , detail_llt11, detail_llt12, detail_llt13, detail_llt14, detail_llt15
+            , detail_llt16, detail_llt17;
     private Button version_btn0, version_btn1, version_btn2, version_btn3, version_btn4, version_btn5
             , version_btn6, version_btn7, version_btn8, version_btn9, version_btn10
-            , version_btn11, version_btn12, version_btn13, version_btn14, version_btn15;
+            , version_btn11, version_btn12, version_btn13, version_btn14, version_btn15
+            , version_btn16, version_btn17;
     private Button version_up_btn0, version_up_btn1, version_up_btn2, version_up_btn3, version_up_btn4, version_up_btn5
             , version_up_btn6, version_up_btn7, version_up_btn8, version_up_btn9, version_up_btn10
-            , version_up_btn11, version_up_btn12, version_up_btn13, version_up_btn14, version_up_btn15;
+            , version_up_btn11, version_up_btn12, version_up_btn13, version_up_btn14, version_up_btn15
+            , version_up_btn16, version_up_btn17;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +64,8 @@ public class VersionActivity extends WQPServiceActivity {
         detail_txt13 = (TextView) findViewById(R.id.detail_txt13);
         detail_txt14 = (TextView) findViewById(R.id.detail_txt14);
         detail_txt15 = (TextView) findViewById(R.id.detail_txt15);
+        detail_txt16 = (TextView) findViewById(R.id.detail_txt16);
+        detail_txt17 = (TextView) findViewById(R.id.detail_txt17);
         detail_llt0 = (LinearLayout) findViewById(R.id.detail_llt0);
         detail_llt1 = (LinearLayout) findViewById(R.id.detail_llt1);
         detail_llt2 = (LinearLayout) findViewById(R.id.detail_llt2);
@@ -110,6 +82,8 @@ public class VersionActivity extends WQPServiceActivity {
         detail_llt13 = (LinearLayout) findViewById(R.id.detail_llt13);
         detail_llt14 = (LinearLayout) findViewById(R.id.detail_llt14);
         detail_llt15 = (LinearLayout) findViewById(R.id.detail_llt15);
+        detail_llt16 = (LinearLayout) findViewById(R.id.detail_llt16);
+        detail_llt17 = (LinearLayout) findViewById(R.id.detail_llt17);
         version_btn0 = (Button) findViewById(R.id.version_btn0);
         version_btn1 = (Button) findViewById(R.id.version_btn1);
         version_btn2 = (Button) findViewById(R.id.version_btn2);
@@ -126,6 +100,8 @@ public class VersionActivity extends WQPServiceActivity {
         version_btn13 = (Button) findViewById(R.id.version_btn13);
         version_btn14 = (Button) findViewById(R.id.version_btn14);
         version_btn15 = (Button) findViewById(R.id.version_btn15);
+        version_btn16 = (Button) findViewById(R.id.version_btn16);
+        version_btn17 = (Button) findViewById(R.id.version_btn17);
         version_up_btn0 = (Button) findViewById(R.id.version_up_btn0);
         version_up_btn1 = (Button) findViewById(R.id.version_up_btn1);
         version_up_btn2 = (Button) findViewById(R.id.version_up_btn2);
@@ -142,6 +118,8 @@ public class VersionActivity extends WQPServiceActivity {
         version_up_btn13 = (Button) findViewById(R.id.version_up_btn13);
         version_up_btn14 = (Button) findViewById(R.id.version_up_btn14);
         version_up_btn15 = (Button) findViewById(R.id.version_up_btn15);
+        version_up_btn16 = (Button) findViewById(R.id.version_up_btn16);
+        version_up_btn17 = (Button) findViewById(R.id.version_up_btn17);
     }
 
     /**
@@ -183,6 +161,9 @@ public class VersionActivity extends WQPServiceActivity {
         detail_txt15.setText("1.修正無法線上更新的問題 \n" +
                              "2.新增百貨/DIY通路部 - 日報上傳作業 \n" +
                              "3.新增百貨/DIY通路部 - 日報查詢/修正");
+        detail_txt16.setText("1.部分內容修正bug及優化 \n" +
+                             "2.修正派工無法回報的問題");
+        detail_txt17.setText("1.抓了幾隻臭蟲");
     }
 
     /**
@@ -411,6 +392,34 @@ public class VersionActivity extends WQPServiceActivity {
             public void onClick(View v) {
                 detail_llt15.setVisibility(View.GONE);
                 version_up_btn15.setVisibility(View.GONE);
+            }
+        });
+        version_btn16.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt16.setVisibility(View.VISIBLE);
+                version_up_btn16.setVisibility(View.VISIBLE);
+            }
+        });
+        version_up_btn16.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt16.setVisibility(View.GONE);
+                version_up_btn16.setVisibility(View.GONE);
+            }
+        });
+        version_btn17.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt17.setVisibility(View.VISIBLE);
+                version_up_btn17.setVisibility(View.VISIBLE);
+            }
+        });
+        version_up_btn17.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_llt17.setVisibility(View.GONE);
+                version_up_btn17.setVisibility(View.GONE);
             }
         });
     }

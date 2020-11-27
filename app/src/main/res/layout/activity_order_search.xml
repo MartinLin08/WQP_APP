@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
@@ -279,31 +279,54 @@
 
             </LinearLayout>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/go_top_btn"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="end|bottom"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="5dp"
-            android:alpha="0.6"
-            android:clickable="true"
-            android:onClick="GoTopBtn"
-            app:backgroundTint="#FFFF4D"
-            app:fabSize="auto"
-            app:srcCompat="@drawable/btn_backtotop"
-            app:maxImageSize="48dp"
-            app:fabCustomSize="60dp"
-            android:scaleType="centerInside"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="end|bottom">
 
-    </android.support.design.widget.CoordinatorLayout>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/go_top_button"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginRight="5dp"
+                android:alpha="0.6"
+                android:clickable="true"
+                android:onClick="GoTopBtn"
+                app:backgroundTint="#FFFF4D"
+                app:fabSize="auto"
+                app:srcCompat="@drawable/btn_backtotop"
+                app:maxImageSize="48dp"
+                app:fabCustomSize="60dp"
+                android:scaleType="centerInside"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/go_down_button"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
+                android:alpha="0.6"
+                android:clickable="true"
+                android:onClick="GoDownBtn"
+                app:backgroundTint="#FFFF4D"
+                app:fabSize="auto"
+                app:srcCompat="@drawable/btn_gotodown"
+                app:maxImageSize="48dp"
+                app:fabCustomSize="60dp"
+                android:scaleType="centerInside"/>
+
+        </LinearLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </FrameLayout>

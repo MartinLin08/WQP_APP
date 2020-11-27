@@ -12,11 +12,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,6 +30,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a10609516.app.BOSS.ApplyExchangeActivity;
+import com.example.a10609516.app.BOSS.ExchangeActivity;
 import com.example.a10609516.app.BuildConfig;
 import com.example.a10609516.app.Tools.HttpParse;
 import com.example.a10609516.app.R;
@@ -197,6 +200,12 @@ public class LoginActivity extends AppCompatActivity {
                     if (httpResponseMsg.equalsIgnoreCase("登入成功")) {
                         if (department_txt.getText().toString().equals("8888")) {
                             Toast.makeText(LoginActivity.this, "無使用權限", Toast.LENGTH_SHORT).show();
+                        } else if (IDEdT.equals("08901002")) {
+                            finish();
+                            Intent intent = new Intent(LoginActivity.this, ApplyExchangeActivity.class);
+                            intent.putExtra(Userid, User_id);
+                            Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
+                            startActivity(intent);
                         } else {
                             finish();
                             Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
@@ -262,13 +271,13 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void Update() {
         /*try {
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.5.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.8.apk");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.setDoOutput(true);
             urlConnection.connect();
             File sdcard = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
-            File file = new File(sdcard, "wqp_2.5.apk");
+            File file = new File(sdcard, "wqp_2.7.apk");
             FileOutputStream fileOutput = new FileOutputStream(file);
             InputStream inputStream = urlConnection.getInputStream();
             byte[] buffer = new byte[1024];
@@ -285,7 +294,7 @@ public class LoginActivity extends AppCompatActivity {
     }*/
 
         try {
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.6.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.9.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -297,7 +306,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.e("LoginActivity", PATH);
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_2.6.apk");
+            File outputFile = new File(file, "wqp_2.9.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -311,7 +320,7 @@ public class LoginActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
             Log.e("LoginActivity", "下載完成");
 
-            File apkFile = new File((Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.6.apk"));
+            File apkFile = new File((Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.9.apk"));
             Uri apkUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -334,7 +343,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
 
             /*Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.6.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.8.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -454,7 +463,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * 與OkHttp建立連線(版本)
+     * 與OkHttp建立連線(版本)_new
      */
     private void sendRequestWithOkHttpOfVersion() {
         new Thread(new Runnable() {
@@ -494,7 +503,7 @@ public class LoginActivity extends AppCompatActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                ver_no = jsonObject.getString("版本");
+                ver_no = jsonObject.getString("VERSION");
                 Log.e("LoginActivity", ver_no);
 
                 SharedPreferences sharedPreferences = getSharedPreferences("fb_version", MODE_PRIVATE);
@@ -527,7 +536,7 @@ public class LoginActivity extends AppCompatActivity {
                     String responseData = response.body().string();
                     Log.i("LoginActivity", responseData);
                     parseJSONWithJSONObjectOfDepartment(responseData);
-                    showResponse(responseData);
+                    //showResponse(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -548,6 +557,7 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String department = jsonObject.getString("Department");
                 department_txt.setText(department);
+                Log.e("LoginActivity", department_txt.getText().toString());
 
                 SharedPreferences sharedPreferences = getSharedPreferences("department_id", MODE_PRIVATE);
                 sharedPreferences.edit().putString("D_ID", department_txt.getText().toString()).apply();
@@ -562,7 +572,7 @@ public class LoginActivity extends AppCompatActivity {
      *
      * @param response
      */
-    private void showResponse(final String response) {
+    /*private void showResponse(final String response) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -572,10 +582,10 @@ public class LoginActivity extends AppCompatActivity {
                 sharedPreferences.edit().putString("D_ID", department_txt.getText().toString()).apply();
             }
         });
-    }
+    }*/
 
     /**
-     * 與OkHttp建立連線(未回派工數量)
+     * 與OkHttp建立連線(未回派工數量)_new
      */
     private void sendRequestWithOkHttpOfMissCount() {
         new Thread(new Runnable() {
@@ -604,12 +614,16 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * 取得未回出勤的數量
-     * @param miss_count
+     * @param jsonData
      */
-    private void parseJSONWithJSONObjectOfMissCount(final String miss_count) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+    private void parseJSONWithJSONObjectOfMissCount(String jsonData) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                //JSON格式改為字串
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String miss_count = jsonObject.getString("COUNT");
+
                 Log.e("LoginActivity", miss_count);
                 if(miss_count.toString().equals("0")){
                     badgeCount = 0;
@@ -618,7 +632,10 @@ public class LoginActivity extends AppCompatActivity {
                     int count = Integer.valueOf(miss_count);
                     ShortcutBadger.applyCount(LoginActivity.this, count);
                 }
+
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

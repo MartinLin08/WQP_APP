@@ -1,57 +1,27 @@
 package com.example.a10609516.app.Basic;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.a10609516.app.Clerk.QuotationActivity;
-import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
-import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
-import com.example.a10609516.app.Manager.InventoryActivity;
 import com.example.a10609516.app.R;
 import com.example.a10609516.app.Tools.WQPServiceActivity;
-import com.example.a10609516.app.Workers.CalendarActivity;
 import com.example.a10609516.app.Tools.ScannerActivity;
-import com.example.a10609516.app.Workers.EngPointsActivity;
-import com.example.a10609516.app.Workers.GPSActivity;
-import com.example.a10609516.app.Workers.MissCountActivity;
-import com.example.a10609516.app.Workers.PointsActivity;
-import com.example.a10609516.app.Workers.ScheduleActivity;
-import com.example.a10609516.app.Workers.SearchActivity;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Map;
 
 public class QRCodeActivity extends WQPServiceActivity {
 

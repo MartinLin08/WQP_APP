@@ -1,31 +1,18 @@
 package com.example.a10609516.app.Workers;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View.OnClickListener;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.example.a10609516.app.Clerk.QuotationActivity;
-import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
-import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
-import com.example.a10609516.app.Manager.InventoryActivity;
 import com.example.a10609516.app.Tools.SignView;
 import com.example.a10609516.app.R;
 import com.example.a10609516.app.Tools.WQPServiceActivity;
-import com.example.a10609516.app.Workers.CalendarActivity;
-import com.example.a10609516.app.Workers.EngPointsActivity;
-import com.example.a10609516.app.Workers.GPSActivity;
-import com.example.a10609516.app.Workers.PointsActivity;
-import com.example.a10609516.app.Workers.ScheduleActivity;
-import com.example.a10609516.app.Workers.SearchActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

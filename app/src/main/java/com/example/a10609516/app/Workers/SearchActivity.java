@@ -1,19 +1,14 @@
 package com.example.a10609516.app.Workers;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Environment;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,7 +19,6 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,31 +33,10 @@ import okhttp3.Response;
 import android.os.Handler;
 import android.os.Message;
 
-import com.example.a10609516.app.Basic.QRCodeActivity;
-import com.example.a10609516.app.Clerk.QuotationActivity;
-import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
-import com.example.a10609516.app.Manager.InventoryActivity;
-import com.example.a10609516.app.Tools.DatePickerFragment;
-import com.example.a10609516.app.Basic.MenuActivity;
-import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.app.R;
-import com.example.a10609516.app.Basic.VersionActivity;
 import com.example.a10609516.app.Tools.WQPServiceActivity;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class SearchActivity extends WQPServiceActivity {
 
@@ -174,6 +147,21 @@ public class SearchActivity extends WQPServiceActivity {
             public void run() {
                 //實現畫面置頂按鈕
                 search_scrollView.fullScroll(ScrollView.FOCUS_UP);
+            }
+        });
+    }
+
+    /**
+     * 實現畫面置底按鈕
+     *
+     * @param view
+     */
+    public void GoDownBtn(View view) {
+        Handler mHandler = new Handler();
+        mHandler.post(new Runnable() {
+            public void run() {
+                //實現畫面置底按鈕
+                search_scrollView.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
     }
@@ -511,33 +499,50 @@ public class SearchActivity extends WQPServiceActivity {
 
     /**
      * 取得未回出勤的數量
-     *
-     * @param miss_count
+     * @param jsonData
      */
-    private void parseJSONWithJSONObjectForMissCount(final String miss_count) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+    private void parseJSONWithJSONObjectForMissCount(String jsonData) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                //JSON格式改為字串
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String miss_count = jsonObject.getString("COUNT");
+
                 Log.e("SearchActivity", miss_count);
-                if (miss_count.toString().equals("0")) {
+                if(miss_count.toString().equals("0")){
                     badgeCount = 0;
                     ShortcutBadger.removeCount(SearchActivity.this);
-                } else {
+                }else{
                     int count = Integer.valueOf(miss_count);
                     ShortcutBadger.applyCount(SearchActivity.this, count);
                 }
+
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
         Log.d("SearchActivity", "onRestart");
-        //建立SearchData.php OKHttp連線
-        sendRequestWithOkHttp();
-        //取得未回派工數量
-        sendRequestWithOkHttpForMissCount();
+        //讓search_tablelayout資料清空
+        search_TableLayout.removeAllViews();
+        //按search_button顯示物件search_linearlayout、search_tablelayout
+        separate_linearLayout.setVisibility(View.VISIBLE);
+        search_LinearLayout.setVisibility(View.VISIBLE);
+        search_TableLayout.setVisibility(View.VISIBLE);
+        try{
+            // delay 1 second
+            Thread.sleep(1000);
+            //建立SearchData.php OKHttp連線
+            sendRequestWithOkHttp();
+        } catch(InterruptedException e){
+            e.printStackTrace();
+
+        }
     }
 
     @Override

@@ -1,25 +1,19 @@
 package com.example.a10609516.app.Workers;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.core.content.res.ResourcesCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,41 +21,19 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import android.widget.TextView;
 
-import com.example.a10609516.app.Basic.QRCodeActivity;
-import com.example.a10609516.app.Clerk.QuotationActivity;
-import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
-import com.example.a10609516.app.Manager.InventoryActivity;
-import com.example.a10609516.app.Tools.DatePickerFragment;
-import com.example.a10609516.app.Basic.MenuActivity;
-import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
 import com.example.a10609516.app.R;
-import com.example.a10609516.app.Basic.VersionActivity;
 import com.example.a10609516.app.Tools.WQPServiceActivity;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Map;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -230,7 +202,7 @@ public class CalendarActivity extends WQPServiceActivity {
     }
 
     /**
-     * 與OkHttp(CalendarData)建立連線
+     * 與OkHttp(CalendarData)建立連線_new
      */
     private void sendRequestWithOKHttpOfCalendar() {
         new Thread(new Runnable() {
@@ -277,14 +249,16 @@ public class CalendarActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String esvd_booking_period = jsonObject.getString("預約開始時間");
-                String esvd_booking_period_end = jsonObject.getString("預約結束時間");
-                String WORK_TYPE_NAME = jsonObject.getString("派工類別");
-                String ESV_CONTACTOR = jsonObject.getString("聯絡人");
-                String ESV_TEL_NO1 = jsonObject.getString("主要電話");
-                String ESV_ADDRESS = jsonObject.getString("派工地址");
-                String User_name = jsonObject.getString("員工姓名A");
-                String Group_name = jsonObject.getString("公司別");
+                String esvd_booking_period = jsonObject.getString("START_TIME");
+                String esvd_booking_period_end = jsonObject.getString("END_TIME");
+                String WORK_TYPE_NAME = jsonObject.getString("WORK_TYPE");
+                String ESV_CONTACTOR = jsonObject.getString("CONTACT_PERSON");
+                String ESV_TEL_NO1 = jsonObject.getString("ESV_TEL_NO1");
+                String ESV_ADDRESS = jsonObject.getString("ESV_ADDRESS");
+                String User_name = jsonObject.getString("EMPLOYEE_A");
+                String User_name2 = jsonObject.getString("EMPLOYEE_B");
+                String Group_name = jsonObject.getString("COMPANY");
+                String turn_id = jsonObject.getString("ID");
 
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
@@ -295,7 +269,9 @@ public class CalendarActivity extends WQPServiceActivity {
                 JArrayList.add(ESV_TEL_NO1);
                 JArrayList.add(ESV_ADDRESS);
                 JArrayList.add(User_name);
+                JArrayList.add(User_name2);
                 JArrayList.add(Group_name);
+                JArrayList.add(turn_id);
 
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();
@@ -311,7 +287,7 @@ public class CalendarActivity extends WQPServiceActivity {
     }
 
     /**
-     * 與OkHttp(CalendarData)建立連線
+     * 與OkHttp(CalendarData)建立連線_new
      */
     private void sendRequestWithOKHttpOfSearch() {
         new Thread(new Runnable() {
@@ -332,6 +308,8 @@ public class CalendarActivity extends WQPServiceActivity {
                             .add("Work_date", s_date)
                             .add("Group_name", group_name)
                             .build();
+                    Log.e("CalendarActivity", user_id_data);
+                    Log.e("CalendarActivity", s_date);
                     Log.e("CalendarActivity", group_name);
                     Request request = new Request.Builder()
                             .url("http://a.wqp-water.com.tw/WQP/CalendarData.php")
@@ -359,14 +337,16 @@ public class CalendarActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String esvd_booking_period = jsonObject.getString("預約開始時間");
-                String esvd_booking_period_end = jsonObject.getString("預約結束時間");
-                String WORK_TYPE_NAME = jsonObject.getString("派工類別");
-                String ESV_CONTACTOR = jsonObject.getString("聯絡人");
-                String ESV_TEL_NO1 = jsonObject.getString("主要電話");
-                String ESV_ADDRESS = jsonObject.getString("派工地址");
-                String User_name = jsonObject.getString("員工姓名A");
-                String Group_name = jsonObject.getString("公司別");
+                String esvd_booking_period = jsonObject.getString("START_TIME");
+                String esvd_booking_period_end = jsonObject.getString("END_TIME");
+                String WORK_TYPE_NAME = jsonObject.getString("WORK_TYPE");
+                String ESV_CONTACTOR = jsonObject.getString("CONTACT_PERSON");
+                String ESV_TEL_NO1 = jsonObject.getString("ESV_TEL_NO1");
+                String ESV_ADDRESS = jsonObject.getString("ESV_ADDRESS");
+                String User_name = jsonObject.getString("EMPLOYEE_A");
+                String User_name2 = jsonObject.getString("EMPLOYEE_B");
+                String Group_name = jsonObject.getString("COMPANY");
+                String turn_id = jsonObject.getString("ID");
 
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
@@ -377,7 +357,9 @@ public class CalendarActivity extends WQPServiceActivity {
                 JArrayList.add(ESV_TEL_NO1);
                 JArrayList.add(ESV_ADDRESS);
                 JArrayList.add(User_name);
+                JArrayList.add(User_name2);
                 JArrayList.add(Group_name);
+                JArrayList.add(turn_id);
 
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();
@@ -393,7 +375,7 @@ public class CalendarActivity extends WQPServiceActivity {
     }
 
     /**
-     * 與OkHttp(CalendarData)建立連線
+     * 與OkHttp(CalendarData)建立連線_new
      */
     private void sendRequestWithOKHttpOfLast() {
         new Thread(new Runnable() {
@@ -434,14 +416,16 @@ public class CalendarActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String esvd_booking_period = jsonObject.getString("預約開始時間");
-                String esvd_booking_period_end = jsonObject.getString("預約結束時間");
-                String WORK_TYPE_NAME = jsonObject.getString("派工類別");
-                String ESV_CONTACTOR = jsonObject.getString("聯絡人");
-                String ESV_TEL_NO1 = jsonObject.getString("主要電話");
-                String ESV_ADDRESS = jsonObject.getString("派工地址");
-                String User_name = jsonObject.getString("員工姓名A");
-                String Group_name = jsonObject.getString("公司別");
+                String esvd_booking_period = jsonObject.getString("START_TIME");
+                String esvd_booking_period_end = jsonObject.getString("END_TIME");
+                String WORK_TYPE_NAME = jsonObject.getString("WORK_TYPE");
+                String ESV_CONTACTOR = jsonObject.getString("CONTACT_PERSON");
+                String ESV_TEL_NO1 = jsonObject.getString("ESV_TEL_NO1");
+                String ESV_ADDRESS = jsonObject.getString("ESV_ADDRESS");
+                String User_name = jsonObject.getString("EMPLOYEE_A");
+                String User_name2 = jsonObject.getString("EMPLOYEE_B");
+                String Group_name = jsonObject.getString("COMPANY");
+                String turn_id = jsonObject.getString("ID");
 
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
@@ -452,7 +436,9 @@ public class CalendarActivity extends WQPServiceActivity {
                 JArrayList.add(ESV_TEL_NO1);
                 JArrayList.add(ESV_ADDRESS);
                 JArrayList.add(User_name);
+                JArrayList.add(User_name2);
                 JArrayList.add(Group_name);
+                JArrayList.add(turn_id);
 
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();
@@ -468,7 +454,7 @@ public class CalendarActivity extends WQPServiceActivity {
     }
 
     /**
-     * 與OkHttp(CalendarData)建立連線
+     * 與OkHttp(CalendarData)建立連線_new
      */
     private void sendRequestWithOKHttpOfNext() {
         new Thread(new Runnable() {
@@ -509,14 +495,16 @@ public class CalendarActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String esvd_booking_period = jsonObject.getString("預約開始時間");
-                String esvd_booking_period_end = jsonObject.getString("預約結束時間");
-                String WORK_TYPE_NAME = jsonObject.getString("派工類別");
-                String ESV_CONTACTOR = jsonObject.getString("聯絡人");
-                String ESV_TEL_NO1 = jsonObject.getString("主要電話");
-                String ESV_ADDRESS = jsonObject.getString("派工地址");
-                String User_name = jsonObject.getString("員工姓名A");
-                String Group_name = jsonObject.getString("公司別");
+                String esvd_booking_period = jsonObject.getString("START_TIME");
+                String esvd_booking_period_end = jsonObject.getString("END_TIME");
+                String WORK_TYPE_NAME = jsonObject.getString("WORK_TYPE");
+                String ESV_CONTACTOR = jsonObject.getString("CONTACT_PERSON");
+                String ESV_TEL_NO1 = jsonObject.getString("ESV_TEL_NO1");
+                String ESV_ADDRESS = jsonObject.getString("ESV_ADDRESS");
+                String User_name = jsonObject.getString("EMPLOYEE_A");
+                String User_name2 = jsonObject.getString("EMPLOYEE_B");
+                String Group_name = jsonObject.getString("COMPANY");
+                String turn_id = jsonObject.getString("ID");
 
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
@@ -527,7 +515,9 @@ public class CalendarActivity extends WQPServiceActivity {
                 JArrayList.add(ESV_TEL_NO1);
                 JArrayList.add(ESV_ADDRESS);
                 JArrayList.add(User_name);
+                JArrayList.add(User_name2);
                 JArrayList.add(Group_name);
+                JArrayList.add(turn_id);
 
                 //HandlerMessage更新UI
                 Bundle b = new Bundle();

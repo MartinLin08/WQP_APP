@@ -1,6 +1,8 @@
 package com.example.a10609516.app.Workers;
 
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -36,6 +38,7 @@ public class WorkersMapsActivity extends FragmentActivity implements OnMapReadyC
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Bundle bundle = getIntent().getExtras();

@@ -88,7 +88,7 @@ public class PointsActivity extends WQPServiceActivity {
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
                     Log.i("PointsActivity", responseData);
-                    showResponseForUserName(responseData);
+                    parseJSONWithJSONObjectOfUserName(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -97,17 +97,22 @@ public class PointsActivity extends WQPServiceActivity {
     }
 
     /**
-     * 在TextView上SHOW出回傳的員工姓名
-     *
-     * @param response
+     * 獲得JSON字串並解析成String字串
+     *在TextView上SHOW出回傳的員工姓名
+     * @param jsonData
      */
-    private void showResponseForUserName(final String response) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                user_txt.setText("工務 : " + response);
+    private void parseJSONWithJSONObjectOfUserName(String jsonData) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                //JSON格式改為字串
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String user_name = jsonObject.getString("MV002");
+                user_txt.setText("工務 : " + user_name);
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -133,7 +138,7 @@ public class PointsActivity extends WQPServiceActivity {
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
                     Log.i("PointsActivity", responseData);
-                    showResponseForUserLocal(responseData);
+                    parseJSONWithJSONObjectOfUserLocal(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -142,21 +147,26 @@ public class PointsActivity extends WQPServiceActivity {
     }
 
     /**
-     * 在TextView上SHOW出回傳的員工所在區域
-     *
-     * @param response
+     * 獲得JSON字串並解析成String字串
+     *在TextView上SHOW出回傳的員工所在地區
+     * @param jsonData
      */
-    private void showResponseForUserLocal(final String response) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                local_txt.setText("地區別 : " + response.substring(0,2));
+    private void parseJSONWithJSONObjectOfUserLocal(String jsonData) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                //JSON格式改為字串
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String user_local = jsonObject.getString("GROUP_NAME");
+                local_txt.setText("地區別 : " + user_local.substring(0,2));
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
-     * 與OkHttp建立連線
+     * 與OkHttp建立連線_new
      */
     private void sendRequestWithOkHttpForWorkAllPoints() {
         new Thread(new Runnable() {
@@ -201,11 +211,11 @@ public class PointsActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                a_points = jsonObject.getString("A點數");
-                b_points = jsonObject.getString("B點數");
-                d_points = jsonObject.getString("D點數");
-                ab_points = jsonObject.getString("AB點數");
-                money = jsonObject.getString("分配金額");
+                a_points = jsonObject.getString("A_POINTS");
+                b_points = jsonObject.getString("B_POINTS");
+                d_points = jsonObject.getString("D_POINTS");
+                ab_points = jsonObject.getString("AB_POINTS_SUM");
+                money = jsonObject.getString("ASSIGN_MONEY");
 
                 Log.e("PointsActivity", a_points);
                 Log.e("PointsActivity", b_points);

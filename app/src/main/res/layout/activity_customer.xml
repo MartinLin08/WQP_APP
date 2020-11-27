@@ -282,11 +282,11 @@
 
     </ScrollView>
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/go_top_button"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -301,6 +301,6 @@
             app:srcCompat="@drawable/btn_backtotop"
             android:scaleType="centerInside"/>
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </FrameLayout>

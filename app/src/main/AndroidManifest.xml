@@ -44,7 +44,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity android:name=".Tools.UsualActivity"></activity>
         <activity
             android:name=".Basic.LoginActivity"
             android:screenOrientation="portrait"
@@ -54,8 +54,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!-- 共用區 -->
+        </activity> <!-- 共用區 -->
         <activity
             android:name=".Basic.MenuActivity"
             android:label="首頁"
@@ -84,8 +83,19 @@
             android:name=".Basic.VersionActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" /> <!-- 總經理室 -->
+        <activity
+            android:name=".BOSS.ApplyExchangeActivity"
+            android:label="換貨申請單"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <!-- 工務部 -->
+        <activity
+            android:name=".BOSS.ExchangeActivity"
+            android:label="換貨申請單"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" /> <!-- 工務部 -->
         <activity
             android:name=".Workers.ScheduleActivity"
             android:label="行程資訊"
@@ -169,8 +179,7 @@
         <activity
             android:name=".Workers.Missing_Date_Record"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
-        <!-- DIY/百貨部 -->
+            android:windowSoftInputMode="stateHidden" /> <!-- DIY/百貨部 -->
         <activity
             android:name=".DepartmentAndDIY.PictureActivity"
             android:label="客戶訂單照片上傳"
@@ -219,12 +228,18 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".DepartmentAndDIY.StationReportAddActivity"
+        <activity
+            android:name=".DepartmentAndDIY.StationReportAddActivity"
             android:label="日報明細新增"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <!-- 業務部 -->
+        <activity
+            android:name=".DepartmentAndDIY.StationReportSearchManagerActivity"
+            android:label="日報查詢(主管用)"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" /> <!-- 業務部 -->
         <activity
             android:name=".Clerk.QuotationActivity"
             android:label="報價單查詢"
@@ -236,8 +251,7 @@
             android:label="報價單審核"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
-        <!-- 管理部 -->
+            android:windowSoftInputMode="stateHidden" /> <!-- 管理部 -->
         <activity
             android:name=".Manager.InventoryActivity"
             android:label="盤點單"
@@ -261,15 +275,13 @@
             android:label="撿料單電子簽名"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
-        <!-- Tools -->
+            android:windowSoftInputMode="stateHidden" /> <!-- Tools -->
         <activity android:name=".Tools.BackKeyActivity" />
         <activity android:name=".Tools.DatePickerFragment" />
         <activity
             android:name=".Tools.ScannerActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
-        <!-- FCM推播 -->
+            android:windowSoftInputMode="stateHidden" /> <!-- FCM推播 -->
         <service android:name=".FCM.MyFirebaseInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -279,33 +291,32 @@
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>
-        <!-- 收到通知時, 到狀態列要顯示的 icon -->
+        </service> <!-- 收到通知時, 到狀態列要顯示的 icon -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/bwt_icon" />
-        <!-- 收到通知的背景色 -->
+            android:resource="@drawable/bwt_icon" /> <!-- 收到通知的背景色 -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent" />
-        <!-- FileProvider安裝套件 -->
+            android:resource="@color/colorAccent" /> <!-- FileProvider安裝套件 -->
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.a10609516.app.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
-        <!-- Google Service版本 -->
+        </provider> <!-- Google Service版本 -->
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <!-- Google Map API key -->
+            android:value="@integer/google_play_services_version" /> <!-- Google Map API key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
 
 </manifest>

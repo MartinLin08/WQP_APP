@@ -1,63 +1,37 @@
 package com.example.a10609516.app.Workers;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.PagerTitleStrip;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.PagerTitleStrip;
+import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.a10609516.app.Basic.QRCodeActivity;
-import com.example.a10609516.app.Clerk.QuotationActivity;
-import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
-import com.example.a10609516.app.Basic.MenuActivity;
-import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
-import com.example.a10609516.app.Manager.InventoryActivity;
 import com.example.a10609516.app.R;
-import com.example.a10609516.app.Basic.VersionActivity;
 import com.example.a10609516.app.Tools.WQPServiceActivity;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -104,6 +78,7 @@ public class ScheduleActivity extends WQPServiceActivity {
         initCircle();
         //確認是否有最新版本，進行更新
         //CheckFirebaseVersion();
+        sendRequestWithOkHttpOfMissCount();
     }
 
     /**
@@ -308,7 +283,7 @@ public class ScheduleActivity extends WQPServiceActivity {
     }
 
     /**
-     * 與OkHttp(Today)建立連線
+     * 與OkHttp(Today)建立連線_new
      */
     private void sendRequestWithOkHttpForToday() {
         new Thread(new Runnable() {
@@ -352,35 +327,35 @@ public class ScheduleActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String work_type_name = jsonObject.getString("派工類別");
-                String esvd_service_no = jsonObject.getString("派工單號");
-                String esv_note = jsonObject.getString("送貨客戶");
-                String time_period_name = jsonObject.getString("預約日期時段");
-                String esv_contactor = jsonObject.getString("聯絡人");
-                String esv_tel_no1 = jsonObject.getString("主要電話");
-                String esv_tel_no2 = jsonObject.getString("次要電話");
-                String esv_address = jsonObject.getString("派工地址");
-                String cp_name = jsonObject.getString("付款方式");
-                String esvd_is_get_money = jsonObject.getString("是否要收款");
-                String esvd_is_money = jsonObject.getString("應收款金額");
-                String esvd_is_eng_money = jsonObject.getString("是否已收款");
-                String esvd_get_eng_money = jsonObject.getString("已收款金額");
-                String esvd_begin_date = jsonObject.getString("抵達日期");
-                String esvd_begin_time = jsonObject.getString("抵達時間");
-                String esvd_end_time = jsonObject.getString("結束時間");
-                String esvd_booking_remark = jsonObject.getString("任務說明");
-                String esv_item_remark = jsonObject.getString("料品說明");
-                String esvd_remark = jsonObject.getString("工作說明");
-                String esvd_seq_id = jsonObject.getString("派工資料識別碼");
-                String esvd_eng_points = jsonObject.getString("工務點數");
-                String esvd_booking_period = jsonObject.getString("預約開始時間");
-                String esvd_booking_period_end = jsonObject.getString("預約結束時間");
-                String my_ontype = jsonObject.getString("狀態");
-                String reserve_time = jsonObject.getString("今日派工時段");
-                String work_type = jsonObject.getString("處理方式");
+                String work_type_name = jsonObject.getString("WORK_TYPE_NAME");
+                String esvd_service_no = jsonObject.getString("ESVD_SERVICE_NO");
+                String esv_note = jsonObject.getString("ESV_NOTE");
+                String time_period_name = jsonObject.getString("BOOKING_DATETIME");
+                String esv_contactor = jsonObject.getString("ESV_CONTACTOR");
+                String esv_tel_no1 = jsonObject.getString("ESV_TEL_NO1");
+                String esv_tel_no2 = jsonObject.getString("ESV_TEL_NO2");
+                String esv_address = jsonObject.getString("ESV_ADDRESS");
+                String cp_name = jsonObject.getString("PAY_MODE");
+                String esvd_is_get_money = jsonObject.getString("IS_GET_MONEY");
+                String esvd_is_money = jsonObject.getString("RECEIVE_MONEY");
+                String esvd_is_eng_money = jsonObject.getString("IS_ENG_MONEY");
+                String esvd_get_eng_money = jsonObject.getString("GET_ENG_MONEY");
+                String esvd_begin_date = jsonObject.getString("ESVD_BEGIN_DATE");
+                String esvd_begin_time = jsonObject.getString("ESVD_BEGIN_TIME");
+                String esvd_end_time = jsonObject.getString("ESVD_END_TIME");
+                String esvd_booking_remark = jsonObject.getString("ESVD_BOOKING_REMARK");
+                String esv_item_remark = jsonObject.getString("ESV_ITEM_REMARK");
+                String esvd_remark = jsonObject.getString("ESVD_REMARK");
+                String esvd_seq_id = jsonObject.getString("ESVD_SEQ_ID");
+                String esvd_eng_points = jsonObject.getString("ESVD_ENG_POINTS");
+                String esvd_booking_period = jsonObject.getString("ESVD_BOOKING_PERIOD");
+                String esvd_booking_period_end = jsonObject.getString("ESVD_BOOKING_PERIOD_End");
+                String my_ontype = jsonObject.getString("REPORT_STATUS");
+                String reserve_time = jsonObject.getString("WORK_TIME");
+                String work_type = jsonObject.getString("WORK_TYPE");
 
-                Log.i("ScheduleActivity", reserve_time);
-                Log.i("ScheduleActivity", work_type_name);
+                Log.e("ScheduleActivity", reserve_time);
+                Log.e("ScheduleActivity", work_type_name);
 
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
@@ -556,7 +531,7 @@ public class ScheduleActivity extends WQPServiceActivity {
 
 
     /**
-     * 與OkHttp(Week)建立連線
+     * 與OkHttp(Week)建立連線_new
      */
     private void sendRequestWithOkHttpForWeek() {
         new Thread(new Runnable() {
@@ -600,32 +575,32 @@ public class ScheduleActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String work_type_name = jsonObject.getString("派工類別");
-                String esvd_service_no = jsonObject.getString("派工單號");
-                String esv_note = jsonObject.getString("送貨客戶");
-                String time_period_name = jsonObject.getString("預約日期時段");
-                String esv_contactor = jsonObject.getString("聯絡人");
-                String esv_tel_no1 = jsonObject.getString("主要電話");
-                String esv_tel_no2 = jsonObject.getString("次要電話");
-                String esv_address = jsonObject.getString("派工地址");
-                String cp_name = jsonObject.getString("付款方式");
-                String esvd_is_get_money = jsonObject.getString("是否要收款");
-                String esvd_is_money = jsonObject.getString("應收款金額");
-                String esvd_is_eng_money = jsonObject.getString("是否已收款");
-                String esvd_get_eng_money = jsonObject.getString("已收款金額");
-                String esvd_begin_date = jsonObject.getString("抵達日期");
-                String esvd_begin_time = jsonObject.getString("抵達時間");
-                String esvd_end_time = jsonObject.getString("結束時間");
-                String esvd_booking_remark = jsonObject.getString("任務說明");
-                String esv_item_remark = jsonObject.getString("料品說明");
-                String esvd_remark = jsonObject.getString("工作說明");
-                String esvd_seq_id = jsonObject.getString("派工資料識別碼");
-                String esvd_eng_points = jsonObject.getString("工務點數");
-                String esvd_booking_period = jsonObject.getString("預約開始時間");
-                String esvd_booking_period_end = jsonObject.getString("預約結束時間");
-                String my_ontype = jsonObject.getString("狀態");
-                String reserve_time = jsonObject.getString("派工日期時間");
-                String work_type = jsonObject.getString("處理方式");
+                String work_type_name = jsonObject.getString("WORK_TYPE_NAME");
+                String esvd_service_no = jsonObject.getString("ESVD_SERVICE_NO");
+                String esv_note = jsonObject.getString("ESV_NOTE");
+                String time_period_name = jsonObject.getString("BOOKING_DATETIME");
+                String esv_contactor = jsonObject.getString("ESV_CONTACTOR");
+                String esv_tel_no1 = jsonObject.getString("ESV_TEL_NO1");
+                String esv_tel_no2 = jsonObject.getString("ESV_TEL_NO2");
+                String esv_address = jsonObject.getString("ESV_ADDRESS");
+                String cp_name = jsonObject.getString("PAY_MODE");
+                String esvd_is_get_money = jsonObject.getString("IS_GET_MONEY");
+                String esvd_is_money = jsonObject.getString("RECEIVE_MONEY");
+                String esvd_is_eng_money = jsonObject.getString("IS_ENG_MONEY");
+                String esvd_get_eng_money = jsonObject.getString("GET_ENG_MONEY");
+                String esvd_begin_date = jsonObject.getString("ESVD_BEGIN_DATE");
+                String esvd_begin_time = jsonObject.getString("ESVD_BEGIN_TIME");
+                String esvd_end_time = jsonObject.getString("ESVD_END_TIME");
+                String esvd_booking_remark = jsonObject.getString("ESVD_BOOKING_REMARK");
+                String esv_item_remark = jsonObject.getString("ESV_ITEM_REMARK");
+                String esvd_remark = jsonObject.getString("ESVD_REMARK");
+                String esvd_seq_id = jsonObject.getString("ESVD_SEQ_ID");
+                String esvd_eng_points = jsonObject.getString("ESVD_ENG_POINTS");
+                String esvd_booking_period = jsonObject.getString("ESVD_BOOKING_PERIOD");
+                String esvd_booking_period_end = jsonObject.getString("ESVD_BOOKING_PERIOD_End");
+                String my_ontype = jsonObject.getString("REPORT_STATUS");
+                String reserve_time = jsonObject.getString("WORK_TIME");
+                String work_type = jsonObject.getString("WORK_TYPE");
 
                 Log.i("ScheduleActivity2", reserve_time);
                 Log.i("ScheduleActivity2", work_type_name);
@@ -799,7 +774,7 @@ public class ScheduleActivity extends WQPServiceActivity {
     };
 
     /**
-     * 與OkHttp(Missing)建立連線
+     * 與OkHttp(Missing)建立連線_new
      */
     private void sendRequestWithOkHttpForMissing() {
         new Thread(new Runnable() {
@@ -843,32 +818,32 @@ public class ScheduleActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String work_type_name = jsonObject.getString("派工類別");
-                String esvd_service_no = jsonObject.getString("派工單號");
-                String esv_note = jsonObject.getString("送貨客戶");
-                String time_period_name = jsonObject.getString("預約日期時段");
-                String esv_contactor = jsonObject.getString("聯絡人");
-                String esv_tel_no1 = jsonObject.getString("主要電話");
-                String esv_tel_no2 = jsonObject.getString("次要電話");
-                String esv_address = jsonObject.getString("派工地址");
-                String cp_name = jsonObject.getString("付款方式");
-                String esvd_is_get_money = jsonObject.getString("是否要收款");
-                String esvd_is_money = jsonObject.getString("應收款金額");
-                String esvd_is_eng_money = jsonObject.getString("是否已收款");
-                String esvd_get_eng_money = jsonObject.getString("已收款金額");
-                String esvd_begin_date = jsonObject.getString("抵達日期");
-                String esvd_begin_time = jsonObject.getString("抵達時間");
-                String esvd_end_time = jsonObject.getString("結束時間");
-                String esvd_booking_remark = jsonObject.getString("任務說明");
-                String esv_item_remark = jsonObject.getString("料品說明");
-                String esvd_remark = jsonObject.getString("工作說明");
-                String esvd_seq_id = jsonObject.getString("派工資料識別碼");
-                String esvd_eng_points = jsonObject.getString("工務點數");
-                String esvd_booking_period = jsonObject.getString("預約開始時間");
-                String esvd_booking_period_end = jsonObject.getString("預約結束時間");
-                String my_ontype = jsonObject.getString("狀態");
-                String reserve_time = jsonObject.getString("派工日期時間");
-                String work_type = jsonObject.getString("處理方式");
+                String work_type_name = jsonObject.getString("WORK_TYPE_NAME");
+                String esvd_service_no = jsonObject.getString("ESVD_SERVICE_NO");
+                String esv_note = jsonObject.getString("ESV_NOTE");
+                String time_period_name = jsonObject.getString("BOOKING_DATETIME");
+                String esv_contactor = jsonObject.getString("ESV_CONTACTOR");
+                String esv_tel_no1 = jsonObject.getString("ESV_TEL_NO1");
+                String esv_tel_no2 = jsonObject.getString("ESV_TEL_NO2");
+                String esv_address = jsonObject.getString("ESV_ADDRESS");
+                String cp_name = jsonObject.getString("PAY_MODE");
+                String esvd_is_get_money = jsonObject.getString("IS_GET_MONEY");
+                String esvd_is_money = jsonObject.getString("RECEIVE_MONEY");
+                String esvd_is_eng_money = jsonObject.getString("IS_ENG_MONEY");
+                String esvd_get_eng_money = jsonObject.getString("GET_ENG_MONEY");
+                String esvd_begin_date = jsonObject.getString("ESVD_BEGIN_DATE");
+                String esvd_begin_time = jsonObject.getString("ESVD_BEGIN_TIME");
+                String esvd_end_time = jsonObject.getString("ESVD_END_TIME");
+                String esvd_booking_remark = jsonObject.getString("ESVD_BOOKING_REMARK");
+                String esv_item_remark = jsonObject.getString("ESV_ITEM_REMARK");
+                String esvd_remark = jsonObject.getString("ESVD_REMARK");
+                String esvd_seq_id = jsonObject.getString("ESVD_SEQ_ID");
+                String esvd_eng_points = jsonObject.getString("ESVD_ENG_POINTS");
+                String esvd_booking_period = jsonObject.getString("ESVD_BOOKING_PERIOD");
+                String esvd_booking_period_end = jsonObject.getString("ESVD_BOOKING_PERIOD_End");
+                String my_ontype = jsonObject.getString("REPORT_STATUS");
+                String reserve_time = jsonObject.getString("WORK_TIME");
+                String work_type = jsonObject.getString("WORK_TYPE");
 
                 Log.i("ScheduleActivity3", reserve_time);
                 Log.i("ScheduleActivity3", work_type_name);
@@ -1074,12 +1049,16 @@ public class ScheduleActivity extends WQPServiceActivity {
 
     /**
      * 取得未回出勤的數量
-     * @param miss_count
+     * @param jsonData
      */
-    private void parseJSONWithJSONObjectOfMissCount(final String miss_count) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+    private void parseJSONWithJSONObjectOfMissCount(String jsonData) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                //JSON格式改為字串
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String miss_count = jsonObject.getString("COUNT");
+
                 Log.e("ScheduleActivity", miss_count);
                 if(miss_count.toString().equals("0")){
                     badgeCount = 0;
@@ -1088,8 +1067,11 @@ public class ScheduleActivity extends WQPServiceActivity {
                     int count = Integer.valueOf(miss_count);
                     ShortcutBadger.applyCount(ScheduleActivity.this, count);
                 }
+
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

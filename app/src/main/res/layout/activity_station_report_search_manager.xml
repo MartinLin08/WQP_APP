@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Basic.RequisitionSearchActivity">
+    tools:context=".DepartmentAndDIY.StationReportSearchManagerActivity">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -15,12 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".Basic.RequisitionSearchActivity">
+            tools:context=".DepartmentAndDIY.StationReportSearchManagerActivity">
 
             <LinearLayout
                 android:id="@+id/search_llt"
@@ -51,7 +52,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_weight="0.05"
                     android:gravity="center"
-                    android:text="資訊/行銷需求單查詢"
+                    android:text="日報查詢"
                     android:textSize="20sp" />
 
                 <LinearLayout
@@ -94,7 +95,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
                         android:layout_weight="1.5"
-                        android:text="申請日期 : "
+                        android:text="回報日期 : "
                         android:textColor="@color/colorAccent"
                         android:textSize="18sp" />
 
@@ -147,12 +148,12 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
                         android:layout_weight="1.5"
-                        android:text="申請類別 : "
+                        android:text="店別 : "
                         android:textColor="@color/colorAccent"
                         android:textSize="18sp" />
 
                     <Spinner
-                        android:id="@+id/category_spinner"
+                        android:id="@+id/station_spinner"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center"

@@ -7,9 +7,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -97,7 +97,7 @@ public class GPSActivity extends WQPServiceActivity {
     }
 
     /**
-     * 與OkHttp建立連線 取得工務打卡的GPS位置
+     * 與OkHttp建立連線 取得工務打卡的GPS位置_new
      */
     private void sendRequestWithOkHttpForGPS() {
         new Thread(new Runnable() {
@@ -145,10 +145,10 @@ public class GPSActivity extends WQPServiceActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 //JSON格式改為字串
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String eng_name = jsonObject.getString("工務姓名");
-                String hr_date = jsonObject.getString("打卡日期");
-                String hr_time = jsonObject.getString("打卡時間");
-                String gps_location = jsonObject.getString("GPS位置");
+                String eng_name = jsonObject.getString("ENG_NAME");
+                String hr_date = jsonObject.getString("PUNCH_DATE");
+                String hr_time = jsonObject.getString("PUNCH_TIME");
+                String gps_location = jsonObject.getString("GPS_LOCATION");
 
                 Log.e("GPSActivity5", eng_name);
                 Log.e("GPSActivity6", hr_date);
@@ -318,6 +318,21 @@ public class GPSActivity extends WQPServiceActivity {
             public void run() {
                 //實現畫面置頂按鈕
                 gps_scv.fullScroll(ScrollView.FOCUS_UP);
+            }
+        });
+    }
+
+    /**
+     * 實現畫面置底按鈕
+     *
+     * @param view
+     */
+    public void GoDownBtn(View view) {
+        Handler mHandler = new Handler();
+        mHandler.post(new Runnable() {
+            public void run() {
+                //實現畫面置底按鈕
+                gps_scv.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
     }

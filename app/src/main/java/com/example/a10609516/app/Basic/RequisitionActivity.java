@@ -2,11 +2,11 @@ package com.example.a10609516.app.Basic;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,6 +29,9 @@ import com.yanzhenjie.album.AlbumFile;
 import com.yanzhenjie.album.impl.OnItemClickListener;
 import com.yanzhenjie.album.widget.divider.Api21ItemDivider;
 import com.yanzhenjie.album.widget.divider.Divider;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -390,7 +393,7 @@ public class RequisitionActivity extends WQPServiceActivity {
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
                     Log.e(LOG, responseData);
-                    showResponse(responseData);
+                    parseJSONWithJSONObjectOfUserName(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -399,18 +402,23 @@ public class RequisitionActivity extends WQPServiceActivity {
     }
 
     /**
-     * 在TextView上SHOW出回傳的員工姓名
-     *
-     * @param response
+     * 獲得JSON字串並解析成String字串
+     *在TextView上SHOW出回傳的員工姓名
+     * @param jsonData
      */
-    private void showResponse(final String response) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                name_txt1.setText(response);
-                name_txt2.setText(response);
+    private void parseJSONWithJSONObjectOfUserName(String jsonData) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                //JSON格式改為字串
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String user_name = jsonObject.getString("MV002");
+                name_txt1.setText(user_name);
+                name_txt2.setText(user_name);
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

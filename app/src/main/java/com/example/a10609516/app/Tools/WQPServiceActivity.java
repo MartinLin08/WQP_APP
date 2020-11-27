@@ -8,10 +8,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.a10609516.app.BOSS.ApplyExchangeActivity;
 import com.example.a10609516.app.Basic.MenuActivity;
 import com.example.a10609516.app.Basic.QRCodeActivity;
 import com.example.a10609516.app.Basic.RequisitionActivity;
@@ -35,6 +36,7 @@ import com.example.a10609516.app.DepartmentAndDIY.RecordActivity;
 import com.example.a10609516.app.DepartmentAndDIY.StationReportActivity;
 import com.example.a10609516.app.DepartmentAndDIY.StationReportSearchActivity;
 import com.example.a10609516.app.DepartmentAndDIY.UploadActivity;
+import com.example.a10609516.app.DepartmentAndDIY.StationReportSearchManagerActivity;
 import com.example.a10609516.app.Manager.InventoryActivity;
 import com.example.a10609516.app.Manager.OrderSearchActivity;
 import com.example.a10609516.app.R;
@@ -84,6 +86,7 @@ public class WQPServiceActivity extends AppCompatActivity {
         String user_id_data = user_id.getString("ID", "");
         SharedPreferences department_id = getSharedPreferences("department_id", MODE_PRIVATE);
         String department_id_data = department_id.getString("D_ID", "");
+        Log.e("WQPServiceActivity_D", department_id_data);
         if ((user_id_data.toString().equals("09706013")) || user_id_data.toString().equals("09908023") || user_id_data.toString().equals("10010039")
                 || user_id_data.toString().equals("10012043") || user_id_data.toString().equals("10304116") || user_id_data.toString().equals("10405235")) {
             //工務主管  //09706013 周威廷  //09908023 劉欣亨  //10010039 劉英任  //10012043 洪寬耀  //10304116 陳信華  //10405235 郭哲毓
@@ -105,9 +108,11 @@ public class WQPServiceActivity extends AppCompatActivity {
             //工務
             getMenuInflater().inflate(R.menu.workers_menu, menu);
             return true;
-        } else {
+        } else if (department_id_data.toString().equals("1000")) {
             //超級使用者
             getMenuInflater().inflate(R.menu.main, menu);
+            return true;
+        } else {
             return true;
         }
     }
@@ -126,6 +131,12 @@ public class WQPServiceActivity extends AppCompatActivity {
                 Toast.makeText(this, "HOME",Toast.LENGTH_SHORT).show();
                 //finish();
                 break; //返回首頁
+            /**總經理室Menu*/
+            case R.id.exchange_item:
+                Intent intent00 = new Intent(this, ApplyExchangeActivity.class);
+                startActivity(intent00);
+                //Toast.makeText(this, "行程資訊",Toast.LENGTH_SHORT).show();
+                break; //進入行程資訊頁面
             /**工務部Menu*/
             case R.id.schedule_item:
                 Intent intent1 = new Intent(this, ScheduleActivity.class);
@@ -209,6 +220,11 @@ public class WQPServiceActivity extends AppCompatActivity {
                 startActivity(intent27);
                 Toast.makeText(this, "日報查詢/修正", Toast.LENGTH_SHORT).show();
                 break; //日報查詢/修正
+            case R.id.report_search_manager_item:
+                Intent intent28 = new Intent(this, StationReportSearchManagerActivity.class);
+                startActivity(intent28);
+                Toast.makeText(this, "日報查詢(主管用)", Toast.LENGTH_SHORT).show();
+                break; //日報查詢(主管用)
             /**管理部Menu*/
             case R.id.inventory_item:
                 Intent intent31 = new Intent(this, InventoryActivity.class);
@@ -329,7 +345,7 @@ public class WQPServiceActivity extends AppCompatActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.6.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.9.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -341,7 +357,7 @@ public class WQPServiceActivity extends AppCompatActivity {
             Log.e("WQPServiceActivity", PATH);
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_2.6.apk");
+            File outputFile = new File(file, "wqp_2.9.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -355,7 +371,7 @@ public class WQPServiceActivity extends AppCompatActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
             Log.e("WQPServiceActivity", "下載完成");
 
-            File apkFile = new File((Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.6.apk"));
+            File apkFile = new File((Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.9.apk"));
             Uri apkUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
 
             Intent intent = new Intent(Intent.ACTION_VIEW);

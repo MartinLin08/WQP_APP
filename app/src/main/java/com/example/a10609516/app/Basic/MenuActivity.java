@@ -8,12 +8,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,20 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.a10609516.app.BuildConfig;
-import com.example.a10609516.app.Clerk.QuotationActivity;
-import com.example.a10609516.app.DepartmentAndDIY.CustomerActivity;
-import com.example.a10609516.app.DepartmentAndDIY.PictureActivity;
-import com.example.a10609516.app.Manager.InventoryActivity;
-import com.example.a10609516.app.Manager.PickingActivity;
 import com.example.a10609516.app.R;
 import com.example.a10609516.app.Tools.WQPServiceActivity;
-import com.example.a10609516.app.Workers.CalendarActivity;
-import com.example.a10609516.app.Workers.EngPointsActivity;
-import com.example.a10609516.app.Workers.GPSActivity;
-import com.example.a10609516.app.Workers.MissCountActivity;
-import com.example.a10609516.app.Workers.PointsActivity;
-import com.example.a10609516.app.Workers.ScheduleActivity;
-import com.example.a10609516.app.Workers.SearchActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -235,7 +221,7 @@ public class MenuActivity extends WQPServiceActivity {
      */
     public void Update() {
         try {
-            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.6.apk");
+            URL url = new URL("http://m.wqp-water.com.tw/wqp_2.8.apk");
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             //c.setRequestMethod("GET");
             //c.setDoOutput(true);
@@ -247,7 +233,7 @@ public class MenuActivity extends WQPServiceActivity {
             Log.e("MenuActivity", PATH);
             File file = new File(PATH);
             file.mkdirs();
-            File outputFile = new File(file, "wqp_2.6.apk");
+            File outputFile = new File(file, "wqp_2.8.apk");
             FileOutputStream fos = new FileOutputStream(outputFile);
 
             InputStream is = c.getInputStream();
@@ -261,7 +247,7 @@ public class MenuActivity extends WQPServiceActivity {
             is.close();//till here, it works fine - .apk is download to my sdcard in download file
             Log.e("MenuActivity", "下載完成");
 
-            File apkFile = new File((Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.6.apk"));
+            File apkFile = new File((Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.8.apk"));
             Uri apkUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -284,7 +270,7 @@ public class MenuActivity extends WQPServiceActivity {
             startActivity(intent);
 
             /*Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.6.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "wqp_2.8.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
