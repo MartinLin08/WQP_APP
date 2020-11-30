@@ -228,8 +228,8 @@ public class ExchangeActivity extends WQPServiceActivity {
                             .add("EXID", exchange_id)
                             .build();
                     Request request = new Request.Builder()
-                            //.url("http://a.wqp-water.com.tw/WQP/ApplyExchangeMaster.php")
-                            .url("http://192.168.0.172/WQP/ApplyExchangeMaster.php")
+                            .url("http://a.wqp-water.com.tw/WQP/ApplyExchangeMaster.php")
+                            //.url("http://192.168.0.172/WQP/ApplyExchangeMaster.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -312,8 +312,8 @@ public class ExchangeActivity extends WQPServiceActivity {
                             .add("EXID", exchange_id)
                             .build();
                     Request request = new Request.Builder()
-                            //.url("http://a.wqp-water.com.tw/WQP/ApplyExchangeDetail.php")
-                            .url("http://192.168.0.172/WQP/ApplyExchangeDetail.php")
+                            .url("http://a.wqp-water.com.tw/WQP/ApplyExchangeDetail.php")
+                            //.url("http://192.168.0.172/WQP/ApplyExchangeDetail.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -521,8 +521,8 @@ public class ExchangeActivity extends WQPServiceActivity {
                             .add("applicant_id", applicant_id)
                             .build();
                     Request request = new Request.Builder()
-                            //.url("http://a.wqp-water.com.tw/WQP/ApplyExchangeApproved.php")
-                            .url("http://192.168.0.172/WQP/ApplyExchangeApproved.php")
+                            .url("http://a.wqp-water.com.tw/WQP/ApplyExchangeApproved.php")
+                            //.url("http://192.168.0.172/WQP/ApplyExchangeApproved.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -564,8 +564,8 @@ public class ExchangeActivity extends WQPServiceActivity {
                             .add("reject_reason", reject_reason)
                             .build();
                     Request request = new Request.Builder()
-                            //.url("http://a.wqp-water.com.tw/WQP/ApplyExchangeReject.php")
-                            .url("http://192.168.0.172/WQP/ApplyExchangeReject.php")
+                            .url("http://a.wqp-water.com.tw/WQP/ApplyExchangeReject.php")
+                            //.url("http://192.168.0.172/WQP/ApplyExchangeReject.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

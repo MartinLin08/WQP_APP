@@ -96,8 +96,8 @@ public class ApplyExchangeActivity extends WQPServiceActivity {
                             .build();
                     Log.e(LOG, user_id_data);
                     Request request = new Request.Builder()
-                            .url("http://192.168.0.172/WQP/ApplyExchangeSearch.php")
-                            //.url("http://a.wqp-water.com.tw/WQP/ApplyExchangeSearch.php")
+                            //.url("http://192.168.0.172/WQP/ApplyExchangeSearch.php")
+                            .url("http://a.wqp-water.com.tw/WQP/ApplyExchangeSearch.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
