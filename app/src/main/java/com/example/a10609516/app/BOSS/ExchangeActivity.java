@@ -23,6 +23,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -46,13 +47,14 @@ import java.util.ArrayList;
 
 public class ExchangeActivity extends WQPServiceActivity {
 
-    private LinearLayout exchange_detail_llt, yes_no_llt, reason_llt;
+    private LinearLayout exchange_detail_llt, yes_no_llt, reason_llt, suggest_llt;
     private TextView mode_txt, date_txt, client_txt, address_txt, applicant_txt, remark_txt;
-    private EditText reason_edt;
+    private EditText reason_edt, suggest_reason_edt;
+    private CheckBox report_checkBox, other_checkBox;
     private ImageView usual_imv;
-    private Button approved_button, reject_button, reject_reason_button, cancel_button;
+    private Button approved_button, reject_button, reject_reason_button, cancel_button, suggest_reason_button, suggest_cancel_button;
 
-    private String exchange_id, exchange, exchange_mode, gift, reason;
+    private String exchange_id, exchange, exchange_mode, gift, reason, reject_reason;
     private String LOG = "ExchangeActivity";
 
     @Override
@@ -68,7 +70,7 @@ public class ExchangeActivity extends WQPServiceActivity {
         //與OkHttp建立連線(換貨申請單單身)
         sendRequestWithOkHttpForDetail();
         reason_llt.setVisibility(View.GONE);
-        approved_button.setVisibility(View.VISIBLE);
+        suggest_llt.setVisibility(View.GONE);
     }
 
     /**
@@ -78,6 +80,7 @@ public class ExchangeActivity extends WQPServiceActivity {
         exchange_detail_llt = (LinearLayout) findViewById(R.id.exchange_detail_llt);
         yes_no_llt = (LinearLayout) findViewById(R.id.yes_no_llt);
         reason_llt = (LinearLayout) findViewById(R.id.reason_llt);
+        suggest_llt = (LinearLayout) findViewById(R.id.suggest_llt);
         mode_txt = (TextView) findViewById(R.id.mode_txt);
         date_txt = (TextView) findViewById(R.id.date_txt);
         client_txt = (TextView) findViewById(R.id.client_txt);
@@ -85,11 +88,16 @@ public class ExchangeActivity extends WQPServiceActivity {
         applicant_txt = (TextView) findViewById(R.id.applicant_txt);
         remark_txt = (TextView) findViewById(R.id.remark_txt);
         reason_edt = (EditText) findViewById(R.id.reason_edt);
+        suggest_reason_edt = (EditText) findViewById(R.id.suggest_reason_edt);
         usual_imv = (ImageView) findViewById(R.id.usual_imv);
+        report_checkBox = (CheckBox) findViewById(R.id.report_checkBox);
+        other_checkBox = (CheckBox) findViewById(R.id.other_checkBox);
         approved_button = (Button) findViewById(R.id.approved_button);
         reject_button = (Button) findViewById(R.id.reject_button);
         reject_reason_button = (Button) findViewById(R.id.reject_reason_button);
         cancel_button = (Button) findViewById(R.id.cancel_button);
+        suggest_reason_button = (Button) findViewById(R.id.suggest_reason_button);
+        suggest_cancel_button = (Button) findViewById(R.id.suggest_cancel_button);
 
         //跳到常用詞語介面
         usual_imv.setOnClickListener(new View.OnClickListener() {
@@ -105,21 +113,42 @@ public class ExchangeActivity extends WQPServiceActivity {
             @Override
             public void onClick(View v) {
                 if (mode_txt.getText().toString().equals("送審中")) {
-                    //與OkHttp建立連線(換貨申請單核准)
-                    sendRequestWithOkHttpForApproved();
-                    mode_txt.setText("");
-                    try{
-                        // delay 1 second
-                        Thread.sleep(1000);
-                        //與OkHttp建立連線(換貨申請單單頭)
-                        sendRequestWithOkHttpForMaster();
-                        approved_button.setVisibility(View.GONE);
-                    } catch(InterruptedException e){
-                        e.printStackTrace();
-                    }
+                    suggest_llt.setVisibility(View.VISIBLE);
+                    yes_no_llt.setVisibility(View.GONE);
+                    approved_button.setClickable(false);
+                    reject_button.setClickable(false);
+                    suggest_reason_button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //與OkHttp建立連線(換貨申請單核准)
+                            sendRequestWithOkHttpForApproved();
+                            mode_txt.setText("");
+                            try{
+                                // delay 1 second
+                                Thread.sleep(500);
+                                //與OkHttp建立連線(換貨申請單單頭)
+                                sendRequestWithOkHttpForMaster();
+                                approved_button.setVisibility(View.GONE);
+                                finish();
+                            } catch(InterruptedException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 } else {
                     Toast.makeText(ExchangeActivity.this, "此換貨申請單未重新送審", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        suggest_cancel_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                suggest_llt.setVisibility(View.GONE);
+                yes_no_llt.setVisibility(View.VISIBLE);
+                approved_button.setClickable(true);
+                reject_button.setClickable(true);
+                suggest_reason_edt.setText("");
             }
         });
 
@@ -140,7 +169,7 @@ public class ExchangeActivity extends WQPServiceActivity {
                             mode_txt.setText("");
                             try{
                                 // delay 1 second
-                                Thread.sleep(1000);
+                                Thread.sleep(500);
                                 //與OkHttp建立連線(換貨申請單單頭)
                                 sendRequestWithOkHttpForMaster();
                                 reason_llt.setVisibility(View.GONE);
@@ -148,6 +177,7 @@ public class ExchangeActivity extends WQPServiceActivity {
                                 approved_button.setClickable(true);
                                 reject_button.setClickable(true);
                                 reason_edt.setText("");
+                                finish();
                             } catch(InterruptedException e){
                                 e.printStackTrace();
                             }
@@ -209,6 +239,31 @@ public class ExchangeActivity extends WQPServiceActivity {
         Bundle bundle = getIntent().getExtras();
         reason = bundle.getString("reason_txt").trim();
         Log.e(LOG, reason);
+    }
+
+    /**
+     * 設置是否已收款的三個CheckBox只能一個被勾選
+     *
+     * @param view
+     */
+    public void onCheckboxClicked(View view) {
+        // Is the view now checked?
+        boolean checked = ((CheckBox) view).isChecked();
+        // Check which checkbox was clicked
+        switch (view.getId()) {
+            case R.id.report_checkBox:
+                if (checked) {
+                    other_checkBox.setChecked(false);
+                    reason_edt.setEnabled(false);
+                }
+                break;
+            case R.id.other_checkBox:
+                if (checked) {
+                    report_checkBox.setChecked(false);
+                    reason_edt.setEnabled(true);
+                }
+                break;
+        }
     }
 
     /**
@@ -511,6 +566,7 @@ public class ExchangeActivity extends WQPServiceActivity {
                 String applicant_name = applicant_txt.getText().toString();
                 String applicant_id = applicant_name.substring(applicant_name.indexOf(":|:"), applicant_name.length()).replace(":|:", "");
                 Log.e(LOG, "ID : " + applicant_id);
+                String suggest_reason = suggest_reason_edt.getText().toString();
 
                 try {
                     OkHttpClient client = new OkHttpClient();
@@ -519,6 +575,7 @@ public class ExchangeActivity extends WQPServiceActivity {
                             .add("EXID", exchange_id)
                             .add("User_id", user_id_data)
                             .add("applicant_id", applicant_id)
+                            .add("suggest_reason", suggest_reason)
                             .build();
                     Request request = new Request.Builder()
                             .url("http://a.wqp-water.com.tw/WQP/ApplyExchangeApproved.php")
@@ -552,7 +609,14 @@ public class ExchangeActivity extends WQPServiceActivity {
                 String applicant_name = applicant_txt.getText().toString();
                 String applicant_id = applicant_name.substring(applicant_name.indexOf(":|:"), applicant_name.length()).replace(":|:", "");
                 Log.e(LOG, "ID : " + applicant_id);
-                String reject_reason = reason_edt.getText().toString();
+                String report_reason = report_checkBox.getText().toString();
+                String other_reason = reason_edt.getText().toString();
+                if (report_checkBox.isChecked()) {
+                    reject_reason = report_reason;
+                } else if (other_checkBox.isChecked()) {
+                    reject_reason = other_reason;
+                }
+
 
                 try {
                     OkHttpClient client = new OkHttpClient();
