@@ -50,11 +50,11 @@ public class ExchangeActivity extends WQPServiceActivity {
     private LinearLayout exchange_detail_llt, yes_no_llt, reason_llt, suggest_llt;
     private TextView mode_txt, date_txt, client_txt, address_txt, applicant_txt, remark_txt;
     private EditText reason_edt, suggest_reason_edt;
-    private CheckBox report_checkBox, other_checkBox;
+    private CheckBox report_checkBox, warranty_checkBox, other_checkBox;
     private ImageView usual_imv;
     private Button approved_button, reject_button, reject_reason_button, cancel_button, suggest_reason_button, suggest_cancel_button;
 
-    private String exchange_id, exchange, exchange_mode, gift, reason, reject_reason;
+    private String exchange_id, exchange, exchange_mode, gift, warranty, reason, reject_reason;
     private String LOG = "ExchangeActivity";
 
     @Override
@@ -91,6 +91,7 @@ public class ExchangeActivity extends WQPServiceActivity {
         suggest_reason_edt = (EditText) findViewById(R.id.suggest_reason_edt);
         usual_imv = (ImageView) findViewById(R.id.usual_imv);
         report_checkBox = (CheckBox) findViewById(R.id.report_checkBox);
+        warranty_checkBox = (CheckBox) findViewById(R.id.warranty_checkBox);
         other_checkBox = (CheckBox) findViewById(R.id.other_checkBox);
         approved_button = (Button) findViewById(R.id.approved_button);
         reject_button = (Button) findViewById(R.id.reject_button);
@@ -253,13 +254,22 @@ public class ExchangeActivity extends WQPServiceActivity {
         switch (view.getId()) {
             case R.id.report_checkBox:
                 if (checked) {
+                    warranty_checkBox.setChecked(false);
                     other_checkBox.setChecked(false);
                     reason_edt.setEnabled(false);
+                }
+                break;
+            case R.id.warranty_checkBox:
+                if (checked) {
+                    report_checkBox.setChecked(false);
+                    other_checkBox.setChecked(false);
+                    reason_edt.setEnabled(true);
                 }
                 break;
             case R.id.other_checkBox:
                 if (checked) {
                     report_checkBox.setChecked(false);
+                    warranty_checkBox.setChecked(false);
                     reason_edt.setEnabled(true);
                 }
                 break;
@@ -403,6 +413,9 @@ public class ExchangeActivity extends WQPServiceActivity {
                 String SCRAP = jsonObject.getString("SCRAP");
                 String COUNT = jsonObject.getString("COUNT");
                 String GIFT = jsonObject.getString("GIFT");
+                String INSTAL_DATE = jsonObject.getString("INSTAL_DATE");
+                String LAST_MAINTAIN = jsonObject.getString("LAST_MAINTAIN");
+                String WARRANTY = jsonObject.getString("WARRANTY");
 
                 //JSONArray加入SearchData資料
                 ArrayList<String> JArrayList = new ArrayList<String>();
@@ -414,6 +427,9 @@ public class ExchangeActivity extends WQPServiceActivity {
                 JArrayList.add(SCRAP);
                 JArrayList.add(COUNT);
                 JArrayList.add(GIFT);
+                JArrayList.add(INSTAL_DATE);
+                JArrayList.add(LAST_MAINTAIN);
+                JArrayList.add(WARRANTY);
 
                 Log.e(LOG, MB001MB002);
 
@@ -458,6 +474,12 @@ public class ExchangeActivity extends WQPServiceActivity {
                     count_llt.setOrientation(LinearLayout.HORIZONTAL);
                     LinearLayout gift_llt = new LinearLayout(ExchangeActivity.this);
                     gift_llt.setOrientation(LinearLayout.HORIZONTAL);
+                    LinearLayout instal_llt = new LinearLayout(ExchangeActivity.this);
+                    instal_llt.setOrientation(LinearLayout.HORIZONTAL);
+                    LinearLayout last_llt = new LinearLayout(ExchangeActivity.this);
+                    last_llt.setOrientation(LinearLayout.HORIZONTAL);
+                    LinearLayout warranty_llt = new LinearLayout(ExchangeActivity.this);
+                    warranty_llt.setOrientation(LinearLayout.HORIZONTAL);
                     HorizontalScrollView dynamically_hsv = new HorizontalScrollView(ExchangeActivity.this);
 
                     Bundle jb = msg.getData();
@@ -512,7 +534,7 @@ public class ExchangeActivity extends WQPServiceActivity {
                     mode_llt.addView(dynamically_mode_txt, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
                     TextView dynamically_count_txt = new TextView(ExchangeActivity.this);
-                    dynamically_count_txt.setText("換貨數量 : "+ JArrayList.get(6));
+                    dynamically_count_txt.setText("換貨數量 : " + JArrayList.get(6));
                     dynamically_count_txt.setTextColor(Color.rgb(0, 0, 0));
                     dynamically_count_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                     dynamically_count_txt.setGravity(Gravity.LEFT);
@@ -526,12 +548,42 @@ public class ExchangeActivity extends WQPServiceActivity {
                     }
 
                     TextView dynamically_gift_txt = new TextView(ExchangeActivity.this);
-                    dynamically_gift_txt.setText("贈品 : "+ gift);
+                    dynamically_gift_txt.setText("贈品 : " + gift);
                     dynamically_gift_txt.setTextColor(Color.rgb(0, 0, 0));
                     dynamically_gift_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                     dynamically_gift_txt.setGravity(Gravity.LEFT);
                     dynamically_gift_txt.setPadding(10, 0, 0, 10);
                     gift_llt.addView(dynamically_gift_txt, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                    TextView instal_date_txt = new TextView(ExchangeActivity.this);
+                    instal_date_txt.setText("安裝日期 : " + JArrayList.get(8));
+                    instal_date_txt.setTextColor(Color.rgb(0, 0, 0));
+                    instal_date_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                    instal_date_txt.setGravity(Gravity.LEFT);
+                    instal_date_txt.setPadding(10, 0, 0, 10);
+                    instal_llt.addView(instal_date_txt, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                    TextView last_maintain_txt = new TextView(ExchangeActivity.this);
+                    last_maintain_txt.setText("最近維護日期 : " + JArrayList.get(9));
+                    last_maintain_txt.setTextColor(Color.rgb(0, 0, 0));
+                    last_maintain_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                    last_maintain_txt.setGravity(Gravity.LEFT);
+                    last_maintain_txt.setPadding(10, 0, 0, 10);
+                    last_llt.addView(last_maintain_txt, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                    if (JArrayList.get(10).trim().equals("Y")) {
+                        warranty = "是";
+                    } else {
+                        warranty = "否";
+                    }
+
+                    TextView warranty_txt = new TextView(ExchangeActivity.this);
+                    warranty_txt.setText("是否保固內 : " + warranty);
+                    warranty_txt.setTextColor(Color.rgb(0, 0, 0));
+                    warranty_txt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                    warranty_txt.setGravity(Gravity.LEFT);
+                    warranty_txt.setPadding(10, 0, 0, 10);
+                    warranty_llt.addView(warranty_txt, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
                     dynamically_hsv.addView(product_llt);
 
@@ -541,6 +593,9 @@ public class ExchangeActivity extends WQPServiceActivity {
                     big_llt.addView(mode_llt);
                     big_llt.addView(count_llt);
                     big_llt.addView(gift_llt);
+                    big_llt.addView(instal_llt);
+                    big_llt.addView(last_llt);
+                    big_llt.addView(warranty_llt);
 
                     exchange_detail_llt.addView(big_llt, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                     break;
@@ -610,9 +665,12 @@ public class ExchangeActivity extends WQPServiceActivity {
                 String applicant_id = applicant_name.substring(applicant_name.indexOf(":|:"), applicant_name.length()).replace(":|:", "");
                 Log.e(LOG, "ID : " + applicant_id);
                 String report_reason = report_checkBox.getText().toString();
+                String warranty_reason = warranty_checkBox.getText().toString();
                 String other_reason = reason_edt.getText().toString();
                 if (report_checkBox.isChecked()) {
                     reject_reason = report_reason;
+                } else if (warranty_checkBox.isChecked()) {
+                    reject_reason = warranty_reason;
                 } else if (other_checkBox.isChecked()) {
                     reject_reason = other_reason;
                 }

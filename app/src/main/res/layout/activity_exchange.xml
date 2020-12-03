@@ -360,6 +360,17 @@
                 android:textSize="18sp" />
 
             <CheckBox
+                android:id="@+id/warranty_checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:onClick="onCheckboxClicked"
+                android:text="安裝時間已過保固"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <CheckBox
                 android:id="@+id/other_checkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
